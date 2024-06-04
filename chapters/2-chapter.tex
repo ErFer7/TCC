@@ -1,0 +1,176 @@
+\chapter{Planejamento}
+
+As seções seguintes apresentam aspectos relacionados ao desenvolvimento deste trabalho, incluindo método de pesquisa, cronograma, custos, recursos humanos necessários, comunicação e, finalmente, possíveis riscos.
+
+\section{Método de Pesquisa}
+
+Primeiramente serão estudados aspectos relacionados aos descritores de imagem e vídeo, como questões teóricas relevantes, categorização, principais exemplos na literatura, suas possíveis aplicações e disponibilidade de acesso.
+A partir dessa pesquisa inicial, serão escolhidos os descritores considerados mais adequados para a proposta.
+Tomada essa decisão, talvez seja necessário implementar um ou mais descritores, sobretudo se não forem encontradas implementações prévias de fácil acesso ou na linguagem desejada.
+
+Posteriormente serão realizados testes aplicando os descritores sobre quadros retirados de algum conjunto de vídeos de teste \textit{datasets} presente na literatura. 
+Há quatro opções principais de conjuntos que podem ser utilizados para essa finalidade: Vimeo90K, \ac{UGC}, \ac{UVG} e  \textit{Deep Video Deblurring}. O Vimeo90K \cite{vimeo90k}, o qual apresenta triplas ou quíntuplas de quadros obtidas de vídeos com conteúdo variado. O \ac{UGC} \cite{Wang2019YouTubeUGC} e o \ac{UVG} \cite{mercat2020uvg}, por sua vez, possuem vídeos \textit{raw} (sem compressão), o que é favorável para evitar interferência de ruídos de codificação iniciais nos resultados. O \ac{UVG} contém sequências com \ac{fps} alto, o que é favorável ao caso de uso proposto, enquanto o UGC conta com conteúdos diversificados, o que pode ser positivo para análise das características, porém não tem informações sobre \ac{fps}.
+Por último, o conjunto desenvolvido no trabalho sobre \textit{Deep Video Deblurring} também inclui vídeos com \ac{fps} alto, no entanto são comprimidos.
+
+Tendo obtido os dados com os descritores, será executado o \ac{DIVC} sobre as sequências. 
+O codificador a ser usado para implementação do modelo é o \ac{VVenC}, o qual é uma versão rápida do \ac{VVC}, o padrão de codificação híbrido estado da arte.
+Já a parte de \ac{VFI} será realizada com o \ac{RIFE} \cite{rife}, pois é um método que atinge qualidade boa em um tempo de execução relativamente baixo, além de possuir uma implementação aberta.
+
+Por último, serão empregadas métricas para avaliação dos resultados obtidos. 
+Algumas opções de métricas para avaliação de qualidade são \ac{PSNR} e \ac{SSIM}, as quais são métricas clássicas e amplamente utilizadas. 
+Também é possível realizar análise a partir da \ac{VMAF}, a qual foi desenvolvida com o objetivo de considerar mais características relacionadas à qualidade percebida pelo \ac{SVH}.
+A medição da taxa de bits (\textit{bit rate}) é dada em kbps (quantidade de informação - kilobits, processados ou transferidos em um segundo), e pode ser utilizada em métricas relacionadas à eficiência de codificação. 
+Uma delas é \ac{BD-Rate} (baseada em PSNR ou $\text{SSIM}_\text{dB}$) \cite{sullivan2001_bd}, cujos valores permitem medir a mudança percentual ($\%$) de \textit{bit rate} em uma qualidade similar. 
+% Outra alternativa é medir através de \ac{BD-PSNR} e \ac{BD-$\text{SSIM}_\text{dB}$}.
+Outra alternativa é medir através de \ac{BD-PSNR} e \ac{BD-SSIMdB}.
+% Outra alternativa é medir através de \ac{BD-PSNR} e BD-$\text{SSIM}_\text{dB}$.
+
+
+Portanto, ao término deste trabalho de conclusão de curso, espera-se contar com uma técnica funcional que permita aumentar a eficiência de codificação do modelo \ac{DIVC} de acordo com pelo menos uma das métricas listadas acima. Para isso, o \ac{DIVC} será aplicado de maneira adaptativa com base na adequação do conteúdo da cena, sendo essa avaliada com o auxílio de descritores. 
+
+
+\section{Cronograma}
+% ----------------------------------------------------------
+
+%\afazer{consertar o problema que ocorreu nas tabelas ao colocar fundo colorido em algumas células}
+% ver melhor com orientador e coorientador.\\
+% \noindent{
+% 	\begin{minipage*}{1\textwidth}
+% 	\centering
+	\noindent\resizebox{\textwidth}{!}{
+
+	\rowcolors{0}{shadecolor}{shadecolor}
+	\begin{tabular}{|X p{5cm}|c|c|c|c|c|c|c|c|c|c|c|c|}
+		%begin{small}
+		\hline
+		%{\rowcolor{shadecolor}}
+		%\multirow{2}{*}{\cellcolor{shadecolor}} \\
+		\multirow{-1}{*}{Etapas} &
+		%\cline{2-12}
+		\multicolumn{12}{|c|}{Meses} \\ \hhline{|~|*{12}{-|}}
+		%{\rowcolor{shadecolor}}
+     & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & 11 & 12\\ \hline
+	\hiderowcolors Fundamentação teórica sobre descritores &
+    \cellcolor{shadecolor}&\cellcolor{shadecolor} & & & & & & & & & & \\ \hline
+    
+	\hiderowcolors Aplicação de descritores selecionados ao \ac{DIVC} & & \cellcolor{shadecolor} & \cellcolor{shadecolor} & & & & & & & & &	\\ \hline
+ 
+	\hiderowcolors Análise da correlação entre os descritores e a eficiência & & \cellcolor{shadecolor} & \cellcolor{shadecolor} & \cellcolor{shadecolor} & & & & & & & & \\ \hline
+	
+    \hiderowcolors Desenvolvimento da utilização adaptativa do \ac{DIVC} & & & & \cellcolor{shadecolor} & \cellcolor{shadecolor} & \cellcolor{shadecolor} & & & & & & \\ \hline
+    
+	\hiderowcolors Testes e coleta de dados & & & & & \cellcolor{shadecolor} & \cellcolor{shadecolor} & \cellcolor{shadecolor} & \cellcolor{shadecolor} &      \cellcolor{shadecolor} & & & \\ \hline
+
+	\hiderowcolors Relatório TCC I & & & & & \cellcolor{shadecolor} & \cellcolor{shadecolor} & & & & & & 
+    \\ \hline
+		
+    \hiderowcolors Análise dos dados coletados & & & & & & & & & \cellcolor{shadecolor} & \cellcolor{shadecolor} & & \\ \hline
+ 
+	\hiderowcolors Redação do rascunho de TCC & & & & & & & & \cellcolor{shadecolor} & \cellcolor{shadecolor} & \cellcolor{shadecolor} & & \\ \hline
+ 
+	\hiderowcolors Entrega do rascunho de TCC & & & & & & & & & & \cellcolor{shadecolor} & & \\ \hline
+ 
+	\hiderowcolors Relatório TCC II & & & & & & & & & & \cellcolor{shadecolor} & \cellcolor{shadecolor} & 
+    \\ \hline
+	
+    \hiderowcolors Ajustes finais & & & & & & & & & & & \cellcolor{shadecolor} & \\ \hline
+    
+	\hiderowcolors Defesa pública & & & & & & & & & & & & \cellcolor{shadecolor} \\ \hline
+ 
+	\end{tabular}
+}
+% \end{minipage*}
+% }\vspace{-.1cm}
+
+\section{Custos}
+%\vspace{-.1cm}
+% \noindent\resizebox{\textwidth}{!}{
+
+Nenhum custo de licença está relacionado ao projeto.
+\\
+
+	\begin{tabular}{|X p{3cm}|c|c|c|}
+		%\begin{small}
+			\hline
+			%\rowcolor{shadecolor}
+		    {\cellcolor{shadecolor}} Item & {\cellcolor{shadecolor}} Quant. & {\cellcolor{shadecolor}} Valor Un. (R\$) & {\cellcolor{shadecolor}} Total (R\$) \\ \hline
+		    \hline
+		    \multicolumn{4}{|c|}{Material de Consumo} \\ \hline
+		    Folhas impressas & 100 & $0,20$ & $20,00$ \\ \hline
+            Internet Wi-FI (valor mensal) & 12 & $100$ & $1200,00$ \\ \hline
+		    \hline
+		    \multicolumn{4}{|c|}{Outros recursos e serviços} \\ \hline
+		    \multicolumn{4}{|c|}{Reserva de Contingência} \\ \hline
+		     &  &  & $500,00$ \\ \hline
+		    \hline
+		    \multicolumn{4}{|c|}{Total} \\ \hline
+		     &  &  & $1720,00$ \\ \hline
+
+		%\end{small}
+	\end{tabular}
+	
+	\section{Recursos Humanos}
+
+% \noindent\resizebox{\textwidth}{!}{
+	\begin{tabular}{|c|c|}
+		%\begin{small}
+			\arrayrulecolor{white}
+			\hline
+			\arrayrulecolor{black}
+			\hline
+			\rowcolor{shadecolor}
+		    Nome & Função \\ \hline
+		    Gabriela Furtado da Silveira & Autor \\ \hline
+                André Beims Bräscher & Orientador \\ \hline
+		    José Luís A. Güntzel & Professor Responsável/Co-orientador \\ \hline
+		    Ismael Seidel & Membro da Banca \\ \hline
+		    A definir & Membro da Banca \\ \hline
+		    Renato Cislaghi & Coordenador de Projetos \\ \hline
+
+		%\end{small}
+	\end{tabular}
+% }
+
+
+\section{Comunicação}
+
+\noindent\resizebox{\textwidth}{!}{
+	\begin{tabular}{|X p{3cm}|X p{3cm}|X p{3cm}|X p{3cm}|X p{3cm}|}
+		%\begin{small}
+			%\arrayrulecolor{white}
+			%\hline
+			%\arrayrulecolor{black}
+			\hhline{|*{5}{-|}}
+			%\rowcolor{shadecolor}
+			%\rowcolor{white}
+		    {\cellcolor{shadecolor}} O que precisa ser comunicado & {\cellcolor{shadecolor}} Por quem & {\cellcolor{shadecolor}} Para quem & {\cellcolor{shadecolor}} Melhor forma de Comunicação & {\cellcolor{shadecolor}} Quando e com que frequência \\ \hhline{|*{5}{-|}}
+			%\rowcolor{white}
+		    Ante-Projeto & Autor & Coordenador de Projetos & Por meio do site de projetos & Final de Cada Semestre \\ \hhline{|*{5}{-|}}
+			%\rowcolor{white}
+		    Reuniões com orientador & Autor & Orientador & Videoconferência & Semanalmente \\ \hhline{|*{5}{-|}}
+			%\rowcolor{white}
+		    Revisão do TCC & Autor & Orientador, membros da banca & Papel impresso e/ou pdf & Próximo da conclusão \\ \hhline{|*{5}{-|}}
+			%\rowcolor{white}
+		    Dúvidas & Autor & Orientador, membros da banca ou Coordenador de Projetos & E-mail e/ou videoconferência & Conforme necessidade \\ \hhline{|*{5}{-|}}
+
+		%\end{small}
+	\end{tabular}
+}
+
+\section{Riscos}
+
+\noindent\resizebox{\textwidth}{!}{
+	\begin{tabular}{|X p{2cm}|c|c|c|X p{3cm}|X p{3cm}|}
+		%\begin{small}
+			%\hline
+			\hhline{|*{6}{-|}}
+			%\rowcolor{shadecolor}
+		    {\cellcolor{shadecolor}} Risco & {\cellcolor{shadecolor}}Probabilidade & {\cellcolor{shadecolor}}Impacto & {\cellcolor{shadecolor}}Prioridade & {\cellcolor{shadecolor}}Estratégia de Resposta & {\cellcolor{shadecolor}}Ações Preventivas \\ \hhline{|*{6}{-|}}
+		    Perda de Dados & baixa & alto & alta & Utilizar ferramenta de versionamento & Geração de backups \\ \hhline{|*{6}{-|}}
+		    Problemas de Saúde & baixa & alto & alta & Realizar tratamento & Manter bons hábitos e ser prudente \\ \hhline{|*{6}{-|}}
+		    Alteração no Tema & baixa & alto & alta & Buscar novo tema ou modificar escopo atual & Manter interação constante com orientador\\ \hhline{|*{6}{-|}}
+		    Alteração no Cronograma & média & alto & alta & Realizar as adaptações necessárias & Ser responsável e organizado e manter-se dentro do cronograma \\ \hhline{|*{6}{-|}}
+
+		%\end{small}
+	\end{tabular}
+}
