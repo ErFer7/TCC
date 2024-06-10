@@ -26,6 +26,7 @@
 \usepackage{latexsym}
 \usepackage{lipsum}
 \usepackage{setspace}
+\usepackage{tabularray}
 
 \definecolor{shadecolor}{rgb}{0.8,0.8,0.8}
 
@@ -59,7 +60,7 @@
 	}
 }
 
-% Capa
+% Definições gerais
 \autor{Eric Fernandes Evaristo}
 \titulo{Uso de uma MLLM para classificar lesões de pele}
 \orientador[Orientador]{Aldo von Wangenheim, Prof. Dr. rer.nat.}  % TODO: Verificar os títulos
@@ -78,29 +79,23 @@
 \imprimirtipotrabalho~do~\imprimirprograma~do~\imprimircentro~da~\imprimirinstituicao~para~a~obtenção~do~título~de~\imprimirformacao.
 }
 
-% ---
 % Configurações de aparência do PDF final
-% ---
-% alterando o aspecto da cor azul
 \definecolor{blue}{RGB}{41,5,195}
-% informações do PDF
 \makeatletter
 \hypersetup{
-     	%pagebackref=true,
-		pdftitle={\@title}, 
+		pdftitle={\@title},
 		pdfauthor={\@author},
     	pdfsubject={\imprimirpreambulo},
 	    pdfcreator={LaTeX with abnTeX2},
-		pdfkeywords={ufsc, latex, abntex2}, 
-		colorlinks=true,       		% false: boxed links; true: colored links
-    	linkcolor=black,%blue,          	% color of internal links
-    	citecolor=black,%blue,        		% color of links to bibliography
-    	filecolor=black,%magenta,      		% color of file links
-		urlcolor=black,%blue,
+		pdfkeywords={ufsc, latex, abntex2},
+		colorlinks=true,
+    	linkcolor=black,
+    	citecolor=black,
+    	filecolor=black,
+		urlcolor=black,
 		bookmarksdepth=4
 }
 \makeatother
-% ---
 
 % ---
 % compila a lista de abreviaturas e siglas e a lista de símbolos
@@ -138,7 +133,7 @@
 % \simbololista{A}{\ensuremath{A}}{Área de um círculo}
 
 % compila a lista de abreviaturas e siglas e a lista de símbolos
-\makenoidxglossaries 
+\makenoidxglossaries
 
 % ---
 % ---
@@ -157,7 +152,7 @@
 \selectlanguage{brazil}
 
 % Retira espaço extra obsoleto entre as frases.
-\frenchspacing 
+\frenchspacing
 
 % Espaçamento 1.5 entre linhas
 \OnehalfSpacing
@@ -216,8 +211,8 @@
 % Referências bibliográficas
 % ----------------------------------------------------------
 \begingroup
-    %  \singlespacing
-	 \printbibliography[title=REFERÊNCIAS]
+%  \singlespacing
+\printbibliography[title=REFERÊNCIAS]
 \endgroup
 
 % ----------------------------------------------------------
@@ -250,7 +245,7 @@
 % Inicia os anexos
 % ---
 \begin{anexosenv}
-%	\partanexos*
+	%	\partanexos*
 	\input{aftertext/anexo_a}
 \end{anexosenv}
 
