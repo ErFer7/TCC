@@ -1,3 +1,4 @@
 #!bin/bash
 
-rm -rf *.bbl *.out.ps chapters/*aux
+latexmk -C
+rm -rf *.aux *.bbl *.bcf *.blg *.idx *.log *.run.xml *.toc chapters/*.aux
