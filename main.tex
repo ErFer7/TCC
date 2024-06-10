@@ -20,18 +20,10 @@
 \usepackage{colortbl}
 \usepackage{framed}
 \usepackage{amssymb}
-%\usepackage{footnote}
-%\makesavenoteenv{tabular}
-%\makesavenoteenv{table}
-%\usepackage[printonlyused, withpage]{acronym}
-%\usepackage{pdfpages}
 \usepackage{afterpage}
 \usepackage{hhline}
 \usepackage{enumitem}
 \usepackage{latexsym}
-%\usepackage{bm}
-%\usepackage{amssymb}
-%\usepackage[lined,boxed,ruled,commentsnumbered,portuguese]{algorithm2e}
 \usepackage{lipsum}
 \usepackage{setspace}
 
@@ -56,73 +48,35 @@
 			\step[fieldset=abstract, null]
 			\step[fieldset=pagetotal, null]
 		}
-		% remove URLs for types that are primarily printed
-%		\map{
-%			\pernottype{software}
-%			\pernottype{online}
-%			\pernottype{report}
-%			\pernottype{techreport}
-%			\pernottype{standard}
-%			\pernottype{manual}
-%			\pernottype{misc}
-%			\step[fieldset=url, null]
-%			\step[fieldset=urldate, null]
-%		}
 		\map{
 			\pertype{inproceedings}
-			% remove mostly redundant conference information
 			\step[fieldset=venue, null]
 			\step[fieldset=eventdate, null]
 			\step[fieldset=eventtitle, null]
-			% do not show ISBN for proceedings
 			\step[fieldset=isbn, null]
-			% Citavi bug
 			\step[fieldset=volume, null]
 		}
 	}
 }
 
+% Capa
 \autor{Eric Fernandes Evaristo}
 \titulo{Uso de uma MLLM para classificar lesões de pele}
-%\subtitulo{Subtítulo (se houver)}
-% FIXME Substituir 'XXXXXX' pelo nome do seu
-% orientador.
-% \orientador{XXXXXXX, Dr.}
-% FIXME Se for orientado por uma mulher, comente a linha acima e descomente a linha a seguir.
-\orientador[Orientador]{André Beims Bräscher, Me.}
-% FIXME Substituir 'XXXXXX' pelo nome do seu
-% coorientador. Caso não tenha coorientador, comente a linha a seguir.
-% \coorientador{}
-% FIXME Se for coorientado por uma mulher, comente a linha acima e descomente a linha a seguir.
-\coorientador[Coorientador]{Prof. José Luís Almada Güntzel, Dr.}
-% FIXME Substituir 'XXXXXX' pelo nome do Coordenador do 
-% programa/curso.
-% \coordenador{Prof. XXXXXX, Dr.}
-% FIXME Se for coordenadora mulher, comente a linha acima e descomente a linha a seguir.
-% \coordenador[Coordenadora]{Nome da Coordenadora, Dra.}
-% FIXME Substituir '[ano da entrega]' pelo ano (ano) em que seu trabalho foi defendido.
+\orientador[Orientador]{Aldo von Wangenheim, Prof. Dr. rer.nat.}  % TODO: Verificar os títulos
 \ano{2024}
-% FIXME Substituir '[dia] de [mês] de [ano]' pela data em que ocorreu sua defesa.
-\data{[dia] de [mês] de [ano]}
-% FIXME Substituir '[Cidade da defesa]' pela cidade em que ocorreu sua defesa.
 \local{Florianópolis}
 \instituicaosigla{UFSC}
 \instituicao{Universidade Federal de Santa Catarina}
-% FIXME Substituir 'Dissertação/Tese' pelo tipo de trabalho (Tese, Dissertação). 
 \tipotrabalho{Proposta de Trabalho de Conclusão de Curso}
-% FIXME Substituir '[licenciado/bacharel] em [nome do título obtido]' pela grau adequado.
 \formacao{Bacharel em Ciências da Computação}
-% FIXME Substituir '[licenciado/bacharel]' pelo nivel adequado.
 \nivel{Bacharel}
-% FIXME Substituir 'Curso de Graduação em [XXXXXXXX]' pela curso adequado.
 \programa{Curso de Graduação em Ciências da Computação}
-% FIXME Substituir 'Campus XXXXXX ou Centro de XXXXXX' pelo campus ou centro adequado.
 \centro{Centro Tecnológico}
+
 \preambulo
-{%
+{
 \imprimirtipotrabalho~do~\imprimirprograma~do~\imprimircentro~da~\imprimirinstituicao~para~a~obtenção~do~título~de~\imprimirformacao.
 }
-% ---
 
 % ---
 % Configurações de aparência do PDF final
