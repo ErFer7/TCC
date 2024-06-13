@@ -139,14 +139,19 @@
 \begin{resumo}
 	\SingleSpacing
 
-	Considerando o aumento significativo observado no consumo e compartilhamento de vídeos nos últimos anos, é notória a demanda por técnicas que permitam armazenamento, transmissão e reprodução desse tipo de dado de forma cada vez mais otimizada.
-	Para essa finalidade, a abordagem mais consolidada é a codificação de vídeo híbrida, que tem sido parte essencial da área de codificação de vídeo nas últimas décadas.
-	Contudo, estima-se que a complexidade de algoritmos tradicionais híbridos venha aumentando em 10X para um ganho de desempenho de 2X, a cada geração.
-	Nesse contexto, surge a necessidade de buscar modelos alternativos de codificação, como o \ac{DIVC}.
-	O \ac{DIVC} combina o modelo de codificação híbrido com \ac{VFI}, porém tem desempenho variável de acordo com o conteúdo do vídeo.
-	Portanto, o objetivo deste trabalho é propor uma técnica para melhorar sua eficiência de codificação a partir da remoção de quadros de forma adaptativa. Para isso, os quadros serão analisados utilizando descritores que apresentem melhor correlação com a eficiência do modelo.
+	Lesões de pele podem ser um indicativo de diversas doenças, incluindo doenças graves como o câncer de pele. A detecção precoce dessas lesões é fundamental para o
+	tratamento e cura da doença. Porém, o diagnóstico de uma lesão de pele é normalmente feita por profissionais especializados em hospitais ou clínicas. Com isso, uma
+	parcela da população acaba sendo não contemplada, pois muitos não dão atenção a lesões de pele e não procuram o atendimento especializado. Além disso, existem casos
+	em que a falta de acesso a esse atendimento, como em regiões mais carentes, resulta em diagnósticos tardios.
 
-	\textbf{Palavras-chave:} Codificação de vídeo. VVC. Eficiência de codificação. Descritores de imagem. VFI.
+	Considerando este cenário, tecnologias como \ac{MLLMs} podem ser úteis. Estes modelos podem identificar lesões de pele com base em imagens e prover um pré-diagnóstico
+	que pode alertar o portador da lesão sobre a necessidade de procurar atendimento médico. O modelo \ac{LLaVa} é um bom candidato para esta aplicação, pois consegue
+	descrever imagens e pode ser adaptado para propósitos específicos.
+
+	Neste trabalho, propõe-se a adaptação do \ac{LLaVa} com a técnica de \textit{fine tuning} para classificar lesões de pele com uma precisão aceitável. Serão utilizadas
+	duas técnicas de \textit{fine tuning}, \ac{PEFT} e \ac{LoRa}. Com isso, será avaliado a eficiência do processo de adaptação e a precisão do modelo final.
+
+	\textbf{Palavras-chave:} Lesões de pele. MLLM. LLaVa. Fine tuning. PEFT. LoRa.
 \end{resumo}
 
 % Resumo em inglês (TODO)
@@ -161,8 +166,10 @@
 
 {
 \hypersetup{hidelinks}
+
 % Lista de siglas
 \imprimirlistadesiglas
+
 % Sumário
 \pdfbookmark[0]{\contentsname}{toc}
 \tableofcontents*
