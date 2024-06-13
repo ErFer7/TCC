@@ -20,20 +20,13 @@
 \usepackage{colortbl}
 \usepackage{framed}
 \usepackage{amssymb}
-%\usepackage{footnote}
-%\makesavenoteenv{tabular}
-%\makesavenoteenv{table}
-%\usepackage[printonlyused, withpage]{acronym}
-%\usepackage{pdfpages}
 \usepackage{afterpage}
 \usepackage{hhline}
 \usepackage{enumitem}
 \usepackage{latexsym}
-%\usepackage{bm}
-%\usepackage{amssymb}
-%\usepackage[lined,boxed,ruled,commentsnumbered,portuguese]{algorithm2e}
 \usepackage{lipsum}
 \usepackage{setspace}
+\usepackage{tabularray}
 
 \definecolor{shadecolor}{rgb}{0.8,0.8,0.8}
 
@@ -56,103 +49,65 @@
 			\step[fieldset=abstract, null]
 			\step[fieldset=pagetotal, null]
 		}
-		% remove URLs for types that are primarily printed
-%		\map{
-%			\pernottype{software}
-%			\pernottype{online}
-%			\pernottype{report}
-%			\pernottype{techreport}
-%			\pernottype{standard}
-%			\pernottype{manual}
-%			\pernottype{misc}
-%			\step[fieldset=url, null]
-%			\step[fieldset=urldate, null]
-%		}
 		\map{
 			\pertype{inproceedings}
-			% remove mostly redundant conference information
 			\step[fieldset=venue, null]
 			\step[fieldset=eventdate, null]
 			\step[fieldset=eventtitle, null]
-			% do not show ISBN for proceedings
 			\step[fieldset=isbn, null]
-			% Citavi bug
 			\step[fieldset=volume, null]
 		}
 	}
 }
 
+% Definições gerais
 \autor{Eric Fernandes Evaristo}
 \titulo{Uso de uma MLLM para classificar lesões de pele}
-%\subtitulo{Subtítulo (se houver)}
-% FIXME Substituir 'XXXXXX' pelo nome do seu
-% orientador.
-% \orientador{XXXXXXX, Dr.}
-% FIXME Se for orientado por uma mulher, comente a linha acima e descomente a linha a seguir.
-\orientador[Orientador]{André Beims Bräscher, Me.}
-% FIXME Substituir 'XXXXXX' pelo nome do seu
-% coorientador. Caso não tenha coorientador, comente a linha a seguir.
-% \coorientador{}
-% FIXME Se for coorientado por uma mulher, comente a linha acima e descomente a linha a seguir.
-\coorientador[Coorientador]{Prof. José Luís Almada Güntzel, Dr.}
-% FIXME Substituir 'XXXXXX' pelo nome do Coordenador do 
-% programa/curso.
-% \coordenador{Prof. XXXXXX, Dr.}
-% FIXME Se for coordenadora mulher, comente a linha acima e descomente a linha a seguir.
-% \coordenador[Coordenadora]{Nome da Coordenadora, Dra.}
-% FIXME Substituir '[ano da entrega]' pelo ano (ano) em que seu trabalho foi defendido.
+\orientador[Orientador]{Aldo von Wangenheim, Prof. Dr. rer.nat.}  % TODO: Verificar os títulos
 \ano{2024}
-% FIXME Substituir '[dia] de [mês] de [ano]' pela data em que ocorreu sua defesa.
-\data{[dia] de [mês] de [ano]}
-% FIXME Substituir '[Cidade da defesa]' pela cidade em que ocorreu sua defesa.
 \local{Florianópolis}
 \instituicaosigla{UFSC}
 \instituicao{Universidade Federal de Santa Catarina}
-% FIXME Substituir 'Dissertação/Tese' pelo tipo de trabalho (Tese, Dissertação). 
 \tipotrabalho{Proposta de Trabalho de Conclusão de Curso}
-% FIXME Substituir '[licenciado/bacharel] em [nome do título obtido]' pela grau adequado.
 \formacao{Bacharel em Ciências da Computação}
-% FIXME Substituir '[licenciado/bacharel]' pelo nivel adequado.
 \nivel{Bacharel}
-% FIXME Substituir 'Curso de Graduação em [XXXXXXXX]' pela curso adequado.
 \programa{Curso de Graduação em Ciências da Computação}
-% FIXME Substituir 'Campus XXXXXX ou Centro de XXXXXX' pelo campus ou centro adequado.
 \centro{Centro Tecnológico}
+
 \preambulo
-{%
+{
 \imprimirtipotrabalho~do~\imprimirprograma~do~\imprimircentro~da~\imprimirinstituicao~para~a~obtenção~do~título~de~\imprimirformacao.
 }
-% ---
 
-% ---
 % Configurações de aparência do PDF final
-% ---
-% alterando o aspecto da cor azul
 \definecolor{blue}{RGB}{41,5,195}
-% informações do PDF
 \makeatletter
 \hypersetup{
-     	%pagebackref=true,
-		pdftitle={\@title}, 
+		pdftitle={\@title},
 		pdfauthor={\@author},
     	pdfsubject={\imprimirpreambulo},
 	    pdfcreator={LaTeX with abnTeX2},
-		pdfkeywords={ufsc, latex, abntex2}, 
-		colorlinks=true,       		% false: boxed links; true: colored links
-    	linkcolor=black,%blue,          	% color of internal links
-    	citecolor=black,%blue,        		% color of links to bibliography
-    	filecolor=black,%magenta,      		% color of file links
-		urlcolor=black,%blue,
+		pdfkeywords={ufsc, latex, abntex2},
+		colorlinks=true,
+    	linkcolor=black,
+    	citecolor=black,
+    	filecolor=black,
+		urlcolor=black,
 		bookmarksdepth=4
 }
 \makeatother
-% ---
 
 % ---
 % compila a lista de abreviaturas e siglas e a lista de símbolos
 % ---
 
 % Declaração das siglas
+\siglalista{MLLMs}{Grandes Modelos de Linguagem Multimodais - \textit{Multimodal Large Language Models}}
+\siglalista{LLaVa}{\textit{Large Language and Vision Assistant}}
+\siglalista{PEFT}{\textit{Parameter-Efficient Fine-Tuning}}
+\siglalista{LoRa}{\textit{Low-Rank Adaptation}}
+
+% TODO: Remover
 \siglalista{DIVC}{\textit{Decoupled Interpolated Video Coding}}
 \siglalista{SSIM}{Structural Similarity Index Measure}
 \siglalista{VFI}{Interpolação de Quadros de Vídeo - \textit{Video Frame Interpolation}}
@@ -172,30 +127,17 @@
 \siglalista{BD-Rate}{\textit{{Bj{\o}ntegaard Delta Bitrate}}}
 \siglalista{BD-PSNR}{\textit{{Bj{\o}ntegaard Delta PSNR}}}
 \newacronym{BD-SSIMdB}{BD-SSIM$_\text{dB}$}{\textit{{Bj{\o}ntegaard Delta SSIM$_\text{dB}$}}}
-% \siglalista{BD-$\text{SSIM}_\text{dB}$}{\textit{{Bj{\o}ntegaard Delta $\text{SSIM}_\text{dB}$}}}
 \siglalista{VMAF}{\textit{Video Multi-Method Assessment Fusion}}
 \siglalista{UVG}{\textit{Ultra Video Group}}
 \siglalista{UGC}{\textit{User Generated Content}}
 
-% Declaração dos simbolos
-% \simbololista{C}{\ensuremath{C}}{Circunferência de um círculo}
-% \simbololista{pi}{\ensuremath{\pi}}{Número pi} 
-% \simbololista{r}{\ensuremath{r}}{Raio de um círculo}
-% \simbololista{A}{\ensuremath{A}}{Área de um círculo}
+% Compila a lista de abreviaturas e siglas e a lista de símbolos
+\makenoidxglossaries
 
-% compila a lista de abreviaturas e siglas e a lista de símbolos
-\makenoidxglossaries 
-
-% ---
-% ---
-% compila o indice
-% ---
+% Compila o indice
 \makeindex
-% ---
 
-% ----
 % Início do documento
-% ----
 \begin{document}
 
 % Seleciona o idioma do documento (conforme pacotes do babel)
@@ -203,7 +145,7 @@
 \selectlanguage{brazil}
 
 % Retira espaço extra obsoleto entre as frases.
-\frenchspacing 
+\frenchspacing
 
 % Espaçamento 1.5 entre linhas
 \OnehalfSpacing
@@ -262,8 +204,8 @@
 % Referências bibliográficas
 % ----------------------------------------------------------
 \begingroup
-    %  \singlespacing
-	 \printbibliography[title=REFERÊNCIAS]
+%  \singlespacing
+\printbibliography[title=REFERÊNCIAS]
 \endgroup
 
 % ----------------------------------------------------------
@@ -296,7 +238,7 @@
 % Inicia os anexos
 % ---
 \begin{anexosenv}
-%	\partanexos*
+	%	\partanexos*
 	\input{aftertext/anexo_a}
 \end{anexosenv}
 
