@@ -1,29 +1,26 @@
 \chapter{Introdução}
 
-% Propor a ideia de um sistema de detecção de câncer de pele por meio de imagens que possa ser utilizado por agentes de saúde
-% Propor que o sistema seja baseado no LLaVa e que seja treinado com imagens de câncer de pele
-
-% Explicar que o treinamento completo seria difícil, mas seria possível fazer um fine tuning com PEFT ou LoRa
-% Indicar que o resultado esperado é um modelo que possa classificar lesões de pele com alta acurácia
-
 Lesões de pele são indicativos de diversas doenças, como infecções de baixo risco ou até mesmo câncer. Cerca de 30\% dos tumores malignos registrados no Brasil são
 causados pelo câncer de pele \cite{skin_cancer_in_brazil}. Os tipos mais comuns desta doença são o carcinoma basocelular e o carcinoma epidermoide, que mesmo tendo uma
 baixa letalidade, podem causar sequelas expressivas por conta do tratamento. O melanoma é menos frequente, mas possui uma letalidade muito maior, causando 75\% das mortes
-por câncer de pele.
+por câncer de pele \cite{skin_cancer_screening}.
 
-% Tendo em vista esse cenário, fica evidente a importância da codificação de vídeos, a qual busca formas de armazenar, transmitir e reproduzir esse tipo de dado de forma otimizada.
-% Nesse contexto, a abordagem mais consolidada é a codificação híbrida, a qual vem sendo parte essencial do estado da arte da área nas últimas décadas.
-% Os padrões de codificação híbridos valem-se de diferentes técnicas para examinar quadros e regiões dentro dos quadros a procura de informações redundantes para o sistema visual humano. Com isso, eles exploram a taxa de compressão atingida para minimizar tanto quanto possível o armazenamento, mantendo ao máximo a qualidade.
-% Contudo, o aumento da demanda e da concorrência observado recentemente tem levado ao desenvolvimento de algoritmos cada vez mais complexos, impactando no custo computacional e no tempo de execução.
-% Dessa maneira, a cada geração, a eficiência de codificação vem duplicando, ao custo de um aumento na complexidade de cerca de 10X.
-% Por consequência, técnicas alternativas têm sido propostas para tentar melhorar a eficiência de codificação, e uma delas é o \ac{DIVC} \cite{ours}.
-% Esse modelo de codificação consiste em combinar o uso de um dos padrões híbridos com a realização de \ac{VFI}.
+A detecção precoce do câncer de pele é essencial para a garantia da efetividade do tratamento, dado que a taxa de sobrevida dos pacientes tende a cair ao longo do avanço
+da doença \cite{skin_cancer_survival}. Observa-se que indivíduos com um grau menor de escolaridade têm um prognóstico pior, pois apresentam tumores em estágios mais
+avançados \cite{skin_cancer_socioeconomic}. Esta correlação pode indicar que a falta de conhecimento sobre a doença e problemas socioeconômicos podem resultar no atraso
+do diagnóstico e consequentemente na redução da taxa de sucesso do tratamento.
 
-% \ac{VFI} é uma técnica para gerar ao menos um quadro intermediário ($Q_t$), tomando como referência pelo menos um quadro anterior ($Q_0$) e um posterior ($Q_1$), como mostra a Figura.
-% Nesse caso, \textit{t} representa a posição temporal do quadro interpolado em relação aos quadros de referência, com $0<t<1$.
-% Os quadros podem ser produzidos com diferentes propósitos, e as implementações mais recentes são baseadas na utilização de \acp{NN}.
-% Uma das abordagens mais empregadas pode ser classificada como \textit{flow-based}, e consiste em computar o \textit{optical flow}, o qual é usado para relizar \textit{warping} sobre os quadros de referência.
-% Um exemplo desse tipo de arquitetura foi proposto por \textcite{niklaus2020softmax}.
+Considerando este cenário, a utilização de um sistema automatizado de fácil acesso de classificação de lesões de pele pode ser útil na identificação precoce de melanomas
+e outros tipos de câncer. \ac{MLLMs} conseguem obter uma precisão significativa na classificação de imagens de diagnósticos médicos, o que torna viável o uso destes modelos
+para o desenvolvimento deste trabalho \cite{mllm_success_rate}.
+
+O \ac{LLaVa} foi escolhido como o modelo base devido à limitação de recursos para o treinamento de um novo modelo e pelo fato de ter o código disponível publicamente. Este
+modelo combina o codificador visual \ac{CLIP ViT-L/14} e o \ac{LLM} \textit{Vicuna} \cite{llava}. Com este modelo, é possível realizar um \textit{fine-tuning}, adaptando-o
+para a classificação de lesões de pele. Com o objetivo utilizar os recursos computacionais disponíveis eficientemente, o \textit{fine-tuning} será feito com técnicas
+baseadas em \ac{PEFT}. Este método permite a redução de número de parâmetros usado no \textit{fine-tuning}, resultando em uma utilização menor de recursos \cite{peft}.
+Especificamente, planeja-se utilizar métodos como \ac{LoRa} ou outros similares para a adaptação do modelo.
+
+Com as adaptações feitas no modelo \ac{LLaVa}, espera-se obter um sistema confiável de classificação de lesões de pele.
 
 \section{Objetivos}
 
