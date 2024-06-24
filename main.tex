@@ -102,8 +102,10 @@
 % ---
 
 % Declaração das siglas
-\siglalista{MLLMs}{Grandes Modelos de Linguagem Multimodais - \textit{Multimodal Large Language Models}}
+\siglalista{MLLMs}{\textit{Multimodal Large Language Models}}
+\siglalista{LLM}{\textit{Large Language Model}}
 \siglalista{LLaVa}{\textit{Large Language and Vision Assistant}}
+\siglalista{CLIP ViT-L/14}{\textit{Contrastive Language-Image Pre-training ViT-L/14}}
 \siglalista{PEFT}{\textit{Parameter-Efficient Fine-Tuning}}
 \siglalista{LoRa}{\textit{Low-Rank Adaptation}}
 
@@ -153,56 +155,30 @@
 % Corrige justificação
 %\sloppy
 
-% ----------------------------------------------------------
-% ELEMENTOS PRÉ-TEXTUAIS
-% ----------------------------------------------------------
+% Elementos pré-textuais
 % \pretextual %a macro \pretextual é acionado automaticamente no início de \begin{document}
-% ---
-% Capa, folha de rosto, ficha bibliografica, errata, folha de apróvação
-% Dedicatória, agradecimentos, epígrafe, resumos, listas
-% ---
 \input{beforetext/beforetext}
-% ---
 
-% ----------------------------------------------------------
-% ELEMENTOS TEXTUAIS
-% ----------------------------------------------------------
+% Elementos textuais
 \textual
 
-% ---
 % 1 - Introdução
-% ---
 \include{chapters/1-chapter}
-% ---
 
-% ---
 % 2 - Capítulo 2
-% ---
 \include{chapters/2-chapter}
-% ---
 
-% ---
 % 3 - Capítulo 3
-% ---
-\include{chapters/3-chapter}
-% ---
+% \include{chapters/3-chapter}
 
-% ---
 % 4 - Conclusão
-% ---
 %\phantompart
-\include{chapters/4-chapter}
-% ---
+% \include{chapters/4-chapter}
 
-% ----------------------------------------------------------
-% ELEMENTOS PÓS-TEXTUAIS
-% ----------------------------------------------------------
+% Elementos pós-textuais
 \postextual
-% ----------------------------------------------------------
 
-% ----------------------------------------------------------
 % Referências bibliográficas
-% ----------------------------------------------------------
 \begingroup
 %  \singlespacing
 \printbibliography[title=REFERÊNCIAS]
