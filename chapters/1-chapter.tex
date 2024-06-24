@@ -5,22 +5,23 @@ causados pelo câncer de pele \cite{skin_cancer_in_brazil}. Os tipos mais comuns
 baixa letalidade, podem causar sequelas expressivas por conta do tratamento. O melanoma é menos frequente, mas possui uma letalidade muito maior, causando 75\% das mortes
 por câncer de pele \cite{skin_cancer_screening}.
 
-A detecção precoce do câncer de pele é essencial para a garantia da efetividade do tratamento, dado que a taxa de sobrevida dos pacientes tende a cair ao longo do avanço
+A detecção precoce do câncer de pele é essencial para a garantia da efetividade do tratamento, pois a taxa de sobrevida dos pacientes tende a cair ao longo do avanço
 da doença \cite{skin_cancer_survival}. Observa-se que indivíduos com um grau menor de escolaridade têm um prognóstico pior, pois apresentam tumores em estágios mais
-avançados \cite{skin_cancer_socioeconomic}. Esta correlação pode indicar que a falta de conhecimento sobre a doença e problemas socioeconômicos podem resultar no atraso
+avançados \cite{skin_cancer_socioeconomic}. Esta correlação pode indicar que a falta de conhecimento sobre a doença ou problemas socioeconômicos podem resultar no atraso
 do diagnóstico e consequentemente na redução da taxa de sucesso do tratamento.
 
-Considerando este cenário, a utilização de um sistema automatizado de fácil acesso de classificação de lesões de pele pode ser útil na identificação precoce de melanomas
-e outros tipos de câncer. \ac{MLLMs} conseguem obter uma precisão significativa na classificação de imagens de diagnósticos médicos, o que torna viável o uso destes modelos
-para o desenvolvimento deste trabalho \cite{mllm_success_rate}.
+Considerando este cenário, o desenvolvimento de um sistema automatizado de fácil utilização de classificação de lesões de pele pode ser útil na identificação precoce de
+melanomas e outros tipos de lesões de pele. \ac{MLLMs} conseguem obter uma precisão significativa na classificação de imagens de diagnósticos médicos, o que torna viável
+o uso destes modelos para o desenvolvimento deste trabalho \cite{mllm_success_rate}.
 
-O \ac{LLaVa} foi escolhido como o modelo base devido à limitação de recursos para o treinamento de um novo modelo e pelo fato de ter o código disponível publicamente. Este
-modelo combina o codificador visual \ac{CLIP ViT-L/14} e o \ac{LLM} \textit{Vicuna} \cite{llava}. Com este modelo, é possível realizar um \textit{fine-tuning}, adaptando-o
-para a classificação de lesões de pele. Com o objetivo utilizar os recursos computacionais disponíveis eficientemente, o \textit{fine-tuning} será feito com técnicas
-baseadas em \ac{PEFT}. Este método permite a redução de número de parâmetros usado no \textit{fine-tuning}, resultando em uma utilização menor de recursos \cite{peft}.
-Especificamente, planeja-se utilizar métodos como \ac{LoRa} ou outros similares para a adaptação do modelo.
+O \ac{LLaVa} foi escolhido como o modelo base devido à limitação de recursos para o treinamento de um novo modelo e por ter o código disponível publicamente. Este
+modelo combina o codificador visual \ac{CLIP ViT-L/14} e o \ac{LLM} \textit{Vicuna} \cite{llava}.
 
-Com as adaptações feitas no modelo \ac{LLaVa}, espera-se obter um sistema confiável de classificação de lesões de pele.
+Com este modelo, é possível realizar um \textit{fine-tuning}, adaptando-o para a classificação de lesões de pele. Com o objetivo utilizar os recursos computacionais
+disponíveis eficientemente, o \textit{fine-tuning} será feito com técnicas baseadas em \ac{PEFT}. Este método permite a redução de número de parâmetros usados no processo,
+resultando em uma utilização menor de recursos \cite{peft}. Especificamente, planeja-se utilizar métodos como \ac{LoRa} ou outros similares para a adaptação do modelo.
+
+Com as adaptações feitas no \ac{LLaVa}, espera-se obter um sistema confiável de classificação de lesões de pele.
 
 \section{Objetivos}
 
