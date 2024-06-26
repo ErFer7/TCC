@@ -126,10 +126,8 @@
 \OnehalfSpacing
 
 % Corrige justificação
-%\sloppy
 
 % Elementos pré-textuais
-% \pretextual %a macro \pretextual é acionado automaticamente no início de \begin{document}
 \input{beforetext/beforetext}
 
 % Elementos textuais
@@ -153,49 +151,14 @@
 
 % Referências bibliográficas
 \begingroup
-%  \singlespacing
 \printbibliography[title=REFERÊNCIAS]
 \endgroup
 
-% ----------------------------------------------------------
-% Glossário
-% ----------------------------------------------------------
-%
-% Consulte o manual da classe abntex2 para orientações sobre o glossário.
-%
-% \glossary
 
-% ----------------------------------------------------------
 % Apêndices
-% ----------------------------------------------------------
-
-% ---
-% Inicia os apêndices
-% ---
 %\begin{apendicesenv}
 %	\partapendices* 
 %	\input{aftertext/apendice_a}
 %\end{apendicesenv}
-% ---
-
-
-% ----------------------------------------------------------
-% Anexos
-% ----------------------------------------------------------
-
-% ---
-% Inicia os anexos
-% ---
-\begin{anexosenv}
-	%	\partanexos*
-	\input{aftertext/anexo_a}
-\end{anexosenv}
-
-%---------------------------------------------------------------------
-% INDICE REMISSIVO
-%---------------------------------------------------------------------
-%\phantompart
-%\printindex
-%---------------------------------------------------------------------
 
 \end{document}
