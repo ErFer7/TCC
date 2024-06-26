@@ -1,36 +1,24 @@
 \chapter{Planejamento}
 
-As seções seguintes apresentam aspectos relacionados ao desenvolvimento deste trabalho, incluindo método de pesquisa, cronograma, custos, recursos humanos necessários, comunicação e, finalmente, possíveis riscos.
+Este capítulo trata do método de pesquisa e desenvolvimento do projeto, incluindo o cronograma, orçamento, recursos humanos necessários, definições sobre comunicação e
+riscos associados.
 
 \section{Método de Pesquisa}
 
-Primeiramente serão estudados aspectos relacionados aos descritores de imagem e vídeo, como questões teóricas relevantes, categorização, principais exemplos na literatura, suas possíveis aplicações e disponibilidade de acesso.
-A partir dessa pesquisa inicial, serão escolhidos os descritores considerados mais adequados para a proposta.
-Tomada essa decisão, talvez seja necessário implementar um ou mais descritores, sobretudo se não forem encontradas implementações prévias de fácil acesso ou na linguagem desejada.
+A execução do projeto será caracterizada por uma parte teórica de pesquisa do estado da arte e de tecnologias utilizáveis e por uma parte prática em que o modelo será
+desenvolvido e testado. Além disso, o trabalho será feito com o auxílio de um grupo de pesquisa de \ac{MLLMs}.
 
-Posteriormente serão realizados testes aplicando os descritores sobre quadros retirados de algum conjunto de vídeos de teste \textit{datasets} presente na literatura.
-Há quatro opções principais de conjuntos que podem ser utilizados para essa finalidade: Vimeo90K, \ac{UGC}, \ac{UVG} e  \textit{Deep Video Deblurring}. O Vimeo90K \cite{vimeo90k}, o qual apresenta triplas ou quíntuplas de quadros obtidas de vídeos com conteúdo variado. O \ac{UGC} \cite{Wang2019YouTubeUGC} e o \ac{UVG} \cite{mercat2020uvg}, por sua vez, possuem vídeos \textit{raw} (sem compressão), o que é favorável para evitar interferência de ruídos de codificação iniciais nos resultados. O \ac{UVG} contém sequências com \ac{fps} alto, o que é favorável ao caso de uso proposto, enquanto o UGC conta com conteúdos diversificados, o que pode ser positivo para análise das características, porém não tem informações sobre \ac{fps}.
-Por último, o conjunto desenvolvido no trabalho sobre \textit{Deep Video Deblurring} também inclui vídeos com \ac{fps} alto, no entanto são comprimidos.
+A primeira etapa do projeto se consistirá no estudo do estado da arte de \ac{MLLMs} e do processo de treinamento destes modelos. Além disso, serão estudadas as técnicas
+de \textit{fine tuning} com um foco em \ac{PEFT} e suas aplicações no \ac{LLaVa}.
 
-Tendo obtido os dados com os descritores, será executado o \ac{DIVC} sobre as sequências.
-O codificador a ser usado para implementação do modelo é o \ac{VVenC}, o qual é uma versão rápida do \ac{VVC}, o padrão de codificação híbrido estado da arte.
-Já a parte de \ac{VFI} será realizada com o \ac{RIFE} \cite{rife}, pois é um método que atinge qualidade boa em um tempo de execução relativamente baixo, além de possuir uma implementação aberta.
+A próxima etapa se consiste em uma análise do conjunto de dados a ser utilizado, de modo a tratá-lo para a sua utilização no desenvolvimento.
 
-Por último, serão empregadas métricas para avaliação dos resultados obtidos.
-Algumas opções de métricas para avaliação de qualidade são \ac{PSNR} e \ac{SSIM}, as quais são métricas clássicas e amplamente utilizadas.
-Também é possível realizar análise a partir da \ac{VMAF}, a qual foi desenvolvida com o objetivo de considerar mais características relacionadas à qualidade percebida pelo \ac{SVH}.
-A medição da taxa de bits (\textit{bit rate}) é dada em kbps (quantidade de informação - kilobits, processados ou transferidos em um segundo), e pode ser utilizada em métricas relacionadas à eficiência de codificação.
-Uma delas é \ac{BD-Rate} (baseada em PSNR ou $\text{SSIM}_\text{dB}$) \cite{sullivan2001_bd}, cujos valores permitem medir a mudança percentual ($\%$) de \textit{bit rate} em uma qualidade similar.
-% Outra alternativa é medir através de \ac{BD-PSNR} e \ac{BD-$\text{SSIM}_\text{dB}$}.
-Outra alternativa é medir através de \ac{BD-PSNR} e \ac{BD-SSIMdB}.
-% Outra alternativa é medir através de \ac{BD-PSNR} e BD-$\text{SSIM}_\text{dB}$.
+Posteriormente será feito o \textit{fine tuning} do modelo \ac{LLaVa} com diferentes métodos, visando a eficiência do processo. Nesta etapa também serão feitos testes
+para avaliar a precisão do modelo resultante.
 
-
-Portanto, ao término deste trabalho de conclusão de curso, espera-se contar com uma técnica funcional que permita aumentar a eficiência de codificação do modelo \ac{DIVC} de acordo com pelo menos uma das métricas listadas acima. Para isso, o \ac{DIVC} será aplicado de maneira adaptativa com base na adequação do conteúdo da cena, sendo essa avaliada com o auxílio de descritores.
-
+Por fim, será feita uma análise dos resultados com o propósito de determinar a viabilidade da utilização do modelo resultante para a classificação de lesões de pele.
 
 \section{Cronograma}
-% ----------------------------------------------------------
 
 %\afazer{consertar o problema que ocorreu nas tabelas ao colocar fundo colorido em algumas células}
 % ver melhor com orientador e coorientador.\\
@@ -81,32 +69,32 @@ Portanto, ao término deste trabalho de conclusão de curso, espera-se contar co
 % \end{minipage*}
 % }\vspace{-.1cm}
 
-\section{Custos}
-%\vspace{-.1cm}
-% \noindent\resizebox{\textwidth}{!}{
+% \section{Custos}
+% %\vspace{-.1cm}
+% % \noindent\resizebox{\textwidth}{!}{
 
-Nenhum custo de licença está relacionado ao projeto.
-\\
+% Nenhum custo de licença está relacionado ao projeto.
+% \\
 
-\begin{tabular}{|X p{3cm}|c|c|c|}
-	%\begin{small}
-	\hline
-	%\rowcolor{shadecolor}
-	{\cellcolor{shadecolor}} Item & {\cellcolor{shadecolor}} Quant. & {\cellcolor{shadecolor}} Valor Un. (R\$) & {\cellcolor{shadecolor}} Total (R\$) \\ \hline
-	\hline
-	\multicolumn{4}{|c|}{Material de Consumo}                                                                                                         \\ \hline
-	Folhas impressas              & 100                             & $0,20$                                   & $20,00$                              \\ \hline
-	Internet Wi-FI (valor mensal) & 12                              & $100$                                    & $1200,00$                            \\ \hline
-	\hline
-	\multicolumn{4}{|c|}{Outros recursos e serviços}                                                                                                  \\ \hline
-	\multicolumn{4}{|c|}{Reserva de Contingência}                                                                                                     \\ \hline
-	                              &                                 &                                          & $500,00$                             \\ \hline
-	\hline
-	\multicolumn{4}{|c|}{Total}                                                                                                                       \\ \hline
-	                              &                                 &                                          & $1720,00$                            \\ \hline
+% \begin{tabular}{|X p{3cm}|c|c|c|}
+% 	%\begin{small}
+% 	\hline
+% 	%\rowcolor{shadecolor}
+% 	{\cellcolor{shadecolor}} Item & {\cellcolor{shadecolor}} Quant. & {\cellcolor{shadecolor}} Valor Un. (R\$) & {\cellcolor{shadecolor}} Total (R\$) \\ \hline
+% 	\hline
+% 	\multicolumn{4}{|c|}{Material de Consumo}                                                                                                         \\ \hline
+% 	Folhas impressas              & 100                             & $0,20$                                   & $20,00$                              \\ \hline
+% 	Internet Wi-FI (valor mensal) & 12                              & $100$                                    & $1200,00$                            \\ \hline
+% 	\hline
+% 	\multicolumn{4}{|c|}{Outros recursos e serviços}                                                                                                  \\ \hline
+% 	\multicolumn{4}{|c|}{Reserva de Contingência}                                                                                                     \\ \hline
+% 	                              &                                 &                                          & $500,00$                             \\ \hline
+% 	\hline
+% 	\multicolumn{4}{|c|}{Total}                                                                                                                       \\ \hline
+% 	                              &                                 &                                          & $1720,00$                            \\ \hline
 
-	%\end{small}
-\end{tabular}
+% 	%\end{small}
+% \end{tabular}
 
 \section{Recursos Humanos}
 
