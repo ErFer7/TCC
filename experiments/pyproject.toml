@@ -12,6 +12,7 @@ transformers = "^4.42.4"
 accelerate = "^0.32.1"
 evaluate = "^0.4.2"
 peft = "^0.11.1"
+ipykernel = "^6.29.5"
 
 [tool.poetry.dev-dependencies]
 
