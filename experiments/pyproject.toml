@@ -13,6 +13,8 @@ accelerate = "^0.32.1"
 evaluate = "^0.4.2"
 peft = "^0.11.1"
 ipykernel = "^6.29.5"
+pydicom = "^2.4.4"
+pillow = "^10.4.0"
 
 [tool.poetry.dev-dependencies]
 
