@@ -20,24 +20,24 @@ SOFT_PROMPT = 'Identify if the image is showing a benign or malignant skin cance
 
 OLLAMA_URL = 'http://localhost:11434'
 
-parser = ArgumentParser(description='Análise de modelos')
+parser = ArgumentParser(description='Teste de modelos')
 client = Client(OLLAMA_URL)
 
-parser.add_argument('model_name', type=str, help='Modelo a ser analisado')
-parser.add_argument('--samples', type=int, help='Número de amostras a serem analisadas', default=None)
+parser.add_argument('model_name', type=str, help='Modelo a ser testado')
+parser.add_argument('--samples', type=int, help='Número de amostras a serem testadas', default=None)
 parser.add_argument('--hard', action='store_true', help='Força a escolha entre apenas duas opções', default=False)
 parser.add_argument('--writerate', type=int, help='Frequência de escrita do output', default=128)
 
 args = parser.parse_args()
 
-with open(join('data', 'analysis_dataset.json'), 'r', encoding='utf-8') as file:
+with open(join('data', 'basic_test_dataset.json'), 'r', encoding='utf-8') as file:
     data = load(file)[:args.samples]
 
 prompt = HARD_PROMPT if args.hard else SOFT_PROMPT
 total = len(data)
 current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 test_name = f'{args.model_name}_analysis_{current_time}'
-test_output = f'# Image id, Expected, Response. size={total}, hard={args.hard}, time={current_time}\n'
+test_output = f'# Image id, Expected answer, Actual answer. size={total}, hard={args.hard}, time={current_time}\n'
 
 directory = join('data', 'analysis')
 
@@ -55,9 +55,9 @@ try:
             image = b64encode(file.read()).decode('utf-8')
 
         answer = client.generate(args.model_name, prompt, images=[image])
-        response = answer['response'].strip()
+        striped_answer = answer['response'].strip()
 
-        test_output += f'{image_name}, {expected}, {response}\n'
+        test_output += str((image_name, expected, striped_answer)) + '\n'
 
         if (i + 1) % args.writerate == 0:
             with open(join('data', 'analysis', f'{test_name}.txt'), 'a', encoding='utf-8') as file:
@@ -65,7 +65,7 @@ try:
 
             test_output = ''
 
-        print(f'[{(i + 1) / total * 100.0:.3f}%] Esperado: {expected}, Resposta: {response}')
+        print(f'[{(i + 1) / total * 100.0:.3f}%] Esperado: {expected}, Resposta: {striped_answer}')
 except KeyboardInterrupt:
     print('Teste interrompido!')
     test_output += '# Teste interrompido!\n'
