@@ -36,10 +36,10 @@ with open(join('data', 'basic_test_dataset.json'), 'r', encoding='utf-8') as fil
 prompt = HARD_PROMPT if args.hard else SOFT_PROMPT
 total = len(data)
 current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-test_name = f'{args.model_name}_analysis_{current_time}'
+test_name = f'{args.model_name}_test_{current_time}'
 test_output = f'# Image id, Expected answer, Actual answer. size={total}, hard={args.hard}, time={current_time}\n'
 
-directory = join('data', 'analysis')
+directory = 'analysis'
 
 if not exists(directory):
     makedirs(directory)
@@ -60,7 +60,7 @@ try:
         test_output += str((image_name, expected, striped_answer)) + '\n'
 
         if (i + 1) % args.writerate == 0:
-            with open(join('data', 'analysis', f'{test_name}.txt'), 'a', encoding='utf-8') as file:
+            with open(join('analysis', f'{test_name}.txt'), 'a', encoding='utf-8') as file:
                 file.write(test_output)
 
             test_output = ''
@@ -73,7 +73,7 @@ except KeyboardInterrupt:
 test_output += f'# Teste finalizado em {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}\n'
 
 if len(test_output) > 0:
-    with open(join('data', 'analysis', f'{test_name}.txt'), 'a', encoding='utf-8') as file:
+    with open(join('analysis', f'{test_name}.txt'), 'a', encoding='utf-8') as file:
         file.write(test_output)
 
-print(f'Teste concluído. Resultados salvos em data/analysis/{test_name}.txt')
+print(f'Teste concluído. Resultados salvos em analysis/{test_name}.txt')

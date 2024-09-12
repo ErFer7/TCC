@@ -2,110 +2,150 @@
 Análise de modelos
 """
 
+import matplotlib.pyplot as plt
+
 from os import makedirs
+from ast import literal_eval
 from os.path import join, exists
-from json import load
 from argparse import ArgumentParser
-from base64 import b64encode
 
 parser = ArgumentParser(description='Análise de modelos')
 
-parser.add_argument('files', type=str, nargs='+')
+parser.add_argument('output_file', type=str, help='Arquivo de saída')
+parser.add_argument('files', type=str, nargs=2)
+parser.add_argument('--clear', action='store_true', help='Limpa o arquivo de análise', default=False)
 
 args = parser.parse_args()
 
-with open(join('data', 'analysis_dataset.json'), 'r', encoding='utf-8') as file:
-    data = load(file)[:args.samples]
+first_test = []
+second_test = []
 
-tests = {test: [] for test in args.files}
+for i, test in enumerate(args.files):
+    with open(join(test), 'r', encoding='utf-8') as file:
+        lines = file.readlines()
 
-# prompt = HARD_PROMPT if args.hard else SOFT_PROMPT
+    test_data = list(map(literal_eval, filter(lambda line: not line.startswith('#'), lines)))
 
-# # (expected, actual): count
-# answers = {('Benign', 'Benign'): 0,
-#            ('Benign', 'Malignant'): 0,
-#            ('Malignant', 'Benign'): 0,
-#            ('Malignant', 'Malignant'): 0}
+    if i == 0:
+        first_test = test_data
+    else:
+        second_test = test_data
 
-# if not args.hard:
-#     answers[('Benign', 'Not clear')] = 0
-#     answers[('Malignant', 'Not clear')] = 0
+print('Calulando exatidão')
 
-# out_of_scope_answers = []
-# current_total = 0
-# total = len(data)
+# (expected, actual): count
+answers = {('Benign', 'Benign'): 0,
+           ('Benign', 'Malignant'): 0,
+           ('Malignant', 'Benign'): 0,
+           ('Malignant', 'Malignant'): 0,
+           ('Benign', 'Other'): 0,
+           ('Malignant', 'Other'): 0}
 
-# print(f'Analisando {total} amostras com o modelo {args.model_name}')
+for _, expected, actual in first_test + second_test:
+    try:
+        answers[(expected, actual)] += 1
+    except KeyError:
+        answers[(expected, 'Other')] += 1
 
-# try:
-#     for i, value in enumerate(data):
-#         image = value['image']
-#         expected = value['result']
+print('Calculando precisão')
 
-#         with open(join('data', 'images', image), 'rb') as file:
-#             image = b64encode(file.read()).decode('utf-8')
+differences = 0
 
-#         answer = client.generate(args.model_name, prompt, images=[image])
-#         response = answer['response'].strip()
+if len(first_test) == len(second_test):
+    for result_a, result_b in zip(first_test, second_test):
+        if result_a[2] != result_b[2]:
+            differences += 1
+else:
+    print('Os testes não possuem o mesmo tamanho!')
 
-#         try:
-#             answers[(expected, response)] += 1
-#         except KeyError:
-#             out_of_scope_answers.append((expected, response))
+total = sum(answers.values())
 
-#         current_total += 1
+benign_benign_answers = answers[("Benign", "Benign")]
+benign_malignant_answers = answers[("Benign", "Malignant")]
+malignant_benign_answers = answers[("Malignant", "Benign")]
+malignant_malignant_answers = answers[("Malignant", "Malignant")]
+benign_other_answers = answers[("Benign", "Other")]
+malignant_other_answers = answers[("Malignant", "Other")]
 
-#         print(f'[{(i + 1) / total * 100.0:.3f}%] Esperado: {expected}, Resposta: {response}')
-# except KeyboardInterrupt:
-#     print('Análise interrompida')
+benign_benign_answers_rate = benign_benign_answers / total * 100.0
+benign_malignant_answers_rate = benign_malignant_answers / total * 100.0
+malignant_benign_answers_rate = malignant_benign_answers / total * 100.0
+malignant_malignant_answers_rate = malignant_malignant_answers / total * 100.0
+benign_other_answers_rate = benign_other_answers / total * 100.0
+malignant_other_answers_rate = malignant_other_answers / total * 100.0
 
-# benign_benign_answers = answers[("Benign", "Benign")]
-# benign_malignant_answers = answers[("Benign", "Malignant")]
-# malignant_benign_answers = answers[("Malignant", "Benign")]
-# malignant_malignant_answers = answers[("Malignant", "Malignant")]
+directory = 'analysis'
 
-# benign_benign_answers_rate = benign_benign_answers / current_total * 100.0
-# benign_malignant_answers_rate = benign_malignant_answers / current_total * 100.0
-# malignant_benign_answers_rate = malignant_benign_answers / current_total * 100.0
-# malignant_malignant_answers_rate = malignant_malignant_answers / current_total * 100.0
+if not exists(directory):
+    makedirs(directory)
 
-# if not args.hard:
-#     benign_not_clear_answers = answers[("Benign", "Not clear")]
-#     malignant_not_clear_answers = answers[("Malignant", "Not clear")]
-#     benign_not_clear_answers_rate = benign_not_clear_answers / current_total * 100.0
-#     malignant_not_clear_answers_rate = malignant_not_clear_answers / current_total * 100.0
+labels = ['Benign, Benign', 'Benign, Malignant', 'Malignant, Benign',
+          'Malignant, Malignant', 'Benign, Other', 'Malignant, Other']
+sizes = [benign_benign_answers, benign_malignant_answers, malignant_benign_answers,
+         malignant_malignant_answers, benign_other_answers, malignant_other_answers]
+colors = ['#ff9999', '#66b3ff', '#99ff99', '#ffcc99', '#c2c2f0', '#ffb3e6']
 
-# out_of_scope_answers_rate = len(out_of_scope_answers) / current_total * 100.0
+total = sum(sizes)
+percentages = [size / total * 100 for size in sizes]
 
-# directory = join('data', 'analysis')
+fig, ax = plt.subplots(figsize=(4, 8))
+bottom = 0
 
-# if not exists(directory):
-#     makedirs(directory)
+for i, label in enumerate(labels):
+    ax.bar('Distribuição detalhada', percentages[i], bottom=bottom, color=colors[i], label=label)
+    bottom += percentages[i]
 
-# mode = 'w' if args.clear else 'a'
+ax.set_xlabel('Categorias')
+ax.set_ylabel('%')
+ax.set_title('Distribuição detalhada')
+ax.legend()
+plt.tight_layout()
+plt.savefig(join(directory, f'{args.output_file}_stacked_bar_chart.png'))
+plt.close()
 
-# with open(join('data', 'analysis', f'{args.model_name}_analysis.txt'), mode, encoding='utf-8') as file:
-#     file.write(f'Análise do modelo {args.model_name} com {current_total} de {total} amostras analisadas no modo '
-#                f'{"HARD" if args.hard else "SOFT"}:\n\nResposta esperada - Resposta recebida\n\n'
-#                f'Benign, Benign: {benign_benign_answers}, {benign_benign_answers_rate:.3f}%\n'
-#                f'Benign, Malignant: {benign_malignant_answers}, {benign_malignant_answers_rate:.3f}%\n'
-#                f'Malignant, Benign: {malignant_benign_answers}, {malignant_benign_answers_rate:.3f}%\n'
-#                f'Malignant, Malignant: {malignant_malignant_answers}, {malignant_benign_answers_rate:.3f}%\n')
+summary_labels = ['Respostas corretas', 'Falsos positivos', 'Falsos negativos', 'Respostas incertas']
+summary_sizes = [benign_benign_answers + malignant_malignant_answers, benign_malignant_answers,
+                 malignant_benign_answers, benign_other_answers + malignant_other_answers]
+summary_colors = ['#36AE7C', '#F9D923', '#EB5353', '#c2c2f0']
 
-#     if not args.hard:
-#         file.write(f'Benign, Not Clear: {benign_not_clear_answers}, {benign_not_clear_answers_rate:.3f}%\n'
-#                    f'Malignant, Not Clear: {malignant_not_clear_answers}, {malignant_not_clear_answers_rate:.3f}%\n')
+summary_total = sum(summary_sizes)
+summary_percentages = [size / summary_total * 100 for size in summary_sizes]
 
-#     file.write(f'Respostas fora de escopo: {len(out_of_scope_answers)}, {out_of_scope_answers_rate:.3f}%\n'
-#                f'Total: {current_total}\n'
-#                f'Precisão: {(benign_benign_answers + malignant_malignant_answers) / current_total * 100.0:.3f}%\n'
-#                f'Taxa de erro: {(benign_malignant_answers + malignant_benign_answers) / current_total * 100.0:.3f}%\n')
+fig, ax = plt.subplots(figsize=(4, 8))
+bottom = 0
 
-#     file.write('\nRespostas fora de escopo:\n\n')
+for i, summary_label in enumerate(summary_labels):
+    ax.bar(
+        'Distribuição de Respostas', summary_percentages[i],
+        bottom=bottom, color=summary_colors[i],
+        label=summary_label)
+    bottom += summary_percentages[i]
 
-#     for i, (expected, actual) in enumerate(out_of_scope_answers):
-#         file.write(f'{i + 1}. Esperado: {expected}, Resposta: {actual}\n')
+ax.set_xlabel('Categorias')
+ax.set_ylabel('%')
+ax.set_title('Distribuição')
+ax.legend()
+plt.tight_layout()
+plt.savefig(join(directory, f'{args.output_file}_summary_stacked_bar_chart.png'))
+plt.close()
 
-#     file.write(f'\n{"-" * 64}\n')
+mode = 'w' if args.clear or not exists(join(directory, f'{args.output_file}.txt')) else 'a'
 
-# print(f'Análise concluída. Resultados salvos em data/analysis/{args.model_name}_analysis.txt')
+with open(join(directory, f'{args.output_file}.txt'), mode, encoding='utf-8') as file:
+    file.write(f'Análise com {total} amostras.\n\nResposta esperada - Resposta recebida:\n\n'
+               f'Benign, Benign: {benign_benign_answers}, {benign_benign_answers_rate:.3f}%\n'
+               f'Benign, Malignant: {benign_malignant_answers}, {benign_malignant_answers_rate:.3f}%\n'
+               f'Malignant, Benign: {malignant_benign_answers}, {malignant_benign_answers_rate:.3f}%\n'
+               f'Malignant, Malignant: {malignant_malignant_answers}, {malignant_benign_answers_rate:.3f}%\n'
+               f'Benign, Other: {benign_other_answers}, {benign_other_answers_rate:.3f}%\n'
+               f'Malignant, Other: {malignant_other_answers}, {malignant_other_answers_rate:.3f}%\n')
+
+    file.write(f'Total: {total}\n'
+               f'Taxa de acertos: {(benign_benign_answers + malignant_malignant_answers) / total * 100.0:.3f}%\n'
+               f'Taxa de erro: {(benign_malignant_answers + malignant_benign_answers) / total * 100.0:.3f}%\n'
+               f'Taxa de reincidência: {100.0 - differences / total * 100.0:.3f}%\n\n')
+
+    file.write(f'{"-" * 64}\n')
+
+
+print(f'Análise concluída. Resultados salvos em {directory}/{args.output_file}.txt')

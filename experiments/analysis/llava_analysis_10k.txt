@@ -1,0 +1,16 @@
+Análise com 20000 amostras.
+
+Resposta esperada - Resposta recebida:
+
+Benign, Benign: 8203, 41.015%
+Benign, Malignant: 10553, 52.765%
+Malignant, Benign: 458, 2.290%
+Malignant, Malignant: 700, 2.290%
+Benign, Other: 76, 0.380%
+Malignant, Other: 10, 0.050%
+Total: 20000
+Taxa de acertos: 44.515%
+Taxa de erro: 55.055%
+Taxa de reincidência: 76.150%
+
+----------------------------------------------------------------
