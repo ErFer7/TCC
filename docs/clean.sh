@@ -1,2 +1,0 @@
-latexmk -C
-rm -rf *.aux *.bbl *.bcf *.blg *.idx *.log *.run.xml *.toc chapters/*.aux
