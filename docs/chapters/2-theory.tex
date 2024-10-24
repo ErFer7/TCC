@@ -9,8 +9,10 @@ de visão computacional com redes neurais, \ac{LLMs} e como estas tecnologias se
 A pele é o maior órgão do corpo humano e é responsável por proteger o corpo de agentes microbiológicos, físicos e químicos. Além disso, ela também ajuda na regulação da
 temperatura do corpo e, através de receptores cutâneos, proporciona informações sensoriais como o tato \cite{skin}.
 
-Devido à exposição da pele ao ambiente, é mais comum que esse órgão sofra com doenças. As áreas afetadas são consideradas lesões de pele e podem ser usadas para o
-diagnóstico da doença \cite{segmentation_skin_lesions}.
+Devido à exposição da pele ao ambiente, é mais comum que esse órgão sofra com doenças. As áreas afetadas são consideradas lesões de pele e podem ser usadas para
+diagnósticos \cite{segmentation_skin_lesions}.
+
+% TODO: Características gerais das lesões de pele
 
 \subsection{Câncer de Pele}
 
@@ -27,14 +29,25 @@ de 75\% das mortes por câncer de pele são causadas por melanomas \cite{skin_ca
 A doença tem um prognóstico muito melhor quando a detecção e tratamento são feitos cedo o suficiente. Segundo \cite{skin_cancer_survival}, a taxa de sobrevivência ao
 melanoma no Brasil é menor que a taxa global, sendo que há uma prevalência maior de casos avançados.
 
-\subsection{Classificação e Segmentação de lesões}
+% TODO: Características do câncer de pele
 
-% Características gerais
-% classificação automatizada
+\subsection{Imagens de Lesões de Pele}
 
-\subsection{Detecção e Classificação de Câncer de Pele}
+As imagens para exames dermatológicos podem ser agrupadas em diferentes categorias. Alguns exemplos baseados em procedimentos recomendados por \cite{fotos_dermatologia}
+são:
 
-% Características do câncer de pele
+\begin{itemize}
+    \item \textbf{Dermatoscopia}: Essas imagens são obtidas com um equipamento especializado, o dermatoscópio. Esse método permite que um diagnóstico mais preciso seja
+feito, sendo melhor que o olho nu na detecção de melanomas \cite{dermatoscopy}.
+    \item \textbf{Foto de aproximação com régua}: Esse tipo de imagem é obtida com uma fotografia feita a 30 centímetros da lesão, sem utilizar \textit{zoom}.
+Nessas imagens, etiquetas são colocadas próximas à lesão para auxiliar na determinação do seu tamanho.
+    \item \textbf{Foto panorâmica}: Nesse método são registradas imagens de regiões do corpo, como da cabeça, tronco, braços e pernas.
+\end{itemize}
+
+% TODO: 
+% \subsection{Classificação e Segmentação}
+
+% classificação e segmentação automatizadas
 
 \section{Descritores de Imagens}
 
