@@ -1,0 +1,58 @@
+\chapter{Fundamentação Teórica}
+
+Neste capítulo serão discutidos os aspectos relacionados à classificação de imagens de lesões de pele e detecção de melanomas. Além disso, serão explicados os conceitos
+de visão computacional com redes neurais, \ac{LLMs} e como estas tecnologias se integram em um \ac{MLLM}. Por fim, será discutido sobre diferentes métodos de
+\textit{fine-tuning}.
+
+\section{Lesões de Pele}
+
+A pele é o maior órgão do corpo humano e é responsável por proteger o corpo de agentes microbiológicos, físicos e químicos. Além disso, ela também ajuda na regulação da
+temperatura do corpo e, através de receptores cutâneos, proporciona informações sensoriais como o tato \cite{skin}.
+
+Devido à exposição da pele ao ambiente, é mais comum que esse órgão sofra com doenças. As áreas afetadas são consideradas lesões de pele e podem ser usadas para
+diagnósticos \cite{segmentation_skin_lesions}.
+
+% TODO: Características gerais das lesões de pele
+
+\subsection{Câncer de Pele}
+
+O câncer é uma doença caracterizada pela multiplicação de células anormais que podem se espalhar para além do seu tecido de origem, causando tumores e levando
+eventualmente à morte \cite{cancer}. O câncer de pele é o tipo mais comum da doença globalmente e é mais frequentemente causado pela exposição prolongada à radiação
+ultravioleta \cite{skin_cancer}. Em geral, essa doença afeta mais a pele clara e pode afetar a mesma pessoa mais de uma vez. Uma vez desenvolvido, há um aumento de 35\%
+no risco de desenvolvimento de um novo câncer de pele do mesmo tipo em um período de três anos \cite{skin_cancer_zink}.
+
+Existem várias categorias de câncer de pele, elas podem ser agrupadas como \ac{CPNM} e melanoma. \ac{CPNM} podem ser subdivididos em \ac{CBC}, \ac{CEC}, carcinoma de
+Merkel e entre outros. Essa categoria é a mais incidente, correspondendo a mais de 90\% dos cânceres diagnosticados e também é a menos fatal. O subtipo \ac{CBC} é o
+mais frequente e corresponde a mais de 75\% dos casos de \ac{CPNM} no Brasil \cite{skin_cancer_zink}. O melanoma é o tipo mais fatal e menos incidente da doença. Cerca
+de 75\% das mortes por câncer de pele são causadas por melanomas \cite{skin_cancer_screening}.
+
+A doença tem um prognóstico muito melhor quando a detecção e tratamento são feitos cedo o suficiente. Segundo \cite{skin_cancer_survival}, a taxa de sobrevivência ao
+melanoma no Brasil é menor que a taxa global, sendo que há uma prevalência maior de casos avançados.
+
+% TODO: Características do câncer de pele
+
+\subsection{Imagens de Lesões de Pele}
+
+As imagens para exames dermatológicos podem ser agrupadas em diferentes categorias. Alguns exemplos baseados em procedimentos recomendados por \cite{fotos_dermatologia}
+são:
+
+\begin{itemize}
+    \item \textbf{Dermatoscopia}: Essas imagens são obtidas com um equipamento especializado, o dermatoscópio. Esse método permite que um diagnóstico mais preciso seja
+feito, sendo melhor que o olho nu na detecção de melanomas \cite{dermatoscopy}.
+    \item \textbf{Foto de aproximação com régua}: Esse tipo de imagem é obtida com uma fotografia feita a 30 centímetros da lesão, sem utilizar \textit{zoom}.
+Nessas imagens, etiquetas são colocadas próximas à lesão para auxiliar na determinação do seu tamanho.
+    \item \textbf{Foto panorâmica}: Nesse método são registradas imagens de regiões do corpo, como da cabeça, tronco, braços e pernas.
+\end{itemize}
+
+% TODO: 
+% \subsection{Classificação e Segmentação}
+
+% classificação e segmentação automatizadas
+
+\section{Descritores de Imagens}
+
+\section{LLMs}
+
+\section{MLLMs}
+
+\section{Fine-tuning}
