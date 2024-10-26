@@ -12,8 +12,6 @@ temperatura do corpo e, através de receptores cutâneos, proporciona informaç�
 Devido à exposição da pele ao ambiente, é mais comum que esse órgão sofra com doenças. As áreas afetadas são consideradas lesões de pele e podem ser usadas para
 diagnósticos \cite{segmentation_skin_lesions}.
 
-% TODO: Características gerais das lesões de pele
-
 \subsection{Câncer de Pele}
 
 O câncer é uma doença caracterizada pela multiplicação de células anormais que podem se espalhar para além do seu tecido de origem, causando tumores e levando
@@ -29,8 +27,6 @@ de 75\% das mortes por câncer de pele são causadas por melanomas \cite{skin_ca
 A doença tem um prognóstico muito melhor quando a detecção e tratamento são feitos cedo o suficiente. Segundo \cite{skin_cancer_survival}, a taxa de sobrevivência ao
 melanoma no Brasil é menor que a taxa global, sendo que há uma prevalência maior de casos avançados.
 
-% TODO: Características do câncer de pele
-
 \subsection{Imagens de Lesões de Pele}
 
 As imagens para exames dermatológicos podem ser agrupadas em diferentes categorias. Alguns exemplos baseados em procedimentos recomendados por \cite{fotos_dermatologia}
@@ -38,20 +34,25 @@ são:
 
 \begin{itemize}
     \item \textbf{Dermatoscopia}: Essas imagens são obtidas com um equipamento especializado, o dermatoscópio. Esse método permite que um diagnóstico mais preciso seja
-feito, sendo melhor que o olho nu na detecção de melanomas \cite{dermatoscopy}.
+          feito, sendo melhor que o olho nu na detecção de melanomas \cite{dermatoscopy}.
     \item \textbf{Foto de aproximação com régua}: Esse tipo de imagem é obtida com uma fotografia feita a 30 centímetros da lesão, sem utilizar \textit{zoom}.
-Nessas imagens, etiquetas são colocadas próximas à lesão para auxiliar na determinação do seu tamanho.
+          Nessas imagens, etiquetas são colocadas próximas à lesão para auxiliar na determinação do seu tamanho.
     \item \textbf{Foto panorâmica}: Nesse método são registradas imagens de regiões do corpo, como da cabeça, tronco, braços e pernas.
 \end{itemize}
 
-% TODO: 
-% \subsection{Classificação e Segmentação}
+\subsection{Detecção e Diagnóstico de Câncer de Pele}
 
-% classificação e segmentação automatizadas
+O câncer de pele pode ser identificado e classificado através dos sintomas causados. Características como o tamanho da lesão, variação da cor, irregularidade do formato,
+progresso ao longo do tempo e local do corpo em que a lesão se encontra são fundamentais para o diagnóstico da doença \cite{recognizing_skin_cancer}.
 
-\section{Descritores de Imagens}
+A análise destes sintomas é normalmente um processo visual realizado por um dermatologista, sendo que técnicas como a dermatoscopia e teledermatologia podem ser usadas.
+Outros métodos não invasivos incluem, por exemplo, a análise intracutânea espectrofotométrica, ultrasonografia de alta frequência e microscopia confocal de refletância.
+É possível também diagnosticar a doença através de métodos invasivos como a biópsia. Além destes métodos, há também a utilização de \ac{IA}. Soluções com \ac{IA}
+utilizam imagens para a classificação da doença e podem ter uma precisão equiparável ou até maior a de dermatologistas \cite{recognizing_skin_cancer, skin_cancer_ai}.
 
 \section{LLMs}
+
+\section{Visão Computacional}
 
 \section{MLLMs}
 
