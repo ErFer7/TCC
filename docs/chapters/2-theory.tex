@@ -2,7 +2,7 @@
 
 % TODO: Atualizar isso aqui
 Neste capítulo serão discutidos os aspectos relacionados à classificação de imagens de lesões de pele e detecção de melanomas. Além disso, serão explicados os conceitos
-de visão computacional com redes neurais, \ac{LLMs} e como estas tecnologias se integram em um \ac{MLLM}. Por fim, será discutido sobre diferentes métodos de
+de visão computacional com redes neurais, \acp{LLM} e como estas tecnologias se integram em um \ac{MLLM}. Por fim, será discutido sobre diferentes métodos de
 \textit{fine-tuning}.
 
 \section{Lesões de Pele}
@@ -53,14 +53,27 @@ utilizam imagens para a classificação da doença e podem ter uma precisão equ
 
 \section{Multimodal Large Language Models}
 
-% TODO: Definir MLLM
+\acp{MLLM} são \acp{IA} baseadas em \acp{LLM} que possuem a capacidade de interpretação de diferentes modalidades de informação, diferentemente de \acp{LLM}, que
+operam sobre informações textuais. Esses modelos também podem ser capazes de produzir conteúdo multimodal. Essas modalidades podem ser imagens, vídeos, áudios e
+entre outros \cite{mllm_survey_2023, mllm_survey_2024}.
+
+Segundo \cite{mllm_survey_2024}, a estrutura de um \ac{MLLM} pode ser dividida em cinco componentes, sendo eles o codificador de modalidade, projetor de entrada,
+\ac{LLM}, projetor de saída e o gerador de modalidade.1 No caso de \acp{MLLM} que possuem apenas saída de texto, somente os três primeiros componentes estão presentes.
+
+% TODO: Adicionar uma imagem da arquitetura de um MLLM
+
+Neste trabalho, o foco será dado a modelos que interpretam imagens e retornam saídas textuais. Sendo assim, a parte de geração multimodal não será coberta.
+
+\subsection{Codificador de Modalidade}
+
+\subsubsection{Codificador Visual}
+
+\subsubsubsection{Transformadores Visuais}
+
+\subsection{Projetor de Entrada}
 
 \subsection{Large Language Models}
 
-\subsubsection{Transformers}
-
-\subsubsection{Multimodalidade}
-
-\subsection{Vision Transformers}
+\subsubsection{Transformadores}
 
 \section{Fine-tuning}
