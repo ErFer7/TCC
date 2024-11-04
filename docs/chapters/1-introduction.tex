@@ -14,15 +14,15 @@ Considerando este cenário, o desenvolvimento de um sistema automatizado de fác
 melanomas e outros tipos de doenças. \acp{MLLM} conseguem obter uma precisão significativa na classificação de imagens de diagnósticos médicos, o que torna viável
 o uso destes modelos para o desenvolvimento deste trabalho \cite{mllm_success_rate}.
 
-O \ac{LLaVA} foi escolhido como o modelo base devido à limitação de recursos para o treinamento de um novo modelo e por ter o código disponível publicamente. Este
-modelo combina o codificador visual \ac{CLIP ViT-L/14} e o \ac{LLM} \textit{Vicuna} \cite{llava}.
+O \ac{LLaMA 3.2} foi escolhido como o modelo base devido à limitação de recursos para o treinamento de um novo modelo e por ter o código disponível publicamente
+\cite{llama}.
 
 Com este modelo, é possível realizar um \textit{fine-tuning}, adaptando-o para a classificação de lesões de pele e principalmente para a detecção de câncer de pele. Com
 o objetivo utilizar os recursos computacionais disponíveis eficientemente, o \textit{fine-tuning} será feito com técnicas baseadas em \ac{PEFT}. Este método permite a
 redução do número de parâmetros usados no processo, resultando em uma utilização menor de recursos \cite{peft}. Especificamente, planeja-se utilizar métodos como
 \ac{LoRa} e \ac{QLoRa} para a adaptação do modelo.
 
-Com as adaptações feitas no \ac{LLaVA}, espera-se obter um sistema confiável de classificação de lesões de pele.
+Com as adaptações feitas no \ac{LLaMA 3.2}, espera-se obter um sistema confiável de classificação de lesões de pele.
 
 \section{Objetivos}
 
