@@ -75,6 +75,12 @@ Neste trabalho, o foco será dado a modelos que interpretam imagens e retornam s
 \subsection{Large Language Models}
 
 \acp{LLM} ou Grandes Modelos de Linguagem são modelos estatísticos pré-treinados baseados em transformadores capazes de processar e gerar textos em linguagem natural.
+Estes modelos possuem centenas de bilhões de parâmetros, sendo que as famílias mais famosas são o \ac{GPT}, \ac{LLaMA} e \ac{PaLM}. \acp{LLM} exibem comportamentos
+emergentes mais generalistas, sendo melhores na interpretação de linguagem do que os modelos de \ac{PLN} anteriores, exibindo a capacidade de aprendizado por contexto,
+resposta a perguntas, resolução de problemas básicos e aritmética simples \cite{llm}.
+
+Esses modelos são baseados em transformadores, uma arquitetura de rede neural proposta por \textcite{transformers_the_og}, originalmente para realizar traduções entre
+idiomas.
 
 \subsubsection{Transformadores}
 
@@ -103,6 +109,8 @@ exemplos dessa relação entre palavras podem ser vistos na \autoref{fig:word_em
       \label{fig:word_embeddings_directions}
 \end{figure}
 \clearpage  % TODO: Apagar isso aqui se possível
+
+\subsubsection{Arquiteturas}
 
 \subsection{Codificador de Modalidade}
 
