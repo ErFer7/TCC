@@ -79,16 +79,36 @@ Estes modelos possuem centenas de bilhões de parâmetros, sendo que as família
 emergentes mais generalistas, sendo melhores na interpretação de linguagem do que os modelos de \ac{PLN} anteriores, exibindo a capacidade de aprendizado por contexto,
 resposta a perguntas, resolução de problemas básicos e aritmética simples \cite{llm}.
 
-Esses modelos são baseados em transformadores, uma arquitetura de rede neural proposta por \textcite{transformers_the_og}, originalmente para realizar traduções entre
-idiomas.
+As próxima seções tratarão dos conceitos da representação do texto de entrada, como a tokenização e o uso de \textit{embedding vectors} ou incorporações vetorais.
+Depois, transformadores e outros ascpectos das arquiteturas de \acp{LLM} serão explicados.
 
-\subsubsection{Transformadores}
+\subsubsection{Tokenização}  % TODO: Desenvolver mais esse conceito
 
-\subsubsubsection{Incorporação Vetorial}
+Tokenização é um processo em que o texto é separado em partes menores, chamadas de \textit{tokens}. A maioria das formas de tokenização quebram palavras em subpalavras,
+isso permite que o modelo interprete novas palavras não vistas antes com base na composição das subpalavras \cite{llm}. Na \autoref{fig:tokens} é possível ver um exemplo
+de texto tokenizado. Cada preenchimento de cor denota um token.
 
-Um \textit{embedding vector} ou uma incorporação vetorial é um vetor de valores reais em um espaço semântico n-dimensional que representa um dado, como, por exemplo, uma
-palavra ou uma imagem. Esse tipo de representação permite que diferentes tipos de dados sejam representados em um espaço vetorial unificado. Na
-\autoref{fig:word_embeddings} há um exemplo simplificado da estrutura destes vetores \cite{word_embedding, mllm_survey_2023}.
+\begin{figure}[ht]
+      \centering
+      \includegraphics[width=0.7\columnwidth,keepaspectratio]{images/tokens.png}
+      \caption{\small Texto tokenizado com o tokenizador do \ac{GPT}-4o. Fonte: \textcite{tokenizer}.}
+      \label{fig:tokens}
+\end{figure}
+
+O mesmo texto, representado como uma lista de \textit{IDs} de tokens pode ser visto na \autoref{fig:tokens_ids}.
+
+\begin{figure}[ht]
+      \centering
+      \includegraphics[width=0.7\columnwidth,keepaspectratio]{images/tokens_ids.png}
+      \caption{\small \textit{IDs} de tokens gerados com o tokenizador do \ac{GPT}-4o. Fonte: \textcite{tokenizer}.}
+      \label{fig:tokens_ids}
+\end{figure}
+
+\subsubsection{Incorporação Vetorial}
+
+Uma incorporação vetorial é um vetor de valores reais em um espaço semântico n-dimensional que representa um dado, como, por exemplo, uma palavra ou uma imagem. Esse
+tipo de representação permite que diferentes tipos de dados sejam representados em um espaço vetorial unificado. Na \autoref{fig:word_embeddings} há um exemplo
+simplificado da estrutura destes vetores \cite{word_embedding, mllm_survey_2023}.
 
 \begin{figure}[ht]
       \centering
@@ -108,7 +128,11 @@ exemplos dessa relação entre palavras podem ser vistos na \autoref{fig:word_em
       \caption{\small Visualização de incorporações com a direção que codifica informações de gênero evidenciada. Fonte: \textcite{word_embedding}.}
       \label{fig:word_embeddings_directions}
 \end{figure}
-\clearpage  % TODO: Apagar isso aqui se possível
+
+\subsubsection{Transformadores}
+
+% TODO: Explicar melhor
+Essa é uma arquitetura de rede neural proposta por \textcite{transformers_the_og}, originalmente para realizar traduções entre idiomas.
 
 \subsubsection{Arquiteturas}
 
