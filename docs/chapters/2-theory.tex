@@ -76,17 +76,17 @@ Neste trabalho, o foco será dado a modelos que interpretam imagens e retornam s
 
 \acp{LLM} ou Grandes Modelos de Linguagem são modelos estatísticos pré-treinados baseados em transformadores capazes de processar e gerar textos em linguagem natural.
 Estes modelos possuem centenas de bilhões de parâmetros, sendo que as famílias mais famosas são o \ac{GPT}, \ac{LLaMA} e \ac{PaLM}. \acp{LLM} exibem comportamentos
-emergentes mais generalistas, sendo melhores na interpretação de linguagem do que os modelos de \ac{PLN} anteriores, exibindo a capacidade de aprendizado por contexto,
-resposta a perguntas, resolução de problemas básicos e aritmética simples \cite{llm}.
+emergentes mais generalistas, sendo melhores na interpretação do que modelos de linguagem anteriores, exibindo a capacidade de aprendizado por contexto, resposta a
+perguntas, resolução de problemas básicos e aritmética simples \cite{llm_survey_2024}.
 
-As próxima seções tratarão dos conceitos da representação do texto de entrada, como a tokenização e o uso de \textit{embedding vectors} ou incorporações vetorais.
-Depois, transformadores e outros ascpectos das arquiteturas de \acp{LLM} serão explicados.
+As próximas seções tratarão dos conceitos da representação do texto de entrada, como a tokenização e o uso de \textit{embedding vectors} ou incorporações vetoriais.
+Depois, transformadores e outros aspectos das arquiteturas de \acp{LLM} serão explicados.
 
 \subsubsection{Tokenização}  % TODO: Desenvolver mais esse conceito
 
-Tokenização é um processo em que o texto é separado em partes menores, chamadas de \textit{tokens}. A maioria das formas de tokenização quebram palavras em subpalavras,
-isso permite que o modelo interprete novas palavras não vistas antes com base na composição das subpalavras \cite{llm}. Na \autoref{fig:tokens} é possível ver um exemplo
-de texto tokenizado. Cada preenchimento de cor denota um token.
+Tokenização é um processo em que o texto é separado em partes menores, chamadas \textit{tokens}. A maioria das formas de tokenização quebram palavras em sub-palavras,
+isso permite que o modelo interprete novas palavras não vistas antes com base na composição das sub-palavras \cite{llm_survey_2024}. Na \autoref{fig:tokens} é possível
+ver um exemplo de texto tokenizado. Cada preenchimento de cor denota um \textit{token}.
 
 \begin{figure}[ht]
       \centering
@@ -95,20 +95,20 @@ de texto tokenizado. Cada preenchimento de cor denota um token.
       \label{fig:tokens}
 \end{figure}
 
-O mesmo texto, representado como uma lista de \textit{IDs} de tokens pode ser visto na \autoref{fig:tokens_ids}.
+O mesmo texto, representado como uma lista de \textit{IDs} de \textit{tokens} pode ser visto na \autoref{fig:tokens_ids}.
 
 \begin{figure}[ht]
       \centering
       \includegraphics[width=0.7\columnwidth,keepaspectratio]{images/tokens_ids.png}
-      \caption{\small \textit{IDs} de tokens gerados com o tokenizador do \ac{GPT}-4o. Fonte: \textcite{tokenizer}.}
+      \caption{\small \textit{IDs} de \textit{tokens} gerados com o tokenizador do \ac{GPT}-4o. Fonte: \textcite{tokenizer}.}
       \label{fig:tokens_ids}
 \end{figure}
 
 \subsubsection{Incorporação Vetorial}
 
-Uma incorporação vetorial é um vetor de valores reais em um espaço semântico n-dimensional que representa um dado, como, por exemplo, uma palavra ou uma imagem. Esse
-tipo de representação permite que diferentes tipos de dados sejam representados em um espaço vetorial unificado. Na \autoref{fig:word_embeddings} há um exemplo
-simplificado da estrutura destes vetores \cite{word_embedding, mllm_survey_2023}.
+Uma incorporação vetorial é um vetor de valores reais em um espaço semântico n-dimensional que representa um dado, como, por exemplo, uma palavra ou uma imagem. Essa
+forma de representação permite que diferentes tipos de dados sejam representados em um espaço vetorial unificado. Na \autoref{fig:word_embeddings} há um exemplo
+simplificado da estrutura destes vetores. No contexto de \acp{LLM}, \textit{tokens} são representados com incorporações vetoriais \cite{word_embedding, mllm_survey_2023}.
 
 \begin{figure}[ht]
       \centering
@@ -117,10 +117,11 @@ simplificado da estrutura destes vetores \cite{word_embedding, mllm_survey_2023}
       \label{fig:word_embeddings}
 \end{figure}
 
+% Esse parágrafo quebra a verificação ortográfica
 Nesse espaço vetorial, direções podem ter um significado semântico. Um exemplo dado por \textcite{glove} demonstra isso com uma frase, traduzida do inglês: "Um rei é para
 uma rainha o que um homem é para uma mulher", que pode ser representada como \textit{$V_{rei} - V_{rainha} \approx V_{homem} - V_{mulher}$}, evidenciando que a direção do
 vetor \textit{$V_{rei} - V_{rainha}$} codifica informações sobre gênero. Além disso, a proximidade entre incorporações indica a similaridade semântica entre elas. Mais
-exemplos dessa relação entre palavras podem ser vistos na \autoref{fig:word_embeddings_directions}.
+exemplos dessa relação entre incorporações podem ser vistos na \autoref{fig:word_embeddings_directions}.
 
 \begin{figure}[ht]
       \centering
@@ -132,7 +133,7 @@ exemplos dessa relação entre palavras podem ser vistos na \autoref{fig:word_em
 \subsubsection{Transformadores}
 
 % TODO: Explicar melhor
-Essa é uma arquitetura de rede neural proposta por \textcite{transformers_the_og}, originalmente para realizar traduções entre idiomas.
+Essa é uma arquitetura de rede neural proposta por \textcite{transformers}, originalmente para realizar traduções entre idiomas.
 
 \subsubsection{Arquiteturas}
 
@@ -143,8 +144,8 @@ Codificadores de modalidade são os componentes responsáveis pela extração da
 
 \subsubsection{Codificador Visual}
 
-Existem diversos tipos de codificadores visuais. Os mais comuns usam \acp{ViT} ou Transformadores Visuais na suas arquiteturas, mas também há também codificadores
-baseados em convolução \cite{mllm_survey_2023}. Neste trabalho o foco será direcionado a arquiteturas baseadas em \ac{ViT}.
+Existem diversos codificadores visuais. Os mais comuns usam \acp{ViT} ou Transformadores Visuais nas suas arquiteturas, mas também há codificadores baseados em convolução
+\cite{mllm_survey_2023}. Neste trabalho o foco será direcionado a arquiteturas baseadas em \ac{ViT}.
 
 \subsubsubsection{Transformadores Visuais}
 
