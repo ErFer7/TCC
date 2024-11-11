@@ -84,9 +84,12 @@ Depois, transformadores e outros aspectos das arquiteturas de \acp{LLM} serão e
 
 \subsubsection{Tokenização}  % TODO: Desenvolver mais esse conceito
 
-Tokenização é um processo em que o texto é separado em partes menores, chamadas \textit{tokens}. A maioria das formas de tokenização quebram palavras em sub-palavras,
-isso permite que o modelo interprete novas palavras não vistas antes com base na composição das sub-palavras \cite{llm_survey_2024}. Na \autoref{fig:tokens} é possível
-ver um exemplo de texto tokenizado. Cada preenchimento de cor denota um \textit{token}.
+\subsection{Tokenização}
+
+Tokenização é um processo em que o texto é separado em partes menores, denominados \textit{tokens}. A maioria das formas de tokenização quebram palavras em sub-palavras,
+isso permite que o modelo interprete novas palavras não vistas antes com base na composição das sub-palavras. Esse processo também torna o processamento de texto mais
+eficiente, reduzindo a memória necessária para o vocabulário \cite{tokenizer_performance}. Na \autoref{fig:tokens} é possível ver um exemplo de texto tokenizado. Cada
+preenchimento colorido denota um \textit{token}.
 
 \begin{figure}[ht]
       \centering
@@ -103,6 +106,20 @@ O mesmo texto, representado como uma lista de \textit{IDs} de \textit{tokens} po
       \caption{\small \textit{IDs} de \textit{tokens} gerados com o tokenizador do \ac{GPT}-4o. Fonte: \textcite{tokenizer}.}
       \label{fig:tokens_ids}
 \end{figure}
+
+\textcite{llm_survey_2024} elenca os tipos mais comuns de tokenização, sendo eles o \textit{Byte pair encoding}, \textit{Word piece encoding} e
+\textit{Sentence Piece Encoding}.
+
+\begin{itemize}
+      \item \textbf{\textit{Byte pair encoding}}: Neste algoritmo o texto é quebrado com base na frequência das palavras. Palavras mais frequentes se mantém inteiras
+      enquanto as menos frequentes são quebradas.
+      \item \textbf{\textit{Word piece encoding}}: No \textit{Word piece encoding}, o algoritmo é inicializado com o alfabeto da linguagem e depois passa por uma etapa
+      de treinamento, onde os caracteres são combinados em sub-palavras com base na frequência em que elas aparecem. O treinamento continua até que toda a base textual
+      possa ser representada com o vocabulário de \textit{tokens}.
+      \item \textbf{\textit{Sentence Piece Encoding}}: Este método é similar aos já citados, porém, sua maior diferença está na forma em que o texto é tratado. Sendo
+      que o texto é dado como uma sequência contínua de caracteres, sem assumir que delimitações existam entre as palavras. Isso se torna útil na tokenização de línguas
+      sem delimitações com espaços, como, por exemplo, japonês ou chinês. 
+\end{itemize}
 
 \subsubsection{Incorporação Vetorial}
 
