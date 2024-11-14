@@ -74,17 +74,24 @@ Neste trabalho, o foco será dado a modelos que interpretam imagens e retornam s
 
 \subsection{Large Language Models}
 
-\acp{LLM} ou Grandes Modelos de Linguagem são modelos estatísticos pré-treinados baseados em transformadores capazes de processar e gerar textos em linguagem natural.
-Estes modelos possuem centenas de bilhões de parâmetros, sendo que as famílias mais famosas são o \ac{GPT}, \ac{LLaMA} e \ac{PaLM}. \acp{LLM} exibem comportamentos
-emergentes mais generalistas, sendo melhores na interpretação do que modelos de linguagem anteriores, exibindo a capacidade de aprendizado por contexto, resposta a
-perguntas, resolução de problemas básicos e aritmética simples \cite{llm_survey_2024}.
+\acp{LLM} ou Grandes Modelos de Linguagem são modelos estatísticos pré-treinados baseados em transformadores que possuem bilhões de parâmetros e conseguem processar e
+gerar textos em linguagem natural \cite{llm_survey_2024}.
+
+Embora modelos de linguagem já sejam conceitos discutidos há várias décadas, a introdução da arquitetura de transformadores no artigo \textit{Attention Is All You Need}
+de \textcite{transformers} define um marco no desenvolvimento destes modelos, levando ao surgimento de \acp{LLM}.
+
+Transformadores foram desenvolvidos inicialmente para tarefas de tradução. Porém, pouco tempo depois da sua introdução, pesquisadores da OpenAI aplicaram essa arquitetura
+no desenvolvimento do modelo \ac{GPT}. O modelo demonstrou características emergentes além da simples geração de texto, como a capacidade de responder perguntas com
+respostas que não estavam na sua base de treinamento \cite{gpt1}. Os modelos sucessores, \ac{GPT}-2 e \ac{GPT}-3, demonstraram ser ainda melhores em diversas tarefas,
+como a tradução, resolução de problemas básicos, interpretação de texto e aritmética básica \cite{gpt2, gpt3}.
+
+Após o lançamento comercial do \textit{ChatGPT} em 2022, vários novos \acp{LLM} foram desenvolvidos. Os mais notáveis são baseados no \ac{LLaMA} e no \ac{PaLM}
+\cite{llm_survey_2024}.
 
 As próximas seções tratarão dos conceitos da representação do texto de entrada, como a tokenização e o uso de \textit{embedding vectors} ou incorporações vetoriais.
 Depois, transformadores e outros aspectos das arquiteturas de \acp{LLM} serão explicados.
 
-\subsubsection{Tokenização}  % TODO: Desenvolver mais esse conceito
-
-\subsection{Tokenização}
+\subsubsection{Tokenização}
 
 Tokenização é um processo em que o texto é separado em partes menores, denominados \textit{tokens}. A maioria das formas de tokenização quebram palavras em sub-palavras,
 isso permite que o modelo interprete novas palavras não vistas antes com base na composição das sub-palavras. Esse processo também torna o processamento de texto mais
@@ -123,8 +130,8 @@ O mesmo texto, representado como uma lista de \textit{IDs} de \textit{tokens} po
 
 \subsubsection{Incorporação Vetorial}
 
-Uma incorporação vetorial é um vetor de valores reais em um espaço semântico n-dimensional que representa um dado, como, por exemplo, uma palavra ou uma imagem. Essa
-forma de representação permite que diferentes tipos de dados sejam representados em um espaço vetorial unificado. Na \autoref{fig:word_embeddings} há um exemplo
+Uma incorporação vetorial é um vetor de valores reais em um espaço semântico n-dimensional que representa um dado, como, por exemplo, uma palavra ou uma imagem. Esse
+tipo de representação permite que diferentes tipos de dados sejam representados em um espaço vetorial unificado. Na \autoref{fig:word_embeddings} há um exemplo
 simplificado da estrutura destes vetores. No contexto de \acp{LLM}, \textit{tokens} são representados com incorporações vetoriais \cite{word_embedding, mllm_survey_2023}.
 
 \begin{figure}[ht]
@@ -134,11 +141,9 @@ simplificado da estrutura destes vetores. No contexto de \acp{LLM}, \textit{toke
       \label{fig:word_embeddings}
 \end{figure}
 
-% Esse parágrafo quebra a verificação ortográfica
-Nesse espaço vetorial, direções podem ter um significado semântico. Um exemplo dado por \textcite{glove} demonstra isso com uma frase, traduzida do inglês: "Um rei é para
-uma rainha o que um homem é para uma mulher", que pode ser representada como \textit{$V_{rei} - V_{rainha} \approx V_{homem} - V_{mulher}$}, evidenciando que a direção do
-vetor \textit{$V_{rei} - V_{rainha}$} codifica informações sobre gênero. Além disso, a proximidade entre incorporações indica a similaridade semântica entre elas. Mais
-exemplos dessa relação entre incorporações podem ser vistos na \autoref{fig:word_embeddings_directions}.
+Nesse espaço vetorial, direções podem ter um significado semântico. Um exemplo dado por \textcite{glove} demonstra isso com a frase \textit{"king is to queen as man is
+to woman"}, que pode ser representada como $V_{king} - V_{queen} \approx V_{man} - V_{woman}$, evidenciando que a direção do vetor $V_{king} - V_{queen}$ codifica
+informações sobre gênero. A \autoref{fig:word_embeddings_directions} traz uma visualização aproximada desta relação.
 
 \begin{figure}[ht]
       \centering
@@ -146,6 +151,10 @@ exemplos dessa relação entre incorporações podem ser vistos na \autoref{fig:
       \caption{\small Visualização de incorporações com a direção que codifica informações de gênero evidenciada. Fonte: \textcite{word_embedding}.}
       \label{fig:word_embeddings_directions}
 \end{figure}
+
+Outro exemplo de relação semântica pode ser visto com $V_{Paris} - V_{France} + V_{Italy} \approx V_{Rome}$, em que é possível calcular qual é a capital da Itália
+somando um vetor que incorpora a relação de capital para país com um vetor que incorpora a palavra "Itália". A proximidade entre incorporações indica a similaridade
+semântica entre elas \cite{word2vec_estimation}.
 
 \subsubsection{Transformadores}
 
