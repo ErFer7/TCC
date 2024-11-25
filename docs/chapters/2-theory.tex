@@ -78,7 +78,7 @@ Neste trabalho, o foco será dado a modelos que interpretam imagens e retornam s
 gerar textos em linguagem natural \cite{llm_survey_2024}.
 
 Embora modelos de linguagem já sejam conceitos discutidos há várias décadas, a introdução da arquitetura de transformadores no artigo \textit{Attention Is All You Need}
-de \textcite{transformers} define um marco no desenvolvimento destes modelos, levando ao surgimento de \acp{LLM}.
+de \textcite{transformer} define um marco no desenvolvimento destes modelos, levando ao surgimento de \acp{LLM}.
 
 Transformadores foram desenvolvidos inicialmente para tarefas de tradução. Porém, pouco tempo depois da sua introdução, pesquisadores da OpenAI aplicaram essa arquitetura
 no desenvolvimento do modelo \ac{GPT}. O modelo demonstrou características emergentes além da simples geração de texto, como a capacidade de responder perguntas com
@@ -93,10 +93,10 @@ Depois, transformadores e outros aspectos das arquiteturas de \acp{LLM} serão e
 
 \subsubsection{Tokenização}
 
-Tokenização é um processo em que o texto é separado em partes menores, denominados \textit{tokens}. A maioria das formas de tokenização quebram palavras em sub-palavras,
-isso permite que o modelo interprete novas palavras não vistas antes com base na composição das sub-palavras. Esse processo também torna o processamento de texto mais
-eficiente, reduzindo a memória necessária para o vocabulário \cite{tokenizer_performance}. Na \autoref{fig:tokens} é possível ver um exemplo de texto tokenizado. Cada
-preenchimento colorido denota um \textit{token}.
+A tokenização é um processo em que o texto é separado em partes menores, denominados \textit{tokens}. A maioria das formas de tokenização quebram palavras em
+sub-palavras, isso permite que o modelo interprete novas palavras não vistas antes com base na composição das sub-palavras. Esse processo também torna o processamento de
+texto mais eficiente, reduzindo a memória necessária para o vocabulário \cite{tokenizer_performance}. Na \autoref{fig:tokens} é possível ver um exemplo de texto
+tokenizado. Cada preenchimento colorido denota um \textit{token}.
 
 \begin{figure}[ht]
       \centering
@@ -115,17 +115,17 @@ O mesmo texto, representado como uma lista de \textit{IDs} de \textit{tokens} po
 \end{figure}
 
 \textcite{llm_survey_2024} elenca os tipos mais comuns de tokenização, sendo eles o \textit{Byte pair encoding}, \textit{Word piece encoding} e
-\textit{Sentence Piece Encoding}.
+\textit{Sentence Piece Encoding}:
 
 \begin{itemize}
       \item \textbf{\textit{Byte pair encoding}}: Neste algoritmo o texto é quebrado com base na frequência das palavras. Palavras mais frequentes se mantém inteiras
-      enquanto as menos frequentes são quebradas.
+            enquanto as menos frequentes são quebradas.
       \item \textbf{\textit{Word piece encoding}}: No \textit{Word piece encoding}, o algoritmo é inicializado com o alfabeto da linguagem e depois passa por uma etapa
-      de treinamento, onde os caracteres são combinados em sub-palavras com base na frequência em que elas aparecem. O treinamento continua até que toda a base textual
-      possa ser representada com o vocabulário de \textit{tokens}.
+            de treinamento, onde os caracteres são combinados em sub-palavras com base na frequência em que elas aparecem. O treinamento continua até que toda a base
+            textual possa ser representada com o vocabulário de \textit{tokens}.
       \item \textbf{\textit{Sentence Piece Encoding}}: Este método é similar aos já citados, porém, sua maior diferença está na forma em que o texto é tratado. Sendo
-      que o texto é dado como uma sequência contínua de caracteres, sem assumir que delimitações existam entre as palavras. Isso se torna útil na tokenização de línguas
-      sem delimitações com espaços, como, por exemplo, japonês ou chinês. 
+            que o texto é dado como uma sequência contínua de caracteres, sem assumir que delimitações existam entre as palavras. Isso se torna útil na tokenização de
+            línguas sem delimitações com espaços, como, por exemplo, japonês ou chinês.
 \end{itemize}
 
 \subsubsection{Incorporação Vetorial}
@@ -136,32 +136,139 @@ simplificado da estrutura destes vetores. No contexto de \acp{LLM}, \textit{toke
 
 \begin{figure}[ht]
       \centering
-      \includegraphics[width=0.4\columnwidth,keepaspectratio]{images/word_embeddings.pdf}
-      \caption{\small Representação de palavras como vetores de valores reais. Fonte: \textcite{word_embedding}.}
+      \includegraphics[width=0.3\columnwidth,keepaspectratio]{images/word_embeddings.pdf}
+      \caption{Representação de palavras como vetores de valores reais. Fonte: \textcite{word_embedding}.}
       \label{fig:word_embeddings}
 \end{figure}
 
 Nesse espaço vetorial, direções podem ter um significado semântico. Um exemplo dado por \textcite{glove} demonstra isso com a frase \textit{"king is to queen as man is
-to woman"}, que pode ser representada como $V_{king} - V_{queen} \approx V_{man} - V_{woman}$, evidenciando que a direção do vetor $V_{king} - V_{queen}$ codifica
-informações sobre gênero. A \autoref{fig:word_embeddings_directions} traz uma visualização aproximada desta relação.
+to woman"}, que pode ser representada como \begin{math}V_{king} - V_{queen} \approx V_{man} - V_{woman}\end{math}, evidenciando que a direção do vetor
+\begin{math}V_{king} - V_{queen}\end{math} codifica informações sobre gênero. A \autoref{fig:word_embeddings_directions} traz uma visualização aproximada desta relação.
+
+\clearpage
 
 \begin{figure}[ht]
       \centering
-      \includegraphics[width=0.7\columnwidth,keepaspectratio]{images/word_embeddings_directions.png}
-      \caption{\small Visualização de incorporações com a direção que codifica informações de gênero evidenciada. Fonte: \textcite{word_embedding}.}
+      \includegraphics[width=0.6\columnwidth,keepaspectratio]{images/word_embeddings_directions.png}
+      \caption{Visualização aproximada de incorporações com a direção que codifica informações de gênero evidenciada. Fonte: \textcite{word_embedding}.}
       \label{fig:word_embeddings_directions}
 \end{figure}
 
-Outro exemplo de relação semântica pode ser visto com $V_{Paris} - V_{France} + V_{Italy} \approx V_{Rome}$, em que é possível calcular qual é a capital da Itália
-somando um vetor que incorpora a relação de capital para país com um vetor que incorpora a palavra "Itália". A proximidade entre incorporações indica a similaridade
-semântica entre elas \cite{word2vec_estimation}.
+Outro exemplo de relação semântica pode ser visto com \begin{math}V_{Paris} - V_{France} + V_{Italy} \approx V_{Rome}\end{math}, em que é possível calcular qual é a
+capital da Itália somando um vetor que incorpora a relação de capital para país com um vetor que incorpora a palavra "Itália". A proximidade entre incorporações indica a
+similaridade semântica entre elas \cite{word2vec_estimation}.
+
+\subsubsection{Codificação Posicional}
+
+Transformadores não possuem mecanismos de recorrência ou convolução, então é necessária uma forma de codificar a posição de cada \textit{token} do texto de entrada. No
+modelo original de transformador, isso foi feito com a adição de vetores de codificação posicional às incorporações. Para gerar uma codificação como esta, é usada uma
+combinação de funções seno e cosseno com diferentes frequências, sendo que cada dimensão da codificação corresponde a um senoide \cite{transformer}.
+
+% TODO: Adicionar imagem
 
 \subsubsection{Transformadores}
 
-% TODO: Explicar melhor
-Essa é uma arquitetura de rede neural proposta por \textcite{transformers}, originalmente para realizar traduções entre idiomas.
+O transformador é o componente central de um \ac{LLM}, ele processa o texto de entrada previamente tokenizado e representado em incorporações vetoriais com codificação
+posicional e prevê o próximo \textit{token} desse texto. As explicações fornecidas neste trabalho se baseiam no modelo de \textcite{transformer}.
 
-\subsubsection{Arquiteturas}
+A arquitetura original dos transformadores possui um codificador e um decodificador, sendo que cada um deles é composto por camadas. No codificador, cada camada é
+composta por duas subcamadas, sendo uma delas um mecanismo de \textit{multi-head self-attention} e outra, uma rede \textit{feed-forward}. A saída de cada uma delas possui
+uma conexão residual e uma etapa de normalização. O decodificador é similar ao codificador, mas suas camadas possuem uma subcamada extra que aplica o mecanismo de
+\textit{multi-head self-attention} mascarado sobre a saída do codificador. Além disso, a entrada do decodificador é deslocada em uma posição, de modo que uma nova
+incorporação possa ser prevista e usada para gerar um \textit{token}. A \autoref{fig:transformer} mostra a arquitetura original de um transformador.
+
+\begin{figure}[ht]
+      \centering
+      \includegraphics[width=0.4\columnwidth,keepaspectratio]{images/transformer.png}
+      \caption{Arquitetura de um transformador. Fonte: \textcite{transformer}.}
+      \label{fig:transformer}
+\end{figure}
+
+O mecanismo de \textit{multi-head self-attention} permite que o modelo reconheça as relações entre diferentes partes do texto de entrada e ajuste os valores das
+incorporações vetoriais com base nessas relações. Esse conceito pode ser exemplificado de forma mais intuitiva com a frase: \textit{"Você está lendo um documento, ele foi
+escrito em português"}. Nesse caso, a palavra \textit{"ele"} possui uma relação com a palavra \textit{"documento"}. O mecanismo identificaria essa relação e utilizaria
+essa informação para recalcular a incorporação vetorial da palavra \textit{"ele"}, de modo que ela reflita seu vínculo com \textit{"documento"}. A captura das relações e
+significados é o que permite que o modelo gere mais partes do texto. Por exemplo, na frase \textit{"Um animal vivendo em seu habitat..."}, o modelo poderia ajustar o
+valor semântico de uma nova incorporação com base na sua relação com outras incorporações até que ela representasse a palavra \textit{"natural"}.
+
+O modelo de atenção proposto originalmente se chama \textit{Scaled Dot-Product Attention}. Na primeira etapa do processamento, são calculados três vetores para cada
+incorporação vetorial, sendo eles o \textit{query} (\begin{math}V_Q\end{math}), \textit{key} (\begin{math}V_K\end{math}) e \textit{value} (\begin{math}V_V\end{math}).
+Para realizar esta operação, as incorporações são agrupadas em uma matriz \begin{math}E\end{math} e multiplicadas pelas matrizes \begin{math}W_Q\end{math},
+\begin{math}W_K\end{math} e \begin{math}W_V\end{math}, provenientes do treinamento do modelo. Assim, são obtidas as matrizes \begin{math}Q\end{math},
+\begin{math}K\end{math} e \begin{math}V\end{math}. As equações abaixo ilustram este processo:
+
+\begin{align*}
+      E \times W_Q &= Q \\
+      E \times W_K &= K \\
+      E \times W_V &= V
+\end{align*}
+
+Além disso, os vetores nas matrizes \begin{math}Q\end{math} e \begin{math}K\end{math} possuem uma dimensionalidade menor do que os vetores de incorporação. Isso se dá
+por uma escolha de desenvolvimento na arquitetura original que visava melhorar o desempenho no processamento da atenção \textit{multi-head}.
+
+A próxima etapa se consiste no cálculo do produto escalar entre todos os vetores \begin{math}V_Q\end{math} com todos os \begin{math}V_K\end{math}, através da operação
+\begin{math}Q \times K^T\end{math}. O valor resultante de cada produto indica o quanto um vetor \begin{math}V_K\end{math} atende a um \begin{math}V_Q\end{math}. Em
+outras palavras, um produto escalar alto indica que o \textit{token} de onde foi calculado o \begin{math}V_K\end{math} tem uma relação com o \textit{token} de
+onde foi calculado o \begin{math}V_Q\end{math}.
+
+Os valores resultantes são divididos por \begin{math}\sqrt{d_k}\end{math}, garantindo uma maior estabilidade no gradiente de valores. Nesse caso,
+\begin{math}d_k\end{math} é número de dimensões no espaço de \textit{queries} e \textit{keys}. Depois, uma função de \textit{softmax} é aplicada, normalizando os
+resultados.
+
+Por fim, os vetores da matriz \begin{math}V\end{math} são multiplicados pelos valores normalizados. Assim, vetores \begin{math}V_V\end{math} de \textit{tokens} com pouca
+relação entre si serão numericamente irrelevantes. Depois, os vetores resultantes relativos a cada \textit{token} são somados, gerando novos vetores que representam o
+ajuste no significado das incorporações vetoriais desses \textit{tokens}. O resultado desta etapa é uma matriz composta por esses vetores de ajuste.
+
+O processo definido até o momento pode ser resumido com a expressão:
+
+\begin{align*}
+      Attention(Q, K, V) &= softmax({\frac{QK^T}{\sqrt{d_k}}})V
+\end{align*}
+
+O conceito de \textit{multi-head} é utilizado para melhorar a capacidade do modelo de dar atenção a diferentes partes do texto de entrada. Para cada cabeça há um
+conjunto distinto de matrizes \begin{math}Q\end{math}, \begin{math}K\end{math} e \begin{math}V\end{math}. No fim, cada cabeça irá produzir um vetor de ajuste diferente
+para cada \textit{token}. As matrizes de vetores de ajuste de cada cabeça são concatenadas e multiplicadas por uma matriz \begin{math}W_O\end{math}, gerando a saída da
+subcamada de atenção. A expressão abaixo e a \autoref{fig:attention} demonstram o processo e a estrutura:
+
+\begin{align*}
+      MultiHead(Q, K, V) &= Concat(head_1,...,head_h)W_O
+\end{align*}
+
+\begin{figure}[ht]
+      \centering
+      \includegraphics[width=0.7\columnwidth,keepaspectratio]{images/attention.png}
+      \caption{Estrutura da subcamada de atenção. Fonte: \textcite{transformer}.}
+      \label{fig:attention}
+\end{figure}
+
+A saída de cada subcamada possui uma conexão residual que soma os dados de entrada com os de saída dessa subcamada, aplicando uma normalização em seguida. Esse processo
+atualiza as incorporações com os vetores de ajuste e também atenua o problema do desaparecimento de gradiente.
+
+A subcamada \textit{feed-forward} é composta por duas transformações lineares com uma função de ativação \ac{ReLU} entre elas. Cada incorporação é processada
+isoladamente por esta subcamada. \textcite{feed_forward_knowledge} propõe que essa rede armazena as informações factuais aprendidas no treinamento. A expressão abaixo
+traz a representação matemática desta subcamada:
+
+\begin{align*}
+      FFN(x) &= ReLU(xW_1+b_1)W_2 + b_2
+\end{align*}
+
+A saída do conjunto de camadas de codificação é utilizada pelas camadas de decodificação. No decodificador há uma subcamada extra de \textit{multi-head self-attention}
+mascarada que processa os dados de uma forma em que cada incorporação só possa ser atendida pelas incorporações antecessoras a ela. Em outras palavras, o valor semântico
+de um \textit{token} só pode ser influenciado pelos valores dos \textit{tokens} antecessores a ele. Isso é implementado com a definição do valor
+\begin{math}-\infty\end{math} para as relações ilegais após a etapa de multiplicação e escala das matrizes \begin{math}Q\end{math} e \begin{math}K\end{math}, que é
+normalizado como zero com a aplicação do \textit{softmax}. Com a aplicação desta máscara e do deslocamento da entrada do codificador em uma posição, é possível prever
+uma nova incorporação vetorial que dependa apenas das incorporações anteriores.
+
+Por fim, a nova incorporação prevista pelo decodificador passa por uma transformação linear que gera um vetor de \textit{logit}. O tamanho deste vetor está associado ao
+tamanho do vocabulário de \textit{tokens} do modelo, sendo que cada posição sua corresponde a um \textit{token}. O \textit{logit} é normalizado com \textit{softmax},
+gerando uma distribuição de probabilidades. O \textit{token} que corresponde ao valor com a maior probabilidade é então usado para completar o texto de entrada.
+
+\subsubsubsection{Arquiteturas de Transformadores}
+
+O modelo explicado anteriormente possui um codificador e decodificador, sendo mais complexo e adequado para tarefas de geração de texto com base em uma entrada específica,
+como a geração de resumos ou a tradução. Existem também modelos que possuem apenas codificadores ou decodificadores. Os que usam apenas codificadores são úteis para
+tarefas de classificação de texto, \ac{REM} e \ac{EQA}. Modelos que usam apenas decodificadores são mais utilizados para a geração de texto, sendo que os modelos das
+famílias \ac{GPT} e \ac{LLaMA} são exemplos dessa forma de implementação \cite{llm_survey_2024}.
 
 \subsection{Codificador de Modalidade}
 
@@ -177,6 +284,6 @@ Existem diversos codificadores visuais. Os mais comuns usam \acp{ViT} ou Transfo
 
 \subsection{Projetor de Entrada}
 
-\section{Fine-tuning}
+\subsection{Treinamento e Fine-tuning}
 
-\section{LLaMA}
+\section{LLaMA 3}
