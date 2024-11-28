@@ -1,38 +1,52 @@
 \chapter{Introdução}
 
-Lesões de pele são indicativos de diversas doenças, como infecções de baixo risco ou até mesmo câncer. Cerca de 30\% dos tumores malignos registrados no Brasil são
-causados pelo câncer de pele \cite{skin_cancer_in_brazil}. Os tipos mais comuns desta doença são o carcinoma basocelular e o carcinoma epidermoide, que mesmo tendo uma
-baixa letalidade, podem causar sequelas expressivas por conta do tratamento. O melanoma é o menos frequente, mas possui uma letalidade muito maior, causando 75\% das
-mortes por câncer de pele \cite{skin_cancer_screening}.
+Lesões de pele são áreas anormais ou danificadas da pele, causadas por diversos fatores, como condições ambientais, infecções ou doenças graves, incluindo o câncer de
+pele. A identificação precisa da causa é fundamental para o tratamento adequado, porém, devido à semelhança entre os sintomas, diagnosticar corretamente as doenças que
+afetam a pele pode ser uma tarefa complexa. Além disso, o prognóstico pode se agravar significativamente se o tratamento não for iniciado cedo o suficiente
+\cite{habif2015clinical}.
 
-A detecção precoce do câncer de pele é essencial para a garantia da efetividade do tratamento, pois a taxa de sobrevida dos pacientes tende a cair ao longo do avanço
-da doença \cite{skin_cancer_survival}. Observa-se que indivíduos com um grau menor de escolaridade têm um prognóstico pior, pois apresentam tumores em estágios mais
-avançados \cite{skin_cancer_socioeconomic}. Esta correlação pode indicar que a falta de conhecimento sobre a doença ou problemas socioeconômicos podem resultar no atraso
-do diagnóstico e consequentemente na redução da taxa de sucesso do tratamento.
+A importância do cuidado com lesões de pele é evidenciada pelo impacto do câncer de pele. No Brasil, 30\% dos tumores malignos registrados são atribuídos a essa doença
+\cite{skin_cancer_in_brazil}. Os tipos mais comuns, o carcinoma basocelular e o carcinoma epidermoide, apresentam baixa letalidade, mas podem deixar sequelas
+significativas devido ao tratamento. Já o melanoma, embora menos frequente, é altamente letal e corresponde a cerca de 75\% das mortes causadas pelo câncer de pele
+\cite{skin_cancer_screening}. A detecção precoce é essencial para a garantia da efetividade do tratamento, pois a taxa de sobrevida dos pacientes tende a cair ao longo
+do avanço da doença \cite{skin_cancer_survival}.
 
-Considerando este cenário, o desenvolvimento de um sistema automatizado de fácil utilização de classificação de lesões de pele pode ser útil na identificação precoce de
-melanomas e outros tipos de doenças. \acp{MLLM} conseguem obter uma precisão significativa na classificação de imagens de diagnósticos médicos, o que torna viável
-o uso destes modelos para o desenvolvimento deste trabalho \cite{mllm_success_rate}.
+A dificuldade da identificação precoce de lesões de pele tem um componente socioeconômico. Em um estudo feito por \textcite{skin_cancer_socioeconomic}, observa-se que
+indivíduos com um grau menor de escolaridade têm um prognóstico pior, pois apresentam tumores em estágios mais avançados. Esta correlação pode indicar que a desigualdade
+resulta no atraso do diagnóstico e consequentemente na redução da taxa de sucesso do tratamento. \textcite{santos2020desigualdades} também constata que a saúde dos
+brasileiros está associada à renda e classe econômica.
 
-O \ac{LLaMA} 3.2 foi escolhido como o modelo base devido à limitação de recursos para o treinamento de um novo modelo e por ter o código disponível publicamente
-\cite{llama}.
+No Brasil, uma parte da atenção primária é feita por \ac{ACS}, que possuem um treinamento básico para atender a população e dar orientações simples de saúde. Esses
+são os profissionais que normalmente estão em contato com as regiões mais carentes. A identificação da causa de uma lesão de pele está além das responsabilidades de um
+\ac{ACS} \cite{filgueiras2011agente}. Isso pode ser problemático, pois para realizar a triagem de um caso de lesão de pele, se faz necessária a análise de um dermatologista, que nem sempre está
+disponível em regiões carentes.
 
-Com este modelo, é possível realizar um \textit{fine-tuning}, adaptando-o para a classificação de lesões de pele e principalmente para a detecção de câncer de pele. Com
-o objetivo utilizar os recursos computacionais disponíveis eficientemente, o \textit{fine-tuning} será feito com técnicas baseadas em \ac{PEFT}. Este método permite a
-redução do número de parâmetros usados no processo, resultando em uma utilização menor de recursos \cite{peft}. Especificamente, planeja-se utilizar métodos como
-\ac{LoRa} e \ac{QLoRa} para a adaptação do modelo.
+Considerando este cenário, seria útil a existência de um serviço com uma boa usabilidade que analisasse imagens de pacientes e recomendasse uma forma de triagem,
+mitigando a carência de dermatologistas. As capacidades de classificar lesões de pele precisamente e boa usabilidade com interação conversacional tornam \acp{MLLM}
+bons candidatos para a fundação desse serviço \cite{mllm_success_rate}.
+
+Neste trabalho, o \ac{LLaMA} 3.2 foi escolhido como o modelo base para o desenvolvimento, pois ele tem o código aberto e também é relevante no estado da arte
+\cite{dubey2024llama}.
+
+% TODO: Alterar essa parte com o contexto do fine-tuning completo.
+
+Com este modelo, é possível realizar um \textit{fine-tuning}, adaptando-o para a classificação de lesões de pele. Com o objetivo utilizar os recursos computacionais
+disponíveis eficientemente, o \textit{fine-tuning} será feito com técnicas baseadas em \ac{PEFT}. Este método permite a redução do número de parâmetros usados no
+processo, resultando em uma utilização menor de recursos \cite{peft}. Especificamente, planeja-se utilizar métodos como \ac{LoRa} e \ac{QLoRa} para a adaptação do modelo.
 
 Com as adaptações feitas no \ac{LLaMA} 3.2, espera-se obter um sistema confiável de classificação de lesões de pele.
 
+% TODO: Avaliar se isso está certo para o TCC 1
+
 \section{Objetivos}
 
-O objetivo deste trabalho é desenvolver um sistema de classificação de lesões de pele com um foco na detecção de câncer de pele utilizando um \ac{LLM} multimodal.
-Serão utilizados métodos de \textit{fine-tuning} para adaptar o modelo base. Além disso, planeja-se analisar a eficiência entre diferentes técnicas de adaptação.
+O objetivo deste trabalho é desenvolver um sistema de classificação de lesões de pele utilizando um \ac{LLM} multimodal. Serão utilizados métodos de \textit{fine-tuning}
+para adaptar o modelo base. Além disso, planeja-se analisar a eficiência entre diferentes técnicas de adaptação.
 
 \subsection*{Objetivos Específicos}
 
 \begin{itemize}
     \item Avaliar a eficiência de diferentes métodos de \textit{fine-tuning} e a precisão dos modelos resultantes;
-    \item Obter um modelo adaptado que possua uma precisão satisfatória na classificação de lesões de pele e detecção de câncer de pele;
+    \item Obter um modelo adaptado que possua uma precisão satisfatória na classificação de lesões de pele;
     \item Comparar o modelo adaptado com outros \acp{MLLM}.
 \end{itemize}

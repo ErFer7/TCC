@@ -1,9 +1,7 @@
 \chapter{Fundamentação Teórica}
 
-% TODO: Atualizar isso aqui
-Neste capítulo serão discutidos os aspectos relacionados à classificação de imagens de lesões de pele e detecção de melanomas. Além disso, serão explicados os conceitos
-de visão computacional com redes neurais, \acp{LLM} e como estas tecnologias se integram em um \ac{MLLM}. Por fim, será discutido sobre diferentes métodos de
-\textit{fine-tuning}.
+Neste capítulo serão apresentados os aspectos teóricos de lesões de pele, \acp{MLLM} e do \ac{LLaMA}-3.2. O funcionamento e desenvolvimento de \acp{MLLM} serão
+esclarecidos com a explicação dos principais componentes desses modelos.
 
 \section{Lesões de Pele}
 
@@ -11,7 +9,15 @@ A pele é o maior órgão do corpo humano e é responsável por proteger o corpo
 temperatura do corpo e, através de receptores cutâneos, proporciona informações sensoriais como o tato \cite{skin}.
 
 Devido à exposição da pele ao ambiente, é mais comum que esse órgão sofra com doenças. As áreas afetadas são consideradas lesões de pele e podem ser usadas para
-diagnósticos \cite{segmentation_skin_lesions}.
+diagnósticos de doenças \cite{segmentation_skin_lesions}.
+
+Muitas doenças de pele se manifestam como lesões básicas que podem ser chamadas de lesões primárias. Vários fatores influenciam no diagnóstico de uma doença de pele,
+\textcite{habif2015clinical} recomenda que sejam considerados aspectos como o histórico da lesão, distribuição, características visuais e testes laboratoriais. Porém,
+o diagnóstico de uma doença de pele ainda é desafiador. Uma mesma doença de pele pode apresentar diferentes sintomas em cada instância e também pode evoluir ao longo do
+tempo. A análise visual é o principal componente no diagnóstico de lesões de pele, nesse processo, a lesão é analisada pelas suas características superficiais, como a
+cor, textura e presença de certas estruturas.
+
+Uma doença que causa lesões de pele comumente estudada é o câncer de pele. Devido a sua relevância, será dada uma atenção maior a essa doença nesse trabalho.
 
 \subsection{Câncer de Pele}
 
@@ -21,7 +27,7 @@ ultravioleta \cite{skin_cancer}. Em geral, essa doença afeta mais a pele clara 
 no risco de desenvolvimento de um novo câncer de pele do mesmo tipo em um período de três anos \cite{skin_cancer_zink}.
 
 Existem várias categorias de câncer de pele, elas podem ser agrupadas como \ac{CPNM} e melanoma. \ac{CPNM} podem ser subdivididos em \ac{CBC}, \ac{CEC}, carcinoma de
-Merkel e entre outros. Essa categoria é a mais incidente, correspondendo a mais de 90\% dos cânceres diagnosticados e também é a menos fatal. O subtipo \ac{CBC} é o
+Merkel e entre outros. Os \ac{CPNM} são os mais incidentes, correspondendo a mais de 90\% dos cânceres diagnosticados, e também são os menos fatais. O subtipo \ac{CBC} é o
 mais frequente e corresponde a mais de 75\% dos casos de \ac{CPNM} no Brasil \cite{skin_cancer_zink}. O melanoma é o tipo mais fatal e menos incidente da doença. Cerca
 de 75\% das mortes por câncer de pele são causadas por melanomas \cite{skin_cancer_screening}.
 
@@ -33,25 +39,45 @@ melanoma no Brasil é menor que a taxa global, sendo que há uma prevalência ma
 As imagens para exames dermatológicos podem ser agrupadas em diferentes categorias. Alguns exemplos baseados em procedimentos recomendados por
 \textcite{fotos_dermatologia} são:
 
-% TODO: Adicionar imagens
-
 \begin{itemize}
-      \item \textbf{Dermatoscopia}: Essas imagens são obtidas com um equipamento especializado, o dermatoscópio. Esse método permite que um diagnóstico mais preciso seja
-            feito, sendo melhor que o olho nu na detecção de melanomas \cite{dermatoscopy};
-      \item \textbf{Foto de aproximação com régua}: Esse tipo de imagem é obtida com uma fotografia feita a 30 centímetros da lesão, sem utilizar \textit{zoom}.
-            Nessas imagens, etiquetas são colocadas próximas à lesão para auxiliar na determinação do seu tamanho;
-      \item \textbf{Foto panorâmica}: Nesse método são registradas imagens de regiões do corpo, como da cabeça, tronco, braços e pernas.
+      \item \textbf{Dermatoscopia} (\autoref{fig:contact_pic}): Essas imagens são obtidas com um equipamento especializado, o dermatoscópio. Esse método permite que um
+      diagnóstico mais preciso seja feito, sendo melhor que o olho nu na detecção de melanomas \cite{dermatoscopy};
+      \item \textbf{Foto de aproximação com régua} (\autoref{fig:approximation_pic}): Esse tipo de imagem é obtida com uma fotografia feita a 30 centímetros da lesão,
+      sem utilizar \textit{zoom}. Nessas imagens, etiquetas são colocadas próximas à lesão para auxiliar na determinação do seu tamanho;
+      \item \textbf{Foto panorâmica} (\autoref{fig:panoramic_pic}): Nesse método são registradas imagens de regiões do corpo, como da cabeça, tronco, braços e pernas.
 \end{itemize}
+
+\begin{figure}[ht]
+      \centering
+      \begin{minipage}{0.32\textwidth}
+          \centering
+          \includegraphics[height=0.8\columnwidth,keepaspectratio]{images/contact.png}
+          \caption{\small Exemplo de exame com dermatoscopia. Fonte: \textcite{fotos_dermatologia}.}
+          \label{fig:contact_pic}
+      \end{minipage}\hfill
+      \begin{minipage}{0.32\textwidth}
+          \centering
+          \includegraphics[height=0.8\columnwidth,keepaspectratio]{images/approximation.png}
+          \caption{\small Exemplo de exame com aproximação. Fonte: \textcite{fotos_dermatologia}.}
+          \label{fig:approximation_pic}
+      \end{minipage}\hfill
+      \begin{minipage}{0.32\textwidth}
+          \centering
+          \includegraphics[height=0.8\columnwidth,keepaspectratio]{images/panoramic.png}
+          \caption{\small Exemplo de exame com panorâmica da cabeça. Fonte: \textcite{fotos_dermatologia}.}
+          \label{fig:panoramic_pic}
+      \end{minipage}
+  \end{figure}
 
 \subsection{Detecção e Diagnóstico de Câncer de Pele}
 
 O câncer de pele pode ser identificado e classificado através dos sintomas causados. Características como o tamanho da lesão, variação da cor, irregularidade do formato,
 progresso ao longo do tempo e local do corpo em que a lesão se encontra são fundamentais para o diagnóstico da doença \cite{recognizing_skin_cancer}.
 
-A análise destes sintomas é normalmente um processo visual realizado por um dermatologista, sendo que técnicas como a dermatoscopia e teledermatologia podem ser usadas.
+A análise desses sintomas é normalmente um processo visual realizado por um dermatologista, sendo que técnicas como a dermatoscopia e teledermatologia podem ser usadas.
 Outros métodos não invasivos incluem, por exemplo, a análise intracutânea espectrofotométrica, ultrasonografia de alta frequência e microscopia confocal de refletância.
 É possível também diagnosticar a doença através de métodos invasivos como a biópsia. Além destes métodos, há também a utilização de \ac{IA}. Soluções com \ac{IA}
-utilizam imagens para a classificação da doença e podem ter uma precisão equiparável ou até maior a de dermatologistas \cite{recognizing_skin_cancer, skin_cancer_ai}.
+utilizam imagens para a classificação da doença e podem ter uma precisão equiparável ou até maior à de dermatologistas \cite{recognizing_skin_cancer, skin_cancer_ai}.
 
 \section{Multimodal Large Language Models}
 
@@ -60,8 +86,10 @@ operam sobre informações textuais. Esses modelos também podem ser capazes de 
 entre outros \cite{mllm_survey_2023, mllm_survey_2024}.
 
 Segundo \textcite{mllm_survey_2024}, a estrutura de um \ac{MLLM} pode ser dividida em cinco componentes, sendo eles o codificador de modalidade, projetor de entrada,
-\ac{LLM}, projetor de saída e o gerador de modalidade. No caso de \acp{MLLM} que possuem apenas saída de texto, somente os três primeiros componentes estão presentes,
+\ac{LLM}, projetor de saída e o gerador de modalidade. No caso de \acp{MLLM} que possuem apenas saída de texto, só os três primeiros componentes estão presentes,
 essa estrutura é demonstrada na \autoref{fig:mllm_structure_encoder_only}.
+
+% TODO: Fazer uma figura melhor
 
 \begin{figure}[ht]
       \centering
@@ -81,15 +109,15 @@ Embora modelos de linguagem já sejam conceitos discutidos há várias décadas,
 de \textcite{transformer} define um marco no desenvolvimento destes modelos, levando ao surgimento de \acp{LLM}.
 
 Transformadores foram desenvolvidos inicialmente para tarefas de tradução. Porém, pouco tempo depois da sua introdução, pesquisadores da OpenAI aplicaram essa arquitetura
-no desenvolvimento do modelo \ac{GPT}. O modelo demonstrou características emergentes além da simples geração de texto, como a capacidade de responder perguntas com
+no desenvolvimento do modelo \ac{GPT}, que demonstrou características emergentes além da simples geração de texto, como a capacidade de responder perguntas com
 respostas que não estavam na sua base de treinamento \cite{gpt1}. Os modelos sucessores, \ac{GPT}-2 e \ac{GPT}-3, demonstraram ser ainda melhores em diversas tarefas,
 como a tradução, resolução de problemas básicos, interpretação de texto e aritmética básica \cite{gpt2, gpt3}.
 
 Após o lançamento comercial do \textit{ChatGPT} em 2022, vários novos \acp{LLM} foram desenvolvidos. Os mais notáveis são baseados no \ac{LLaMA} e no \ac{PaLM}
 \cite{llm_survey_2024}.
 
-As próximas seções tratarão dos conceitos da representação do texto de entrada, como a tokenização e o uso de \textit{embedding vectors} ou incorporações vetoriais.
-Depois, transformadores e outros aspectos das arquiteturas de \acp{LLM} serão explicados.
+As próximas subseções tratarão dos conceitos da representação do texto de entrada, como a tokenização, o uso de \textit{embedding vectors} ou incorporações vetoriais e
+codificação posicional. Depois, a arquitetura de transformadores será explicada.
 
 \subsubsection{Tokenização}
 
@@ -97,6 +125,8 @@ A tokenização é um processo em que o texto é separado em partes menores, den
 sub-palavras, isso permite que o modelo interprete novas palavras não vistas antes com base na composição das sub-palavras. Esse processo também torna o processamento de
 texto mais eficiente, reduzindo a memória necessária para o vocabulário \cite{tokenizer_performance}. Na \autoref{fig:tokens} é possível ver um exemplo de texto
 tokenizado. Cada preenchimento colorido denota um \textit{token}.
+
+\clearpage
 
 \begin{figure}[ht]
       \centering
@@ -125,7 +155,7 @@ O mesmo texto, representado como uma lista de \textit{IDs} de \textit{tokens} po
             textual possa ser representada com o vocabulário de \textit{tokens};
       \item \textbf{\textit{Sentence Piece Encoding}}: Este método é similar aos já citados, porém, sua maior diferença está na forma em que o texto é tratado. Sendo
             que o texto é dado como uma sequência contínua de caracteres, sem assumir que delimitações existam entre as palavras. Isso se torna útil na tokenização de
-            línguas sem delimitações com espaços, como, por exemplo, japonês ou chinês.
+            línguas sem delimitações com espaços, como, por exemplo, japonês e chinês.
 \end{itemize}
 
 \subsubsection{Incorporação Vetorial}
@@ -141,11 +171,9 @@ simplificado da estrutura destes vetores. No contexto de \acp{LLM}, \textit{toke
       \label{fig:word_embeddings}
 \end{figure}
 
-Nesse espaço vetorial, direções podem ter um significado semântico. Um exemplo dado por \textcite{glove} demonstra isso com a frase \textit{"king is to queen as man is
-to woman"}, que pode ser representada como \begin{math}V_{king} - V_{queen} \approx V_{man} - V_{woman}\end{math}, evidenciando que a direção do vetor
+Nesse espaço vetorial, direções podem ter um significado semântico. Um exemplo dado por \textcite{glove} demonstra isso com a frase \textit{``king is to queen as man is
+to woman''}, que pode ser representada como \begin{math}V_{king} - V_{queen} \approx V_{man} - V_{woman}\end{math}, evidenciando que a direção do vetor
 \begin{math}V_{king} - V_{queen}\end{math} codifica informações sobre gênero. A \autoref{fig:word_embeddings_directions} traz uma visualização aproximada desta relação.
-
-\clearpage
 
 \begin{figure}[ht]
       \centering
@@ -155,8 +183,8 @@ to woman"}, que pode ser representada como \begin{math}V_{king} - V_{queen} \app
 \end{figure}
 
 Outro exemplo de relação semântica pode ser visto com \begin{math}V_{Paris} - V_{France} + V_{Italy} \approx V_{Rome}\end{math}, em que é possível calcular qual é a
-capital da Itália somando um vetor que incorpora a relação de capital para país com um vetor que incorpora a palavra "Itália". A proximidade entre incorporações indica a
-similaridade semântica entre elas \cite{word2vec_estimation}.
+capital da Itália somando um vetor que incorpora a relação de capital para país com um vetor que incorpora a palavra ``Itália''. A proximidade entre incorporações indica
+a similaridade semântica entre elas \cite{word2vec_estimation}.
 
 \subsubsection{Codificação Posicional} % TODO: Expandir a seção, falando de outras formas de codificação
 
