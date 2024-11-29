@@ -41,33 +41,33 @@ As imagens para exames dermatológicos podem ser agrupadas em diferentes categor
 
 \begin{itemize}
       \item \textbf{Dermatoscopia} (\autoref{fig:contact_pic}): Essas imagens são obtidas com um equipamento especializado, o dermatoscópio. Esse método permite que um
-      diagnóstico mais preciso seja feito, sendo melhor que o olho nu na detecção de melanomas \cite{dermatoscopy};
+            diagnóstico mais preciso seja feito, sendo melhor que o olho nu na detecção de melanomas \cite{dermatoscopy};
       \item \textbf{Foto de aproximação com régua} (\autoref{fig:approximation_pic}): Esse tipo de imagem é obtida com uma fotografia feita a 30 centímetros da lesão,
-      sem utilizar \textit{zoom}. Nessas imagens, etiquetas são colocadas próximas à lesão para auxiliar na determinação do seu tamanho;
+            sem utilizar \textit{zoom}. Nessas imagens, etiquetas são colocadas próximas à lesão para auxiliar na determinação do seu tamanho;
       \item \textbf{Foto panorâmica} (\autoref{fig:panoramic_pic}): Nesse método são registradas imagens de regiões do corpo, como da cabeça, tronco, braços e pernas.
 \end{itemize}
 
 \begin{figure}[ht]
       \centering
       \begin{minipage}{0.32\textwidth}
-          \centering
-          \includegraphics[height=0.8\columnwidth,keepaspectratio]{images/contact.png}
-          \caption{\small Exemplo de exame com dermatoscopia. Fonte: \textcite{fotos_dermatologia}.}
-          \label{fig:contact_pic}
+            \centering
+            \includegraphics[height=0.8\columnwidth,keepaspectratio]{images/contact.png}
+            \caption{\small Exemplo de exame com dermatoscopia. Fonte: \textcite{fotos_dermatologia}.}
+            \label{fig:contact_pic}
       \end{minipage}\hfill
       \begin{minipage}{0.32\textwidth}
-          \centering
-          \includegraphics[height=0.8\columnwidth,keepaspectratio]{images/approximation.png}
-          \caption{\small Exemplo de exame com aproximação. Fonte: \textcite{fotos_dermatologia}.}
-          \label{fig:approximation_pic}
+            \centering
+            \includegraphics[height=0.8\columnwidth,keepaspectratio]{images/approximation.png}
+            \caption{\small Exemplo de exame com aproximação. Fonte: \textcite{fotos_dermatologia}.}
+            \label{fig:approximation_pic}
       \end{minipage}\hfill
       \begin{minipage}{0.32\textwidth}
-          \centering
-          \includegraphics[height=0.8\columnwidth,keepaspectratio]{images/panoramic.png}
-          \caption{\small Exemplo de exame com panorâmica da cabeça. Fonte: \textcite{fotos_dermatologia}.}
-          \label{fig:panoramic_pic}
+            \centering
+            \includegraphics[height=0.8\columnwidth,keepaspectratio]{images/panoramic.png}
+            \caption{\small Exemplo de exame com panorâmica da cabeça. Fonte: \textcite{fotos_dermatologia}.}
+            \label{fig:panoramic_pic}
       \end{minipage}
-  \end{figure}
+\end{figure}
 
 \subsection{Detecção e Diagnóstico de Câncer de Pele}
 
@@ -172,7 +172,7 @@ simplificado da estrutura destes vetores. No contexto de \acp{LLM}, \textit{toke
 \end{figure}
 
 Nesse espaço vetorial, direções podem ter um significado semântico. Um exemplo dado por \textcite{glove} demonstra isso com a frase \textit{``king is to queen as man is
-to woman''}, que pode ser representada como \begin{math}V_{king} - V_{queen} \approx V_{man} - V_{woman}\end{math}, evidenciando que a direção do vetor
+      to woman''}, que pode ser representada como \begin{math}V_{king} - V_{queen} \approx V_{man} - V_{woman}\end{math}, evidenciando que a direção do vetor
 \begin{math}V_{king} - V_{queen}\end{math} codifica informações sobre gênero. A \autoref{fig:word_embeddings_directions} traz uma visualização aproximada desta relação.
 
 \begin{figure}[ht]
@@ -186,24 +186,54 @@ Outro exemplo de relação semântica pode ser visto com \begin{math}V_{Paris} -
 capital da Itália somando um vetor que incorpora a relação de capital para país com um vetor que incorpora a palavra ``Itália''. A proximidade entre incorporações indica
 a similaridade semântica entre elas \cite{word2vec_estimation}.
 
-\subsubsection{Codificação Posicional} % TODO: Expandir a seção, falando de outras formas de codificação
+\subsubsection{Codificação Posicional}
 
 Transformadores não possuem mecanismos de recorrência ou convolução, então é necessária uma forma de codificar a posição de cada \textit{token} do texto de entrada. No
 modelo original de transformador, isso foi feito com a adição de vetores de codificação posicional às incorporações. Para gerar uma codificação como esta, é usada uma
-combinação de funções seno e cosseno com diferentes frequências, sendo que cada dimensão da codificação corresponde a um senoide \cite{transformer}.
+combinação de funções seno e cosseno com diferentes frequências, sendo que cada dimensão da codificação corresponde a um senoide \cite{transformer}. A
+\autoref{fig:absolute_positional_embeddings} apresenta uma visualização das codificações posicionais com o método utilizado no transformador original.
 
-% TODO: Adicionar imagem
+\begin{figure}[ht]
+      \centering
+      \includegraphics[width=1.0\columnwidth,keepaspectratio]{images/absolute_positional_embeddings.png}
+      \caption{Visualização da codificação posicional original, cada faixa horizontal corresponde a uma incorporação. Fonte: \textcite{positional_embeddings}.}
+      \label{fig:absolute_positional_embeddings}
+\end{figure}
 
-\subsubsection{Transformadores} % TODO: Comentar das variantes
+% TODO: Verificar porquê o RoPE não aparece na versão longa sem forçar
+Essa forma de codificação é conhecida como \ac{APE}, ela possui certas desvantagens, como a limitação no número de incorporações e a incapacidade de reconhecer
+distâncias relativas. Mas, existem outras formas de codificação que lidam com esses problemas, como \ac{RPE}, \acl{RoPE} e vieses posicionais relativos.
+\textcite{llm_survey_2024} traz definições sobre esses outros tipos:
 
-O transformador é o componente central de um \ac{LLM}, ele processa o texto de entrada previamente tokenizado e representado em incorporações vetoriais com codificação
-posicional e prevê o próximo \textit{token} desse texto. As explicações fornecidas neste trabalho se baseiam no modelo de \textcite{transformer}.
+\begin{itemize}
+      \item \textbf{\ac{RPE}}: Nessa forma de codificação, os \textit{tokens} são representados em pares ligados entre si, tornando a entrada do modelo em um grafo
+            dirigido conexo. Esse método é implementado diretamente no mecanismo de atenção do transformador. Porém, o \ac{RPE} tem a desvantagem de tornar o treinamento
+            e a inferência mais lentos, devido à modificação do mecanismo de atenção;
+      \item \textbf{\ac{RoPE}}: Essa codificação aplica uma rotação no ângulo \begin{math}m\theta\end{math} nos pares de vetores de
+            \textit{query} e \textit{key}\footnote{Esses vetores serão explicados na seção \autoref{sec:transformers}}, sendo que \begin{math}\theta\end{math} é um ângulo
+            pré-definido e \begin{math}m\end{math} é o índice da posição absoluta do vetor de incorporação usado para gerar os vetores de \textit{query} e \textit{key}. O
+            esquema do \ac{RoPE} pode ser visto na \autoref{fig:rotary_positional_embeddings};
+      \item \textbf{Vieses posicionais relativos}: Nesse método, são introduzidos vieses no nível de atenção calculada entre cada \textit{query} e \textit{key},
+            penalizando os pares que estiverem distantes entre si.
+\end{itemize}
+
+\begin{figure}[ht]
+      \centering
+      \includegraphics[width=0.8\columnwidth,keepaspectratio]{images/rotary_positional_embeddings.jpg}
+      \caption{Funcionamento da codificação do tipo \ac{RoPE}. Fonte: \textcite{su2024roformer}.}
+      \label{fig:rotary_positional_embeddings}
+\end{figure}
+
+\subsubsection{Transformadores} \label{sec:transformers}
+
+O transformador é o componente central de um \ac{LLM}, ele processa o texto de entrada previamente tokenizado e representado em incorporações vetoriais e prevê o
+próximo \textit{token} desse texto. As explicações fornecidas neste trabalho se baseiam no modelo de \textcite{transformer}, mas várias outras variantes já existem.
 
 A arquitetura original dos transformadores possui um codificador e um decodificador, sendo que cada um deles é composto por camadas. No codificador, cada camada é
 composta por duas subcamadas, sendo uma delas um mecanismo de \textit{multi-head self-attention} e outra, uma rede \textit{feed-forward}. A saída de cada uma delas possui
 uma conexão residual e uma etapa de normalização. O decodificador é similar ao codificador, mas suas camadas possuem uma subcamada extra que aplica o mecanismo de
 \textit{multi-head self-attention} mascarado sobre a saída do codificador. Além disso, a entrada do decodificador é deslocada em uma posição, de modo que uma nova
-incorporação possa ser prevista e usada para gerar um \textit{token}. A \autoref{fig:transformer} mostra a arquitetura original de um transformador.
+incorporação possa ser prevista e usada para gerar um \textit{token}. A \autoref{fig:transformer} mostra o transformador original.
 
 \begin{figure}[ht]
       \centering
@@ -214,7 +244,7 @@ incorporação possa ser prevista e usada para gerar um \textit{token}. A \autor
 
 O mecanismo de \textit{multi-head self-attention} permite que o modelo reconheça as relações entre diferentes partes do texto de entrada e ajuste os valores das
 incorporações vetoriais com base nessas relações. Esse conceito pode ser exemplificado de forma mais intuitiva com a frase: \textit{``Você está lendo um documento, ele
-foi escrito em português''}. Nesse caso, a palavra \textit{``ele''} possui uma relação com a palavra \textit{``documento''}. O mecanismo identificaria essa relação e
+      foi escrito em português''}. Nesse caso, a palavra \textit{``ele''} possui uma relação com a palavra \textit{``documento''}. O mecanismo identificaria essa relação e
 utilizaria essa informação para recalcular a incorporação vetorial da palavra \textit{``ele''}, de modo que ela reflita seu vínculo com \textit{``documento''}. A captura
 das relações e significados é o que permite que o modelo gere mais partes do texto. Por exemplo, na frase \textit{``Um animal vivendo em seu habitat...''}, o modelo
 poderia ajustar o valor semântico de uma nova incorporação com base na sua relação com outras incorporações até que ela representasse a palavra \textit{``natural''}.
@@ -226,9 +256,9 @@ Para realizar esta operação, as incorporações são agrupadas em uma matriz \
 \begin{math}K\end{math} e \begin{math}V\end{math}. As equações abaixo ilustram este processo:
 
 \begin{align*}
-      E \times W_Q &= Q \\
-      E \times W_K &= K \\
-      E \times W_V &= V
+      E \times W_Q & = Q \\
+      E \times W_K & = K \\
+      E \times W_V & = V
 \end{align*}
 
 Além disso, os vetores nas matrizes \begin{math}Q\end{math} e \begin{math}K\end{math} possuem uma dimensionalidade menor do que os vetores de incorporação. Isso se dá
@@ -250,7 +280,7 @@ ajuste no significado das incorporações vetoriais desses \textit{tokens}. O re
 O processo definido até o momento pode ser resumido com a expressão:
 
 \begin{align*}
-      Attention(Q, K, V) &= softmax({\frac{QK^T}{\sqrt{d_k}}})V
+      Attention(Q, K, V) & = softmax({\frac{QK^T}{\sqrt{d_k}}})V
 \end{align*}
 
 O conceito de \textit{multi-head} é utilizado para melhorar a capacidade do modelo de dar atenção a diferentes partes do texto de entrada. Para cada cabeça há um
@@ -259,7 +289,7 @@ para cada \textit{token}. As matrizes de vetores de ajuste de cada cabeça são 
 subcamada de atenção. A expressão abaixo e a \autoref{fig:attention} demonstram o processo e a estrutura:
 
 \begin{align*}
-      MultiHead(Q, K, V) &= Concat(head_1,...,head_h)W_O
+      MultiHead(Q, K, V) & = Concat(head_1,...,head_h)W_O
 \end{align*}
 
 \begin{figure}[ht]
@@ -272,19 +302,19 @@ subcamada de atenção. A expressão abaixo e a \autoref{fig:attention} demonstr
 A saída de cada subcamada possui uma conexão residual que soma os dados de entrada com os de saída dessa subcamada, aplicando uma normalização em seguida. Esse processo
 atualiza as incorporações com os vetores de ajuste e também atenua o problema do desaparecimento de gradiente.
 
-A subcamada \textit{feed-forward} é composta por duas transformações lineares com uma função de ativação \ac{ReLU} entre elas. Cada incorporação é processada
-isoladamente por esta subcamada. \textcite{feed_forward_knowledge} propõe que essa rede armazena as informações factuais aprendidas no treinamento. A expressão abaixo
-traz a representação matemática desta subcamada:
+A próxima subcamada, a de \textit{feed-forward}, é composta por duas transformações lineares com uma função de ativação \ac{ReLU} entre elas. Cada incorporação é
+processada isoladamente por esta subcamada. \textcite{feed_forward_knowledge} propõe que essa rede armazena as informações factuais aprendidas no treinamento. A
+expressão abaixo traz a representação matemática desta subcamada:
 
 \begin{align*}
-      FFN(x) &= ReLU(xW_1+b_1)W_2 + b_2
+      FFN(x) & = ReLU(xW_1+b_1)W_2 + b_2
 \end{align*}
 
 A saída do conjunto de camadas de codificação é utilizada pelas camadas de decodificação. No decodificador há uma subcamada extra de \textit{multi-head self-attention}
 mascarada que processa os dados de uma forma em que cada incorporação só possa ser atendida pelas incorporações antecessoras a ela. Em outras palavras, o valor semântico
 de um \textit{token} só pode ser influenciado pelos valores dos \textit{tokens} antecessores a ele. Isso é implementado com a definição do valor
 \begin{math}-\infty\end{math} para as relações ilegais após a etapa de multiplicação e escala das matrizes \begin{math}Q\end{math} e \begin{math}K\end{math}, que é
-normalizado como zero com a aplicação do \textit{softmax}. Com a aplicação desta máscara e do deslocamento da entrada do codificador em uma posição, é possível prever
+normalizado como zero com a aplicação de \textit{softmax}. Com a aplicação desta máscara e do deslocamento da entrada do codificador em uma posição, é possível prever
 uma nova incorporação vetorial que dependa apenas das incorporações anteriores.
 
 Por fim, a nova incorporação prevista pelo decodificador passa por uma transformação linear que gera um vetor de \textit{logit}. O tamanho deste vetor está associado ao
@@ -298,13 +328,62 @@ como a geração de resumos ou a tradução. Existem também modelos que possuem
 tarefas de classificação de texto, \ac{REM} e \ac{EQA}. Modelos que usam apenas decodificadores são mais utilizados para a geração de texto, sendo que os modelos das
 famílias \ac{GPT} e \ac{LLaMA} são exemplos dessa forma de implementação \cite{llm_survey_2024}.
 
+\subsection{Codificador de Modalidade}
+
+Codificadores de modalidade são os componentes responsáveis pela extração das características mais relevantes dos dados multimodais de entrada em incorporações vetoriais.
+\cite{mllm_survey_2024}. Este trabalho apresentará apenas a categoria visual de codificador.
+
+\subsubsection{Codificador Visual}
+
+Existem diversos codificadores visuais. Os mais comuns usam \acp{ViT} ou Transformadores Visuais nas suas arquiteturas, mas também há codificadores baseados em
+convolução, como o \textit{Osprey} \cite{mllm_survey_2023}. Neste trabalho o foco será direcionado a arquiteturas baseadas em \ac{ViT}.
+
+\subsubsubsection{Transformadores Visuais}
+
+\acp{ViT} são transformadores capazes de processar imagens que foram introduzidos por \textcite{dosovitskiy2020image}. A arquitetura original utiliza apenas codificadores
+e visa classificar imagens.
+
+A primeira etapa no processamento envolve a divisão da imagem em seções de menor resolução, sendo então planificadas e incorporadas. Cada incorporação resultante também
+recebe uma codificação posicional simples unidimensional. Nessa etapa, uma incorporação extra também pode ser adicionada na primeira posição da entrada para objetivos de
+classificação de imagens.
+
+Na próxima etapa, as incorporações são processadas pelo transformador, capturando suas relações e refinando-as. Diferentemente da arquitetura de \textcite{transformer},
+o modelo de \textcite{dosovitskiy2020image} aplica a normalização antes da subcamada de atenção. Além disso, a função de ativação usada na subcamada de
+\textit{feed-forward} é a \ac{GELU}.
+
+A classificação pode ser realizada com o processamento da incorporação de classificação por um \ac{MLP}. Assim, é gerada uma distribuição de probabilidades sobre as
+classes. A \autoref{fig:vision_transformer} demonstra a estrutura de um transformador visual com os detalhes de sua implementação.
+
+\clearpage
+
+\begin{figure}[ht]
+      \centering
+      \includegraphics[width=0.8\columnwidth,keepaspectratio]{images/vision_transformer.pdf}
+      \caption{\small Transformador visual. Fonte: \textcite{dosovitskiy2020image}.}
+      \label{fig:vision_transformer}
+\end{figure}
+
+No contexto de codificadores visuais, a classificação não é necessária, já que a saída do codificador se constitui nas incorporações processadas. Sendo assim, a
+incorporação extra de classificação e o \ac{MLP} final podem ser desconsiderados \cite{dubey2024llama}.
+
+\subsection{Projetor de Entrada}
+
+Esse componente faz o alinhamento entre o espaço de incorporações geradas pelo codificador e o espaço de incorporações do \ac{LLM}, podendo utilizar um \ac{MLP} ou um
+mecanismo de \textit{cross-attention}. A principal diferença de \textit{cross-attention} para \textit{self-attention} nesse contexto está no uso dos vetores de
+\textit{key} provenientes do codificador para o cálculo da atenção no transformador do \ac{LLM} \cite{mllm_survey_2024}.
+
+\subsection{Treinamento}
+
+Com base no trabalho de \textcite{mllm_survey_2024}, pode-se dividir o treinamento de \acp{MLLM} em pré-treinamento e \textit{instruction-tuning}. Porém, esse processo
+normalmente envolve a utilização de um \ac{LLM} pré-treinado e alinhado, portanto, o treinamento de um \ac{LLM} será considerado como a primeira etapa.
+
 \subsubsection{Treinamento de LLMs}
 
-\acp{LLM} requerem grandes volumes de dados para serem treinados, sendo que esses dados textuais precisam ser tratados antes de serem usados no treinamento. O tratamento
-envolve a remoção de informações falsas, textos duplicados, ruídos e de dados sem valor para o treinamento. Além disso, os vieses e desbalanceamentos também são
-reduzidos nesse processo \cite{llm_survey_2024}.
+\acp{LLM} requerem grandes volumes de dados para serem treinados, sendo que esses dados textuais precisam ser tratados antes de serem usados. O tratamento envolve a
+remoção de informações falsas, textos duplicados, ruídos e de dados sem valor para o treinamento. Além disso, os vieses e desbalanceamentos também são reduzidos nesse
+processo \cite{llm_survey_2024}.
 
-\subsubsubsection{Pré-Treinamento}
+\subsubsubsection{Pré-treinamento de LLMs}
 
 O pré-treinamento é a primeira etapa de treinamento de um \ac{LLM}. Normalmente o modelo é treinado sobre um grande volume de texto não classificado de forma
 auto-supervisionada. A modelagem auto-regressiva e a modelagem mascarada são duas formas comuns de realizar o pré-treinamento.
@@ -322,68 +401,6 @@ Com o pré-treinamento, os \acp{LLM} conseguem gerar e classificar textos, mas a
 Com o método \ac{RLHF}, os textos gerados são avaliados por humanos, recebendo uma pontuação. Assim, é possível ajustar o modelo para que as respostas tenham
 pontuações melhores. Outro método comum é o \ac{RLAIF}, que integra um modelo já alinhado ao que está em treinamento, realizando os ajustes necessários.
 
-\subsubsubsection{Fine-Tuning} \label{sec:fine_tuning} % TODO: Expandir a seção
-
-O \textit{fine-tuning} é uma etapa de treinamento que pode ser realizada para melhorar a qualidade das saídas sobre dados específicos ou sobre um domínio de
-conhecimento.
-
-Técnicas de \textit{fine-tuning} eficientes oferecem uma forma de adaptação de modelos com um custo computacional relativamente menor. Dentre várias
-técnicas, uma das mais populares é o \ac{LoRa}. Essa técnica se consiste na introdução de matrizes treináveis menores ao \ac{LLM}, deixando as matrizes originais intactas
-durante o treinamento. Assim que treinadas, essas matrizes são adicionadas às originais.
-
-\ac{LoRa} reduz drasticamente o custo do treinamento comparado ao \textit{fine-tuning} completo, usando três vezes menos memória e em dez mil vezes menos parâmetros
-durante o \textit{fine-tuning} do modelo \ac{GPT}-3 \cite{llm_survey_2023}.
-
-É possível usar também a quantização para acelerar o \textit{fine-tuning}. A quantização se trata da redução da precisão numérica durante o treinamento. Uma técnica que
-utiliza este conceito é o \ac{QLoRa}, que segundo \textcite{qlora}, foi usado no \textit{fine-tuning} de um modelo que atingiu 99.3\% do desempenho do \textit{ChatGPT}
-no \textit{benchmark} Vicuna com apenas 24 horas de treinamento em uma placa de vídeo de 48 GB.
-
-\subsection{Codificador de Modalidade}
-
-Codificadores de modalidade são os componentes responsáveis pela extração das características mais relevantes dos dados multimodais de entrada em incorporações vetoriais.
-\cite{mllm_survey_2024}.
-
-\subsubsection{Codificador Visual}
-
-Existem diversos codificadores visuais. Os mais comuns usam \acp{ViT} ou Transformadores Visuais nas suas arquiteturas, mas também há codificadores baseados em
-convolução, como o \textit{Osprey} \cite{mllm_survey_2023}. Neste trabalho o foco será direcionado a arquiteturas baseadas em \ac{ViT}.
-
-\subsubsubsection{Transformadores Visuais}
-
-\acp{ViT} são transformadores capazes de processar imagens introduzidos por \textcite{dosovitskiy2020image}. A arquitetura original utiliza apenas codificadores e visa
-classificar imagens.
-
-A primeira etapa no processamento envolve a divisão da imagem em seções de menor resolução, sendo então planificadas e incorporadas. Cada incorporação resultante também
-recebe uma codificação posicional simples unidimensional. Nessa etapa, uma incorporação extra também pode ser adicionada na primeira posição da entrada para objetivos de
-classificação da imagem.
-
-Na próxima etapa, as incorporações são processadas pelo transformador codificador, capturando suas relações e refinando-as. Diferentemente da arquitetura de
-\textcite{transformer}, o modelo de \textcite{dosovitskiy2020image} aplica a normalização antes da subcamada de atenção. Além disso, a função de ativação usada na
-subcamada de \textit{feed-forward} é a \ac{GELU}.
-
-A classificação pode ser realizada com o processamento da incorporação de classificação por um \ac{MLP}. Assim, é gerada uma distribuição de probabilidades sobre as
-classes. A \autoref{fig:vision_transformer} demonstra a estrutura de um transformador visual com os detalhes de sua implementação.
-
-\begin{figure}[ht]
-      \centering
-      \includegraphics[width=0.8\columnwidth,keepaspectratio]{images/vision_transformer.pdf}
-      \caption{\small Transformador visual. Fonte: \textcite{dosovitskiy2020image}.}
-      \label{fig:vision_transformer}
-\end{figure}
-
-No contexto de codificadores visuais, a classificação não é necessária, já que a saída do codificador se constitui nas incorporações processadas. Sendo assim, a
-incorporação extra de classificação e o \ac{MLP} final podem ser desconsiderados \cite{dubey2024llama}.
-
-\subsection{Projetor de Entrada}
-
-Esse componente faz o alinhamento entre o espaço de incorporações geradas pelo codificador e o espaço de incorporações do \ac{LLM}, podendo utilizar um \ac{MLP} ou um
-mecanismo de \textit{cross-attention}. A principal diferença de \textit{cross-attention} para \textit{self-attention} está no uso dos vetores de \textit{key}
-provenientes do codificador para o cálculo da atenção no transformador do \ac{LLM} \cite{mllm_survey_2024}.
-
-\subsection{Treinamento de MLLMs}
-
-Com base no trabalho de \textcite{mllm_survey_2024}, pode-se dividir o treinamento de \acp{MLLM} em pré-treinamento e \textit{instruction-tuning}.
-
 \subsubsection{Pré-treinamento}
 
 O pré-treinamento de um \ac{MLLM} normalmente evolve o travamento dos codificadores de modalidade e do \ac{LLM}, fazendo com que somente o projetor seja treinado. Em
@@ -391,18 +408,38 @@ alguns casos, o codificador de modalidade também é destravado, permitindo um t
 \ac{LLM}. No contexto de modelos visuais, o pré-treinamento faz o uso de um grande volume de pares de imagens e textos, sendo que os textos descrevem o conteúdo das
 imagens \cite{mllm_survey_2023}.
 
-\subsubsection{Instruction-tuning} % TODO: Expandir a seção, explicando fine tuning no contexto de MLLMs
+\subsubsection{Instruction-tuning}
 
 Essa etapa se consiste na melhoria do modelo para atender melhor às expectativas dos usuários e obter uma capacidade melhor na resolução de problemas envolvendo tarefas
-multimodais, sendo uma etapa similar às de alinhamento e \textit{fine-tuning} discutidas na \autoref{sec:alinhamento} e \autoref{sec:fine_tuning}.
+multimodais, sendo uma etapa similar à de alinhamento discutida na \autoref{sec:alinhamento}.
 
 No contexto de modelos visuais, \textit{Instruction-tuning} pode ser feita inicialmente com \ac{SFT}, usando imagens e textos em um formato de pergunta e resposta, em
 que uma pergunta é feita sobre a imagem. Depois da aplicação de \ac{SFT}, é possível usar \ac{RLHF} para continuar o aprimoramento do modelo \cite{mllm_survey_2024}.
 
+\subsubsection{Fine-Tuning}
+
+O \textit{fine-tuning} é uma etapa de treinamento que pode ser realizada para melhorar o desempenho do modelo com relação a dados específicos ou sobre um domínio de
+conhecimento. Técnicas de \textit{fine-tuning} eficientes, como as baseadas em \ac{PEFT}, oferecem uma forma de adaptação de modelos com um custo computacional
+elativamente menor. Dentre várias técnicas, uma das mais populares é o \ac{LoRa} \cite{llm_survey_2023}.
+
+\subsubsubsection{LoRa} % TODO: Expandir a seção
+
+Essa técnica se consiste na introdução de matrizes treináveis menores ao \ac{MLLM}, deixando as matrizes originais intactas durante o treinamento. Assim que treinadas,
+essas matrizes são adicionadas às originais \cite{hu2021lora}.
+
+\ac{LoRa} reduz drasticamente o custo do treinamento comparado ao \textit{fine-tuning} completo, usando, por exemplo, três vezes menos memória e em dez mil vezes menos
+parâmetros durante o \textit{fine-tuning} do modelo \ac{GPT}-3 \cite{llm_survey_2023}.
+
+\subsubsubsection{QLoRa} % TODO: Expandir a seção
+
+É possível usar também a quantização para acelerar o \textit{fine-tuning}. A quantização se trata da redução da precisão numérica durante o treinamento. Uma técnica que
+utiliza este conceito é o \ac{QLoRa}, que segundo \textcite{qlora}, foi usada no \textit{fine-tuning} de um modelo que atingiu 99.3\% do desempenho do \textit{ChatGPT}
+no \textit{benchmark} Vicuna com apenas 24 horas de treinamento em uma placa de vídeo de 48 GB.
+
 \section{LLaMA 3}
 
 A família de modelos \ac{LLaMA}-3 é composta por \acp{LLM} e \acp{MLLM} desenvolvidos pelos pesquisadores da \textit{Meta AI}. Em particular, este trabalho focará no
-modelo multimodal \ac{LLaMA}-3.2 \cite{dubey2024llama}.
+modelo multimodal \ac{LLaMA}-3.2, que possui as variantes com 11 e 90 bilhões de parâmetros disponíveis \cite{dubey2024llama}.
 
 O \ac{LLM} base do \ac{LLaMA}-3.2 utiliza um transformador decodificador que possui algumas diferenças em relação à arquitetura original de \textcite{transformer}, as
 maiores diferenças já existem desde os modelos \ac{LLaMA} e \ac{LLaMA}-2 e podem ser elencadas com base no trabalho de \textcite{touvron2023llama}:
@@ -413,19 +450,37 @@ maiores diferenças já existem desde os modelos \ac{LLaMA} e \ac{LLaMA}-2 e pod
       \item \textbf{Função de ativação}: Na subcamada de \textit{feed-forward}, a função de ativação é a \ac{SwiGLU}, em vez de \ac{ReLU};
       \item \textbf{Codificação posicional}: A codificação posicional é feita com \ac{RoPE}, em vez da codificação absoluta;
       \item \textbf{\acs{GQA}}: \ac{GQA} é utilizado é com 8 cabeças de chave-valor para melhorar a velocidade de inferência e reduzir o tamanho dos \textit{caches} de
-      chave-valor durante a decodificação;
+            chave-valor durante a decodificação;
       \item \textbf{Máscara de atenção}: Uma máscara é utilizada para impedir o relacionamento entre diferentes documentos de uma mesma entrada;
       \item \textbf{Vocabulário}: O vocabulário de \textit{tokens} usado possui 128 mil \textit{tokens}.
 \end{itemize}
 
-A tabela (TODO) apresenta alguns parâmetros das variantes do \ac{LLM}.
+A \autoref{tab:llama3_architecture} apresenta alguns parâmetros das variantes do \ac{LLM}.
 
-% TODO: Adicionar tabela com as diferenças
+\begin{table}[ht]
+      \caption{Características das variantes do \ac{LLaMA}-3}
+      \centering
+      \begin{tabular}{l|ccc}
+            \hline
+                                                   & 8B                                                                   & 70B                                      & 450B                                   \\ \hline
+            Camadas do transformador               & 32                                                                   & 80                                       & 126                                    \\
+            Dimensão das incorporações             & 4096                                                                 & 8192                                     & 16384                                  \\
+            Dimensão da rede \textit{feed-forward} & 14336                                                                & 28672                                    & 53248                                  \\
+            \textit{fAttention heads}              & 32                                                                   & 64                                       & 128                                    \\
+            \textit{fKey / Value heads}            & 8                                                                    & 8                                        & 8                                      \\
+            Taxa máxima de aprendizado             & \begin{math}3 \times 10^{-4}\end{math}                               & \begin{math}1.5 \times 10^{-4}\end{math} & \begin{math}8 \times 10^{-5}\end{math} \\
+            Função de ativação                     & \multicolumn{3}{c}{\ac{SwiGLU}}                                                                                                                          \\
+            Tamanho do vocabulário                 & \multicolumn{3}{c}{128000}                                                                                                                               \\
+            Codificação posicional                 & \multicolumn{3}{c}{\ac{RoPE}\begin{math}(\theta = 500000)\end{math}}                                                                                     \\ \hline
+      \end{tabular}
+      \label{tab:llama3_architecture}
+\end{table}
+\fonte{\textcite{dubey2024llama}}
 
 O codificador visual utilizado é baseado no transformador visual de \textcite{dosovitskiy2020image}, sendo usada a variante \ac{ViT}-H/14 com modificações extras, como
 a adição de extração de características multicamadas e de 8 camadas de \textit{gated self-attention}, deixando o codificador com um total de 850 milhões de parâmetros.
 
-O projetor de entrada, referenciado como o adaptador de visão no trabalho de \textcite{dubey2024llama}, se baseia em \textit{cross-attention} entre as camadas de
+O projetor de entrada, referenciado como adaptador de visão no trabalho de \textcite{dubey2024llama}, se baseia em \textit{cross-attention} entre as camadas de
 codificação do codificador visual e as camadas de decodificação do \ac{LLM}. Mais especificamente, é aplicada uma camada de \textit{cross-attention} a cada quarta camada
 do \ac{LLM}. Essas camadas também utilizam \ac{GQA} para melhorar o desempenho.
 
