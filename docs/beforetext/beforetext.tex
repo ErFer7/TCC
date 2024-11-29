@@ -4,56 +4,60 @@
 % Folha de rosto
 \imprimirfolhaderosto*
 
-\begin{fichacatalografica}
-	\includepdf{beforetext/Ficha_Catalografica.pdf}
-\end{fichacatalografica}
+% \begin{fichacatalografica}
+% 	\includepdf{beforetext/Ficha_Catalografica.pdf}
+% \end{fichacatalografica}
 
 % Folha de aprovação
-\include{beforetext/approvation}
+% \include{beforetext/approvation}
 
 % \include{beforetext/thanks}
+
+% TODO: Ajustar o resumo
 
 % Resumo em português
 \setlength{\absparsep}{18pt}
 \begin{resumo}
 	\SingleSpacing
-
 	Lesões de pele podem ser um indicativo de diversas doenças, incluindo doenças graves como o câncer de pele. A detecção precoce dessas lesões é fundamental para o
 	tratamento e cura da doença. Porém, o diagnóstico e classificação de uma lesão de pele é normalmente feita por profissionais especializados em hospitais ou clínicas.
 	Isto pode levar a um atraso no diagnóstico pela falta de acesso ou procura pelo atendimento médico.
 
-	Considerando este cenário, tecnologias como \ac{MLLMs} podem ser úteis. Estes modelos podem identificar lesões de pele com base em imagens e prover um pré-diagnóstico
-	que pode alertar o portador da lesão sobre a necessidade de procurar atendimento médico. O modelo \ac{LLaVa} é um bom candidato para esta aplicação, pois consegue
-	descrever imagens e pode ser adaptado para propósitos específicos através de \textit{fine-tuning}.
+	Considerando este cenário, tecnologias como \acp{MLLM} podem ser úteis. Estes modelos podem identificar e classificar lesões de pele com base em imagens e prover um
+	pré-diagnóstico compreensível ao portador da lesão, indicando a necessidade de procurar atendimento médico. O modelo \ac{LLaMA} 3.2 é um bom candidato para esta
+	aplicação, pois consegue descrever imagens e pode ser adaptado para propósitos específicos através de \textit{fine-tuning}.
 
-	Neste trabalho, propõe-se a adaptação do \ac{LLaVa} com diferentes técnicas de \textit{fine-tuning}, comparando-as entre si, para classificar lesões de pele com uma
-	precisão aceitável.
+	Neste trabalho, propõe-se a adaptação do \ac{LLaMA} 3.2 com diferentes técnicas de \textit{fine-tuning} baseadas em \ac{PEFT}, comparando-as entre si, para
+	classificar lesões de pele com uma precisão aceitável. Por conta da severidade, será dado um foco maior à detecção de câncer de pele.
 
-	\textbf{Palavras-chave}: Lesões de pele. MLLM. LLaVa. Fine tuning.
+	\textbf{Palavras-chave}: Lesões de pele. Câncer de pele. MLLM. LLaMA. PEFT. Fine tuning.
 \end{resumo}
 
 % Resumo em inglês
 \begin{resumo}[Abstract]
 	\SingleSpacing
 	\begin{otherlanguage*}{english}
-
 		Skin lesions can indicate several diseases, including serious diseases such as skin cancer. Early detection of these lesions is essential for the treatment
 		and cure of the disease. However, the diagnosis and classification of a skin lesion is normally carried out by specialized professionals in hospitals or clinics.
 		This can lead to a delay in diagnosis due to a lack of access to or demand for medical care.
 
-		Considering this scenario, technologies like \ac{MLLMs} can be useful. These models can identify skin lesions based on images and provide pre-diagnosis which
-		can alert the person suffering from the lesion about the need to seek medical attention. The \ac{LLaVa} model  is a good candidate for this application, as it can
-		describe images and be adapted for specific purposes through fine-tuning.
+		Considering this scenario, technologies like \acp{MLLM} can be useful. These models can identify and classify skin lesions based on images and provide an
+		understandable pre-diagnosis to the affected person, indicating the need to seek medical attention. The \ac{LLaMA} 3.2 model  is a good candidate for this
+		application, as it can describe images and be adapted for specific purposes through fine-tuning.
 
-		In this work, we propose the adaptation of \ac{LLaVa} with different fine-tuning techniques, comparing them to each other, to classify skin lesions with an
-		acceptable accuracy.
+		In this work, we propose the adaptation of \ac{LLaMA} 3.2 with different fine-tuning techniques, comparing them to each other, to classify skin lesions with an
+		acceptable accuracy. Because of its severity, there will be a greater focus on detecting skin cancer.
 
-		\textbf{Keywords}: Skin lesions. MLLM. LLaVa. Fine tuning.
+		\textbf{Keywords}: Skin lesions. Skin cancer. MLLM. LLaMA. PEFT. Fine tuning.
 	\end{otherlanguage*}
 \end{resumo}
 
 {
 \hypersetup{hidelinks}
+
+% Lista de imagens
+\pdfbookmark[0]{\listfigurename}{lof}
+\listoffigures
 
 % Lista de siglas
 \imprimirlistadesiglas
