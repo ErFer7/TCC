@@ -480,7 +480,7 @@ maiores diferenças já existem desde os modelos \ac{LLaMA} e \ac{LLaMA}-2 e pod
 A \autoref{tab:llama3_architecture} apresenta alguns parâmetros das variantes do \ac{LLM}.
 
 \begin{table}[ht]
-      \caption{Características das variantes do \ac{LLaMA}-3}
+      \caption{\small Características das variantes do \ac{LLaMA}-3}
       \centering
       \begin{tabular}{l|ccc}
             \hline
@@ -496,8 +496,8 @@ A \autoref{tab:llama3_architecture} apresenta alguns parâmetros das variantes d
             Codificação posicional                 & \multicolumn{3}{c}{\ac{RoPE}\begin{math}(\theta = 500000)\end{math}}                                                                                     \\ \hline
       \end{tabular}
       \label{tab:llama3_architecture}
+      \fonte{\textcite{dubey2024llama}}
 \end{table}
-\fonte{\textcite{dubey2024llama}}
 
 O codificador visual utilizado é baseado no transformador visual de \textcite{dosovitskiy2020image}, sendo usada a variante \ac{ViT}-H/14 com modificações extras, como
 a adição de extração de características multicamadas e de 8 camadas de \textit{gated self-attention}, deixando o codificador com um total de 850 milhões de parâmetros.

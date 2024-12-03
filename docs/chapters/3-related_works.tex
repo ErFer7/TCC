@@ -1,4 +1,4 @@
-\chapter{Trabalhos Correlatos}
+\chapter{Trabalhos Correlatos} % TODo: Revisar
 
 Nessa seção serão apresentados os trabalhos similares a este para realizar comparações e apresentar melhor o estado da arte nessa linha de pesquisa.
 
@@ -27,3 +27,77 @@ Uma dessas arquiteturas híbridas é a \textit{TransUNet}, combinando transforma
 atingir uma exatidão de 92,11\% na classificação de lesões de pele com o conjunto de dados \ac{ISIC}-2018.
 
 \section{Classificação com MLLMs}
+
+\acp{MLLM} estão sendo aplicados em contexto de dermatologia nos últimos anos. O \ac{GPT}-4V e o \ac{LLaVA} são dois modelos proeminentes na resolução de tarefas
+visuais. Em um estudo de \textcite{cirone2024assessing}, é analisada a eficácia do uso desses modelos na identificação de melanomas em diferentes tons de pele. Os
+testes foram feitos com os conjuntos de dados MClass-D, Dermnet NZ e imagens de livros de dermatologia, contendo imagens macroscópicas com resolução de
+\begin{math}900 \times 1600\end{math} pixels. Para cada imagem foram feitas 20 perguntas em relação a características da imagem, sendo que cada modelo foi testado com 3
+imagens, resultando num total de 60 pares de pergunta e imagem por modelo. As imagens também tiveram suas cores modificadas para avaliar o impacto da coloração na
+identificação de melanomas.
+
+% TODO: Comentar sobre o modelo do Marques (http://sibgrapi.sid.inpe.br/col/sid.inpe.br/sibgrapi/2024/08.28.22.28/doc/Marques-125.pdf) e o SkinDiseaseChat
+
+No fim, o \ac{GPT}-4V atingiu uma exatidão de 85\% e o \ac{LLaVA} atingiu apenas 45\%. O modelo \ac{LLaVA} não conseguiu identificar melanomas corretamente quando as
+imagens tinham suas cores modificadas e também não conseguiu identificar detalhes como ulcerações ou sangramentos. Um detalhe importante é que ambos os modelos são
+generalistas e não são treinados com um foco na classificação de lesões de pele.
+
+O \textit{benchmark} OmniMedVQA de \textcite{hu2024omnimedvqa} traz dados sobre o desempenho de \acp{MLLM} em diferentes tarefas visuais da medicina. Em particular, os
+testes apresentam as pontuações de diversos modelos na área de dermatologia, como pode ser visto na \autoref{tab:omnimedvqa_dermatology_results}.
+
+\begin{table}[ht]
+    \caption{\small Pontuação no \textit{benchmark} OmniMedVQA em dermatologia. A primeira seção de linhas contém modelos generalistas e a outra contém modelos especialidados
+        na área médica.}
+    \centering
+    \begin{tabular}{l|c}
+        \hline
+        Modelo                  & Pontuação em dermatologia \\ \hline
+        InstructBLIP            & 61,86                     \\
+        \ac{LLaMA}\_Adapter\_v2 & 51,43                     \\
+        \ac{LLaVA}              & 49,67                     \\
+        PGTrans                 & 44,66                     \\
+        Otter                   & 42,66                     \\
+        BLIP-2                  & 41,07                     \\
+        Mini\ac{GPT}-4          & 40,09                     \\
+        mPLUG-Owl               & 35,98                     \\ \hline
+        \ac{LLaVA}-Med          & 44,90                     \\
+        RadFM                   & 39,03                     \\
+        Med-Flamingo            & 32,33                     \\
+        MedVInT                 & 29,13                     \\ \hline
+    \end{tabular}
+    \label{tab:omnimedvqa_dermatology_results}
+    \fonte{\textcite{hu2024omnimedvqa}}
+\end{table}
+
+Nas subseções abaixo, serão apresentados alguns modelos que focam em problemas relacionados à classificação de lesões de pele.
+
+\subsection{SkinGPT-4}
+
+Esse modelo foi proposto e desenvolvido por \textcite{zhou2023skingpt} e se baseia no Mini\ac{GPT}-4, que é um \ac{MLLM} composto por um \ac{ViT} com um \textit{Q-Former}
+pré-treinado e o \ac{LLM} Vicuna, que por sua vez é baseado no \ac{LLaMA}. Nesse estudo, o Mini\ac{GPT}-4 passou por um processo de \textit{fine-tuning} de duas etapas
+que familiarizou o modelo com imagens de lesões de pele e depois ajustou suas saídas para um formato mais próximo de um diagnóstico médico. As imagens vieram de um
+conjunto de dados particular, do SKINCON e do Dermnet, sendo que 3886 imagens foram usadas na primeira etapa de treinamento e 49043 na segunda.
+
+A verificação do desempenho do modelo foi feito com base em 150 diagnósticos de casos reais realizados pelo Skin\ac{GPT}-4. Esses diagnósticos foram avaliados por
+dermatologistas, classificando 78,76\% dos diagnósticos como corretos.
+
+\subsection{LLaVA-Med}
+
+\subsection{MpoxVLM}
+
+\subsection{Comparação entre MLLMs}
+
+% TODO: Atualizar isso no futuro
+\begin{table}[ht]
+    \caption{\small Comparação.}
+    \centering
+    \begin{tabular}{l|cc}
+        \hline
+        Modelo                & MLLM base ou arquitetura & Treinamento          \\ \hline
+        SkinGPT-4             & MiniGPT-4                & Fine-tuning completo \\
+        LLaVA-Med             & LLaVA                    & Fine-tuning completo \\
+        MpoxVLM               & CLIP e LLaMA-2           & LoRA                 \\
+        Modelo deste trabalho & LLaMA-3.2                & QLoRA e LoRA         \\ \hline
+    \end{tabular}
+    \label{tab:mllm_comparison}
+    \fonte{Autoria própria.}
+\end{table}
