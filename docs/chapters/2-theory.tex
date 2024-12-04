@@ -34,7 +34,7 @@ de 75\% das mortes por câncer de pele são causadas por melanomas \cite{skin_ca
 A doença tem um prognóstico muito melhor quando a detecção e tratamento são feitos cedo o suficiente. Segundo \textcite{skin_cancer_survival}, a taxa de sobrevivência ao
 melanoma no Brasil é menor que a taxa global, sendo que há uma prevalência maior de casos avançados.
 
-\subsection{Imagens de Lesões de Pele}
+\subsection{Imagens de Lesões de Pele} \label{sec:skin_lesion_images}
 
 As imagens para exames dermatológicos podem ser agrupadas em diferentes categorias. Alguns exemplos baseados em procedimentos recomendados por
 \textcite{fotos_dermatologia} são:
@@ -47,6 +47,7 @@ As imagens para exames dermatológicos podem ser agrupadas em diferentes categor
       \item \textbf{Foto panorâmica} (\autoref{fig:panoramic_pic}): Nesse método são registradas imagens de regiões do corpo, como da cabeça, tronco, braços e pernas.
 \end{itemize}
 
+% TODO: Colocar a descrição longa e curta
 \begin{figure}[ht]
       \centering
       \begin{minipage}{0.32\textwidth}
@@ -69,6 +70,12 @@ As imagens para exames dermatológicos podem ser agrupadas em diferentes categor
       \end{minipage}
 \end{figure}
 
+% TODO: Mudar para "Detecção e Diagnóstico de Lesões de Pele"
+% TODO: Falar das técnicas atuais, por exemplo, ABCD
+% TODO: Falar do processamento de imagens
+% TODO: Falar da segmentação
+% TODO: Falar da extração de características
+% TODO: Falar da classificação de lesões
 \subsection{Detecção e Diagnóstico de Câncer de Pele}
 
 O câncer de pele pode ser identificado e classificado através dos sintomas causados. Características como o tamanho da lesão, variação da cor, irregularidade do formato,
@@ -90,7 +97,6 @@ Segundo \textcite{mllm_survey_2024}, a estrutura de um \ac{MLLM} pode ser dividi
 essa estrutura é demonstrada na \autoref{fig:mllm_structure_encoder_only}.
 
 % TODO: Fazer uma figura melhor
-
 \begin{figure}[ht]
       \centering
       \includegraphics[width=0.7\columnwidth,keepaspectratio]{images/mllm_structure_encoder_only.pdf}
@@ -210,7 +216,7 @@ distâncias relativas. Mas, existem outras formas de codificação que lidam com
             dirigido conexo. Esse método é implementado diretamente no mecanismo de atenção do transformador. Porém, o \ac{RPE} tem a desvantagem de tornar o treinamento
             e a inferência mais lentos, devido à modificação do mecanismo de atenção;
       \item \textbf{\ac{RoPE}}: Essa codificação aplica uma rotação no ângulo \begin{math}m\theta\end{math} nos pares de vetores de
-            \textit{query} e \textit{key}\footnote{Esses vetores serão explicados na seção \autoref{sec:transformers}}, sendo que \begin{math}\theta\end{math} é um ângulo
+            \textit{query} e \textit{key}\footnote{Esses vetores serão explicados na \autoref{sec:transformers}}, sendo que \begin{math}\theta\end{math} é um ângulo
             pré-definido e \begin{math}m\end{math} é o índice da posição absoluta do vetor de incorporação usado para gerar os vetores de \textit{query} e \textit{key}. O
             esquema do \ac{RoPE} pode ser visto na \autoref{fig:rotary_positional_embeddings};
       \item \textbf{Vieses posicionais relativos}: Nesse método, são introduzidos vieses no nível de atenção calculada entre cada \textit{query} e \textit{key},
@@ -416,25 +422,41 @@ multimodais, sendo uma etapa similar à de alinhamento discutida na \autoref{sec
 No contexto de modelos visuais, \textit{Instruction-tuning} pode ser feita inicialmente com \ac{SFT}, usando imagens e textos em um formato de pergunta e resposta, em
 que uma pergunta é feita sobre a imagem. Depois da aplicação de \ac{SFT}, é possível usar \ac{RLHF} para continuar o aprimoramento do modelo \cite{mllm_survey_2024}.
 
-\subsubsection{Fine-Tuning}
+\subsubsection{Fine-Tuning} % TODO: Falar de fine tuning completo
 
 O \textit{fine-tuning} é uma etapa de treinamento que pode ser realizada para melhorar o desempenho do modelo com relação a dados específicos ou sobre um domínio de
 conhecimento. Técnicas de \textit{fine-tuning} eficientes, como as baseadas em \ac{PEFT}, oferecem uma forma de adaptação de modelos com um custo computacional
-elativamente menor. Dentre várias técnicas, uma das mais populares é o \ac{LoRa} \cite{llm_survey_2023}.
+elativamente menor. Dentre várias técnicas, uma das mais populares é o \ac{LoRA} \cite{llm_survey_2023}.
 
-\subsubsubsection{LoRa} % TODO: Expandir a seção
+\subsubsubsection{LoRA}
 
-Essa técnica se consiste na introdução de matrizes treináveis menores ao \ac{MLLM}, deixando as matrizes originais intactas durante o treinamento. Assim que treinadas,
-essas matrizes são adicionadas às originais \cite{hu2021lora}.
+Essa técnica, proposta por \textcite{hu2021lora}, consiste-se em explorar o \textit{rank} intrínseco, um conceito baseado em dimensionalidade intrínseca, introduzindo
+matrizes treináveis menores de baixo \textit{rank} ao \ac{MLLM}, deixando as matrizes originais intactas durante o treinamento. Assim que treinadas, essas matrizes são
+adicionadas às originais.
 
-\ac{LoRa} reduz drasticamente o custo do treinamento comparado ao \textit{fine-tuning} completo, usando, por exemplo, três vezes menos memória e em dez mil vezes menos
-parâmetros durante o \textit{fine-tuning} do modelo \ac{GPT}-3 \cite{llm_survey_2023}.
+O \textit{rank} de uma matriz é o número de colunas ou linhas linearmente independentes que a matriz possui. Ele também corresponde à dimensão do espaço vetorial
+gerado pelas colunas ou linhas. O \textit{rank} intrínseco se trata do menor \textit{rank} que a matriz pode ter no treinamento sem haver uma grande perda de desempenho.
 
-\subsubsubsection{QLoRa} % TODO: Expandir a seção
+Assim, pode-se resumir que com base em uma matriz \begin{math}W_0\end{math} do modelo, tal que \begin{math}W_0 \in \mathbb{R}^{d \times k}\end{math}, é possível
+representá-la em uma forma decomposta \begin{math}W_0 + \Delta W\end{math} em que \begin{math}\Delta W = BA\end{math}, tal que
+\begin{math}B \in \mathbb{R}^{d \times r}\end{math} e \begin{math}A \in \mathbb{R}^{r \times k}\end{math}, sendo que \begin{math}r \ll min(d, k)\end{math}. A matriz
+\begin{math}W_0\end{math} é travada enquanto as matrizes \begin{math}A\end{math} e \begin{math}B\end{math} são treináveis. A matriz \begin{math}A\end{math} é
+inicializada com uma distribuição gaussiana aleatória e a \begin{math}B\end{math} é inicializada como zero. Na \autoref{fig:lora} é apresentada uma representação visual
+do \ac{LoRA} com a expressão \begin{math}h = W_0x + BAx\end{math}.
+
+\begin{figure}[ht]
+      \centering
+      \includegraphics[width=0.35\columnwidth,keepaspectratio]{images/lora.png}
+      \caption{\small Representação do \ac{LoRA} com as matrizes \begin{math}W_0\end{math}, \begin{math}A\end{math} e \begin{math}B\end{math}. Fonte:
+            \textcite{hu2021lora}.}
+      \label{fig:lora}
+\end{figure}
+
+\subsubsubsection{QLoRA} % TODO: Explicar mais no futuro, talvez?
 
 É possível usar também a quantização para acelerar o \textit{fine-tuning}. A quantização se trata da redução da precisão numérica durante o treinamento. Uma técnica que
-utiliza este conceito é o \ac{QLoRa}, que segundo \textcite{qlora}, foi usada no \textit{fine-tuning} de um modelo que atingiu 99.3\% do desempenho do \textit{ChatGPT}
-no \textit{benchmark} Vicuna com apenas 24 horas de treinamento em uma placa de vídeo de 48 GB.
+utiliza este conceito é o \ac{QLoRA}, proposta por \textcite{qlora}. Nessa técnica, é usado o tipo \ac{NF4} no armazenamento das matrizes pré-treinadas, sendo que os
+valores em \ac{NF4} são convertidos para \textit{BFloat16} durante os cálculos. Além disso, também são usados otimizadores paginados e dupla quantização.
 
 \section{LLaMA 3}
 
@@ -458,7 +480,7 @@ maiores diferenças já existem desde os modelos \ac{LLaMA} e \ac{LLaMA}-2 e pod
 A \autoref{tab:llama3_architecture} apresenta alguns parâmetros das variantes do \ac{LLM}.
 
 \begin{table}[ht]
-      \caption{Características das variantes do \ac{LLaMA}-3}
+      \caption{\small Características das variantes do \ac{LLaMA}-3}
       \centering
       \begin{tabular}{l|ccc}
             \hline
@@ -474,8 +496,8 @@ A \autoref{tab:llama3_architecture} apresenta alguns parâmetros das variantes d
             Codificação posicional                 & \multicolumn{3}{c}{\ac{RoPE}\begin{math}(\theta = 500000)\end{math}}                                                                                     \\ \hline
       \end{tabular}
       \label{tab:llama3_architecture}
+      \fonte{\textcite{dubey2024llama}}
 \end{table}
-\fonte{\textcite{dubey2024llama}}
 
 O codificador visual utilizado é baseado no transformador visual de \textcite{dosovitskiy2020image}, sendo usada a variante \ac{ViT}-H/14 com modificações extras, como
 a adição de extração de características multicamadas e de 8 camadas de \textit{gated self-attention}, deixando o codificador com um total de 850 milhões de parâmetros.

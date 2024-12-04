@@ -1,4 +1,4 @@
-# TCC - Uso de uma MLLM para classificar lesões de pele
+# TCC - Fine-tuning do MLLM LLaMA para a classificação de lesões de pele
 
 Lesões de pele podem ser um indicativo de diversas doenças, incluindo doenças graves
 como o câncer de pele. A detecção precoce dessas lesões é fundamental para o tratamento
