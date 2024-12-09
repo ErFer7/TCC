@@ -100,7 +100,7 @@ essa estrutura é demonstrada na \autoref{fig:mllm_structure_encoder_only}.
 \begin{figure}[ht]
       \centering
       \includegraphics[width=0.7\columnwidth,keepaspectratio]{images/mllm_structure_encoder_only.pdf}
-      \caption{\small Estrutura de um \ac{MLLM} que realiza apenas a interpretação multimodal.}
+      \caption{\small Estrutura de um \ac{MLLM} que realiza apenas a interpretação multimodal. Fonte: Autoria própria.}
       \label{fig:mllm_structure_encoder_only}
 \end{figure}
 
@@ -456,7 +456,7 @@ do \ac{LoRA} com a expressão \begin{math}h = W_0x + BAx\end{math}.
 
 É possível usar também a quantização para acelerar o \textit{fine-tuning}. A quantização se trata da redução da precisão numérica durante o treinamento. Uma técnica que
 utiliza este conceito é o \ac{QLoRA}, proposta por \textcite{qlora}. Nessa técnica, é usado o tipo \ac{NF4} no armazenamento das matrizes pré-treinadas, sendo que os
-valores em \ac{NF4} são convertidos para \textit{BFloat16} durante os cálculos. Além disso, também são usados otimizadores paginados e dupla quantização.
+valores em \ac{NF4} são convertidos para \ac{BF16} durante os cálculos. Além disso, também são usados otimizadores paginados e dupla quantização.
 
 \section{LLaMA 3}
 

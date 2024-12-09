@@ -27,6 +27,20 @@
 \usepackage{lipsum}
 \usepackage{setspace}
 \usepackage{tabularray}
+\usepackage{zref-abspage}
+\usepackage{mdframed}
+
+\newmdenv[
+  leftmargin=1cm,
+  rightmargin=1cm,
+  skipabove=1em,
+  skipbelow=1em,
+  backgroundcolor=gray!5,
+  linecolor=gray!50,
+  linewidth=1pt
+]{dialogue}
+
+\newcommand{\speak}[1]{\textbf{#1:}}
 
 \definecolor{shadecolor}{rgb}{0.8,0.8,0.8}
 
@@ -128,11 +142,17 @@
 \siglalista{ACS}{Agentes Comunitários de Saúde}
 \siglalista{APE}{\textit{Absolute Positional Embeddings}}
 \siglalista{RPE}{\textit{Relative Positional Embeddings}}
-\siglalista{NF4}{\textit{4-bit NormalFloat}}
+\siglalista{NF4}{\textit{4-bit Normal Float}}
 \siglalistaplural{CNN}{\textit{Convolutional Neural Network}}{\textit{Convolutional Neural Networks}}
 \siglalista{ISIC}{\textit{International Skin Imaging Collaboration}}
 \siglalista{LLaVA}{\textit{Large Language and Vision Assistant}}
 \siglalista{CLIP}{\textit{Contrastive Language-Image Pre-training}}
+\siglalista{STT/SC}{Sistema Integrado Catarinense de Telemedicina e Telessaúde}
+\siglalista{HAM10000}{\textit{Human Against Machine with 10000 training images}}
+\siglalista{rsLoRA}{\textit{rank-stabilized LoRA}}
+\siglalista{BF16}{\textit{16-bit Brain Floating point}}
+\siglalista{Adam}{\textit{Adaptive Moment Estimation}}
+\siglalista{AdamW}{\textit{Adam with decoupled weight decay}}
 
 % Compila a lista de abreviaturas e siglas e a lista de símbolos
 \makenoidxglossaries
