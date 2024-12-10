@@ -9,12 +9,12 @@ avanços nessa área começaram com advento da aprendizagem profunda e das \acp{
 especificamente o melanoma, \ac{CBC} e \ac{CEC}. Porém, as técnicas desenvolvidas no contexto da classificação do câncer de pele também são úteis na classificação de
 outras doenças \cite{okuboyejo2018review}.
 
-O trabalho de \textcite{skin_cancer_ai} apresenta que os conjuntos de dados mais comuns na área são o HAM10000 e os fornecidos pela \ac{ISIC}. Além disso, \acp{CNN} ainda
-dominam a área como a principal forma de implementar um sistema de classificação de lesões, atingindo entre 80\% e 99\% de acurácia. Cerca de 48,12\% dos conjuntos de
-dados utilizam imagens de dermatoscopia, enquanto 33,33\% deles usam imagens macroscópicas, como as de aproximação e panorâmicas mencionadas na
+O trabalho de \textcite{skin_cancer_ai} apresenta que os conjuntos de dados mais comuns na área são o \ac{HAM10000} e os fornecidos pela \ac{ISIC}. Além disso, \acp{CNN}
+ainda dominam a área como a principal forma de implementar um sistema de classificação de lesões, atingindo entre 80\% e 99\% de acurácia. Cerca de 48,12\% dos conjuntos
+de dados utilizam imagens de dermatoscopia, enquanto 33,33\% deles usam imagens macroscópicas, como as de aproximação e panorâmicas mencionadas na
 \autoref{sec:skin_lesion_images}. Os outros 18,52\% se tratam de conjuntos com diversas modalidades de imagens, como imagens de ultrasonografia, multiespectrais e outras.
 
-\section{Classificação com ViTs}
+\section{Classificação com \textit{ViTs}}
 
 Vários modelos de classificação de lesões baseados em \acp{ViT} foram propostos desde a introdução dessa arquitetura. A pesquisa de \textcite{khan2023identifying}
 apresenta o cenário da utilização de \acp{ViT} nessa área. Muitas implementações seguem um modelo híbrido de \ac{ViT} e \ac{CNN}, combinando as capacidades das duas
@@ -26,7 +26,7 @@ acabam tendo um desempenho pior, pois há uma perda de informações sobre detal
 Uma dessas arquiteturas híbridas é a \textit{TransUNet}, combinando transformadores e \textit{U-Nets}, que conforme evidenciado por \textcite{gulzar2022skin}, consegue
 atingir uma acurácia de 92,11\% na classificação de lesões de pele através do treinamento com o conjunto de dados \ac{ISIC}-2018.
 
-\section{Classificação com MLLMs}
+\section{Classificação com \textit{MLLMs}}
 
 \acp{MLLM} vêm sendo aplicados no contexto da dermatologia nos últimos anos. O \ac{GPT}-4V e o \ac{LLaVA} são dois modelos proeminentes na resolução de tarefas
 visuais. Em um estudo de \textcite{cirone2024assessing}, é analisada a eficácia do uso desses modelos na identificação de melanomas em diferentes tons de pele.
@@ -122,7 +122,7 @@ duas NVIDIA RTX 4090 para os treinamentos nesse estudo.
 
 Os resultados apresentados demonstram que o MpoxVLM atinge uma acurácia de 90,38\% no diagnóstico de \textit{Monkeypox}, ultrapassando vários outros \acp{MLLM}.
 
-\subsection{Comparação entre MLLMs} % TODO: Comentar que no paper do LLaMA-3.2 viram que CLIP não é tão bom assim
+\subsection{Comparação entre \textit{MLLMs}} % TODO: Comentar que no paper do LLaMA-3.2 viram que CLIP não é tão bom assim
 
 Em geral, os modelos utilizam como base \acp{LLM} da família \ac{LLaMA} e codificadores visuais baseados em \acp{ViT}, sendo que o MpoxVLM apresentou a arquitetura
 mais complexa. O \textit{fine-tuning} completo também é frequentemente utilizado, porém, o MpoxVLM atingiu bons resultados com o \ac{LoRA}. Dos três modelos apresentados,

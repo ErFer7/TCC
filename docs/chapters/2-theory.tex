@@ -86,7 +86,7 @@ Outros métodos não invasivos incluem, por exemplo, a análise intracutânea es
 É possível também diagnosticar a doença através de métodos invasivos como a biópsia. Além destes métodos, há também a utilização de \ac{IA}. Soluções com \ac{IA}
 utilizam imagens para a classificação da doença e podem ter uma precisão equiparável ou até maior à de dermatologistas \cite{recognizing_skin_cancer, skin_cancer_ai}.
 
-\section{Multimodal Large Language Models}
+\section{\textit{Multimodal Large Language Models}}
 
 \acp{MLLM} são \acp{IA} baseadas em \acp{LLM} que possuem a capacidade de interpretação de diferentes modalidades de informação, diferentemente de \acp{LLM}, que
 operam sobre informações textuais. Esses modelos também podem ser capazes de produzir conteúdo multimodal. Essas modalidades podem ser imagens, vídeos, áudios e
@@ -100,13 +100,13 @@ essa estrutura é demonstrada na \autoref{fig:mllm_structure_encoder_only}.
 \begin{figure}[ht]
       \centering
       \includegraphics[width=0.7\columnwidth,keepaspectratio]{images/mllm_structure_encoder_only.pdf}
-      \caption{\small Estrutura de um \ac{MLLM} que realiza apenas a interpretação multimodal.}
+      \caption{\small Estrutura de um \ac{MLLM} que realiza apenas a interpretação multimodal. Fonte: Autoria própria.}
       \label{fig:mllm_structure_encoder_only}
 \end{figure}
 
 Neste trabalho, o foco será dado a modelos que interpretam imagens e retornam saídas textuais. Sendo assim, a parte de geração multimodal não será coberta.
 
-\subsection{Large Language Models}
+\subsection{\textit{Large Language Models}}
 
 \acp{LLM} ou Grandes Modelos de Linguagem são modelos estatísticos pré-treinados baseados em transformadores que possuem bilhões de parâmetros e conseguem processar e
 gerar textos em linguagem natural \cite{llm_survey_2024}.
@@ -414,7 +414,7 @@ alguns casos, o codificador de modalidade também é destravado, permitindo um t
 \ac{LLM}. No contexto de modelos visuais, o pré-treinamento faz o uso de um grande volume de pares de imagens e textos, sendo que os textos descrevem o conteúdo das
 imagens \cite{mllm_survey_2023}.
 
-\subsubsection{Instruction-tuning}
+\subsubsection{\textit{Instruction-tuning}}
 
 Essa etapa se consiste na melhoria do modelo para atender melhor às expectativas dos usuários e obter uma capacidade melhor na resolução de problemas envolvendo tarefas
 multimodais, sendo uma etapa similar à de alinhamento discutida na \autoref{sec:alinhamento}.
@@ -422,7 +422,7 @@ multimodais, sendo uma etapa similar à de alinhamento discutida na \autoref{sec
 No contexto de modelos visuais, \textit{Instruction-tuning} pode ser feita inicialmente com \ac{SFT}, usando imagens e textos em um formato de pergunta e resposta, em
 que uma pergunta é feita sobre a imagem. Depois da aplicação de \ac{SFT}, é possível usar \ac{RLHF} para continuar o aprimoramento do modelo \cite{mllm_survey_2024}.
 
-\subsubsection{Fine-Tuning} % TODO: Falar de fine tuning completo
+\subsubsection{\textit{Fine-Tuning}} % TODO: Falar de fine tuning completo
 
 O \textit{fine-tuning} é uma etapa de treinamento que pode ser realizada para melhorar o desempenho do modelo com relação a dados específicos ou sobre um domínio de
 conhecimento. Técnicas de \textit{fine-tuning} eficientes, como as baseadas em \ac{PEFT}, oferecem uma forma de adaptação de modelos com um custo computacional
@@ -456,7 +456,7 @@ do \ac{LoRA} com a expressão \begin{math}h = W_0x + BAx\end{math}.
 
 É possível usar também a quantização para acelerar o \textit{fine-tuning}. A quantização se trata da redução da precisão numérica durante o treinamento. Uma técnica que
 utiliza este conceito é o \ac{QLoRA}, proposta por \textcite{qlora}. Nessa técnica, é usado o tipo \ac{NF4} no armazenamento das matrizes pré-treinadas, sendo que os
-valores em \ac{NF4} são convertidos para \textit{BFloat16} durante os cálculos. Além disso, também são usados otimizadores paginados e dupla quantização.
+valores em \ac{NF4} são convertidos para \ac{BF16} durante os cálculos. Além disso, também são usados otimizadores paginados e dupla quantização.
 
 \section{LLaMA 3}
 
