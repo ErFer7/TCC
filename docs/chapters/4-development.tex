@@ -11,8 +11,8 @@ faz parte de uma plataforma NVIDIA DGX H100.
 
 \section{Conjunto de Dados}
 
-Inicialmente, o objetivo era começar os experimentos com imagens de aproximação e seus laudos provenientes do \ac{STT/SC}, porém, devido a uma demora na obtenção dos
-dados, optou-se por utilizar temporariamente o conjunto de dados \ac{HAM10000}. Sendo assim, os experimentos inciais foram feitos com imagens de dermatoscopia.
+Para os experimentos inciais, utilizou-se o conjunto de dados \ac{HAM10000} de \textcite{tschandl2018ham10000}, que possui 13354 imagens com informações como a doença
+causadora da lesão de pele, a idade do paciente, sexo e localização da lesão. As imagens nesse conjunto de dados são de dermatoscopia.
 
 O conjunto de dados é separado nas seções de treinamento, teste e validação, que possuem 9577, 1285 e 2492 imagens, respectivamente. A \autoref{tab:ham10000_proportion}
 apresenta as proporções entre as categorias de lesões de pele. Os dados foram obtidos a partir da plataforma Hugging Face com uma versão do \ac{HAM10000} fornecida por
@@ -103,13 +103,12 @@ passos.
     \fonte{Autoria própria}
 \end{table}
 
-\clearpage
-
 \begin{figure}[ht]
     \centering
+    \caption{\small \textit{Loss} de treinamento e validação para o \ac{QLoRA} com 450 amostras.}
     \includegraphics[width=0.8\columnwidth,keepaspectratio]{images/loss_qlora_500.png}
-    \caption{\small \textit{Loss} de treinamento e validação para o \ac{QLoRA} com 450 amostras. Fonte: Autoria própria.}
     \label{fig:loss_qlora_500}
+    \fonte{Autoria própria.}
 \end{figure}
 
 Em seguida, foi realizado o \textit{fine-tuning} com \ac{LoRA}, ou seja, sem quantização, com 450 amostras. Os hiperparâmetros utilizados são similares, porém, o
@@ -137,9 +136,10 @@ Em seguida, foi realizado o \textit{fine-tuning} com \ac{LoRA}, ou seja, sem qua
 
 \begin{figure}[ht]
     \centering
+    \caption{\small \textit{Loss} de treinamento e validação para o \ac{LoRA} com 450 amostras.}
     \includegraphics[width=0.725\columnwidth,keepaspectratio]{images/loss_lora_500.png}
-    \caption{\small \textit{Loss} de treinamento e validação para o \ac{LoRA} com 450 amostras. Fonte: Autoria própria.}
     \label{fig:loss_lora_500}
+    \fonte{Autoria própria.}
 \end{figure}
 
 O \textit{fine-tuning} com 900 amostras foi feito sem a alteração nos hiperparâmetros do \ac{QLoRA} e \ac{LoRA}. As informações sobre o treinamento podem ser conferidas
@@ -180,16 +180,18 @@ na \autoref{tab:qlora_1000_training} e \autoref{tab:lora_1000_training}, enquant
 
 \begin{figure}[ht]
     \centering
+    \caption{\small \textit{Loss} de treinamento e validação para o \ac{QLoRA} com 900 amostras.}
     \includegraphics[width=0.725\columnwidth,keepaspectratio]{images/loss_qlora_1000.png}
-    \caption{\small \textit{Loss} de treinamento e validação para o \ac{QLoRA} com 900 amostras. Fonte: Autoria própria.}
     \label{fig:loss_qlora_1000}
+    \fonte{Autoria própria.}
 \end{figure}
 
 \begin{figure}[ht]
     \centering
+    \caption{\small \textit{Loss} de treinamento e validação para o \ac{LoRA} com 900 amostras.}
     \includegraphics[width=0.725\columnwidth,keepaspectratio]{images/loss_lora_1000.png}
-    \caption{\small \textit{Loss} de treinamento e validação para o \ac{LoRA} com 900 amostras. Fonte: Autoria própria.}
     \label{fig:loss_lora_1000}
+    \fonte{Autoria própria.}
 \end{figure}
 
 Por último, foi feito um \textit{fine-tuning} com \ac{QLoRA} com 1800 amostras com os mesmos hiperparâmetros utilizados anteriormente. As informações sobre o treinamento
@@ -214,9 +216,10 @@ podem ser vistas na \autoref{tab:qlora_2000_training} e na \autoref{fig:loss_qlo
 
 \begin{figure}[ht]
     \centering
+    \caption{\small \textit{Loss} de treinamento e validação para o \ac{QLoRA} com 1800 amostras.}
     \includegraphics[width=0.725\columnwidth,keepaspectratio]{images/loss_qlora_2000.png}
-    \caption{\small \textit{Loss} de treinamento e validação para o \ac{QLoRA} com 1800 amostras. Fonte: Autoria própria.}
     \label{fig:loss_qlora_2000}
+    \fonte{Autoria própria.}
 \end{figure}
 
 \subsection{\textit{Fine-tuning} com 5000 e 9500 amostras}
@@ -302,25 +305,28 @@ pode ser conferido na \autoref{fig:loss_qlora_5000}, \autoref{fig:loss_lora_5000
 
 \begin{figure}[ht]
     \centering
+    \caption{\small \textit{Loss} de treinamento e validação para o \ac{QLoRA} com 5000 amostras.}
     \includegraphics[width=0.725\columnwidth,keepaspectratio]{images/loss_qlora_5000.png}
-    \caption{\small \textit{Loss} de treinamento e validação para o \ac{QLoRA} com 5000 amostras. Fonte: Autoria própria.}
     \label{fig:loss_qlora_5000}
+    \fonte{Autoria própria.}
 \end{figure}
 
 \clearpage
 
 \begin{figure}[ht]
     \centering
+    \caption{\small \textit{Loss} de treinamento e validação para o \ac{LoRA} com 5000 amostras.}
     \includegraphics[width=0.725\columnwidth,keepaspectratio]{images/loss_lora_5000.png}
-    \caption{\small \textit{Loss} de treinamento e validação para o \ac{LoRA} com 5000 amostras. Fonte: Autoria própria.}
     \label{fig:loss_lora_5000}
+    \fonte{Autoria própria.}
 \end{figure}
 
 \begin{figure}[ht]
     \centering
+    \caption{\small \textit{Loss} de treinamento e validação para o \ac{QLoRA} com 9500 amostras.}
     \includegraphics[width=0.725\columnwidth,keepaspectratio]{images/loss_qlora_9500.png}
-    \caption{\small \textit{Loss} de treinamento e validação para o \ac{QLoRA} com 9500 amostras. Fonte: Autoria própria.}
     \label{fig:loss_qlora_9500}
+    \fonte{Autoria própria.}
 \end{figure}
 
 \subsection{Análise dos treinamentos}
@@ -405,18 +411,20 @@ Foram registradas 3 respostas incertas para o modelo quantizado e apenas uma par
 
 \begin{figure}[ht]
     \centering
+    \caption{\small Matriz de confusão para o \ac{LLaMA}-11B-Vision-Instruct quantizado.}
     \includegraphics[width=1\columnwidth,keepaspectratio]{images/confusion_matrix_llama_3.2_11b_vision_instruct_quantized.png}
-    \caption{\small Matriz de confusão para o \ac{LLaMA}-11B-Vision-Instruct quantizado. Fonte: Autoria própria.}
     \label{fig:confusion_matrix_llama_quantized}
+    \fonte{Autoria própria.}
 \end{figure}
 
 \clearpage
 
 \begin{figure}[ht]
     \centering
+    \caption{\small Matriz de confusão para o \ac{LLaMA}-11B-Vision-Instruct.}
     \includegraphics[width=1\columnwidth,keepaspectratio]{images/confusion_matrix_llama_3.2_11b_vision_instruct.png}
-    \caption{\small Matriz de confusão para o \ac{LLaMA}-11B-Vision-Instruct. Fonte: Autoria própria.}
     \label{fig:confusion_matrix_llama}
+    \fonte{Autoria própria.}
 \end{figure}
 
 \subsection{Análise dos modelos após o \textit{fine-tuning}}
@@ -446,20 +454,20 @@ deve a um treinamento com um conjunto pequeno de dados e hiperparâmetros não i
 
 \begin{figure}[ht]
     \centering
+    \caption{\small Matriz de confusão para o \ac{LLaMA} treinado com \ac{QLoRA} e 450 amostras.}
     \includegraphics[width=1\columnwidth,keepaspectratio]{images/confusion_matrix_qlora_450.png}
-    \caption{\small Matriz de confusão para o \ac{LLaMA} treinado com \ac{QLoRA} e 450 amostras. Fonte: Autoria
-        própria.}
     \label{fig:confusion_matrix_qlora_450}
+    \fonte{Autoria própria.}
 \end{figure}
 
 \clearpage
 
 \begin{figure}[ht]
     \centering
+    \caption{\small Matriz de confusão para o \ac{LLaMA} treinado com \ac{LoRA} e 450 amostras.}
     \includegraphics[width=1\columnwidth,keepaspectratio]{images/confusion_matrix_lora_450.png}
-    \caption{\small Matriz de confusão para o \ac{LLaMA} treinado com \ac{LoRA} e 450 amostras. Fonte: Autoria
-        própria.}
     \label{fig:confusion_matrix_lora_450}
+    \fonte{Autoria própria.}
 \end{figure}
 
 A acurácia decaiu levemente no \textit{fine-tuning} com 900 amostas, conforme apresentado na \autoref{fig:confusion_matrix_qlora_900} e
@@ -470,22 +478,21 @@ A acurácia decaiu levemente no \textit{fine-tuning} com 900 amostas, conforme a
 
 \begin{figure}[ht]
     \centering
+    \caption{\small Matriz de confusão para o \ac{LLaMA} treinado com \ac{QLoRA} e 900 amostras.}
     \includegraphics[width=1\columnwidth,keepaspectratio]{images/confusion_matrix_qlora_900.png}
-    \caption{\small Matriz de confusão para o \ac{LLaMA} treinado com \ac{QLoRA} e 900 amostras. Fonte: Autoria
-        própria.}
     \label{fig:confusion_matrix_qlora_900}
+    \fonte{Autoria própria.}
 \end{figure}
 
 \clearpage
 
 \begin{figure}[ht]
     \centering
+    \caption{\small Matriz de confusão para o \ac{LLaMA} treinado com \ac{LoRA} e 900 amostras.}
     \includegraphics[width=1\columnwidth,keepaspectratio]{images/confusion_matrix_lora_900.png}
-    \caption{\small Matriz de confusão para o \ac{LLaMA} treinado com \ac{LoRA} e 900 amostras. Fonte: Autoria
-        própria.}
     \label{fig:confusion_matrix_lora_900}
+    \fonte{Autoria própria.}
 \end{figure}
-
 
 O modelo treinado com \ac{QLoRA} e 1800 amostras teve um ganho de acurácia, atingindo 71,1\% e apresentando um padrão de reconhecimento melhor do que os modelos
 anteriores. A matriz de confusão pode ser vista na \autoref{fig:confusion_matrix_qlora_1800}.
@@ -494,10 +501,10 @@ anteriores. A matriz de confusão pode ser vista na \autoref{fig:confusion_matri
 
 \begin{figure}[ht]
     \centering
+    \caption{\small Matriz de confusão para o \ac{LLaMA} treinado com \ac{QLoRA} e 1800 amostras.}
     \includegraphics[width=1\columnwidth,keepaspectratio]{images/confusion_matrix_qlora_1800.png}
-    \caption{\small Matriz de confusão para o \ac{LLaMA} treinado com \ac{QLoRA} e 1800 amostras. Fonte: Autoria
-        própria.}
     \label{fig:confusion_matrix_qlora_1800}
+    \fonte{Autoria própria.}
 \end{figure}
 
 Com 5000 amostras, ambos os modelos treinados com \ac{QLoRA} e \ac{LoRA} apresentaram resultados melhores, com 85,4\% e 86,2\% de acurácia, respectivamente. Deve-se
@@ -509,20 +516,20 @@ A \autoref{fig:confusion_matrix_qlora_5000} e a \autoref{fig:confusion_matrix_lo
 
 \begin{figure}[ht]
     \centering
+    \caption{\small Matriz de confusão do \ac{LLaMA} treinado com \ac{QLoRA} e 5000 amostras.}
     \includegraphics[width=1\columnwidth,keepaspectratio]{images/confusion_matrix_qlora_5000.png}
-    \caption{\small Matriz de confusão do \ac{LLaMA} treinado com \ac{QLoRA} e 5000 amostras. Fonte: Autoria
-        própria.}
     \label{fig:confusion_matrix_qlora_5000}
+    \fonte{Autoria própria.}
 \end{figure}
 
 \clearpage
 
 \begin{figure}[ht]
     \centering
+    \caption{\small Matriz de confusão para o \ac{LLaMA} treinado com \ac{LoRA} e 5000 amostras.}
     \includegraphics[width=1\columnwidth,keepaspectratio]{images/confusion_matrix_lora_5000.png}
-    \caption{\small Matriz de confusão para o \ac{LLaMA} treinado com \ac{LoRA} e 5000 amostras. Fonte: Autoria
-        própria.}
     \label{fig:confusion_matrix_lora_5000}
+    \fonte{Autoria própria.}
 \end{figure}
 
 Por último, o \ac{LLaMA} treinado com \ac{QLoRA} e 9500 amostras apresentou os melhores resultados, com uma acurácia de 87,4\%. A matriz de confusão pode ser vista na
@@ -532,10 +539,10 @@ A \autoref{tab:training_accuracies} apresenta as acurácias de forma resumida.
 
 \begin{figure}[ht]
     \centering
+    \caption{\small Matriz de confusão para o \ac{LLaMA} treinado com \ac{QLoRA} e 9500 amostras.}
     \includegraphics[width=1\columnwidth,keepaspectratio]{images/confusion_matrix_qlora_9500.png}
-    \caption{\small Matriz de confusão para o \ac{LLaMA} treinado com \ac{QLoRA} e 9500 amostras. Fonte: Autoria
-        própria.}
     \label{fig:confusion_matrix_qlora_9500}
+    \fonte{Autoria própria.}
 \end{figure}
 
 \begin{table}[ht]
