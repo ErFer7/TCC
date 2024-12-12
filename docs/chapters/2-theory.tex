@@ -51,8 +51,8 @@ As imagens para exames dermatológicos podem ser agrupadas em diferentes categor
       \centering
       \caption{\small Exemplo de um exame de dermatoscopia, aproximação e panorâmica da cabeça, respectivamente.}
       \includegraphics[width=1\columnwidth,keepaspectratio]{images/skin_lesion_exams.png}
-      \fonte{\textcite{fotos_dermatologia}}
       \label{fig:skin_lesion_exams}
+      \fonte{\textcite{fotos_dermatologia}.}
 \end{figure}
 
 % TODO: Mudar para "Detecção e Diagnóstico de Lesões de Pele"
@@ -63,30 +63,32 @@ As imagens para exames dermatológicos podem ser agrupadas em diferentes categor
 % TODO: Falar da classificação de lesões
 \subsection{Detecção e Diagnóstico de Câncer de Pele}
 
-O câncer de pele pode ser identificado e classificado através dos sintomas causados. Características como o tamanho da lesão, variação da cor, irregularidade do formato,
-progresso ao longo do tempo e local do corpo em que a lesão se encontra são fundamentais para o diagnóstico da doença \cite{recognizing_skin_cancer}.
+O câncer de pele pode ser identificado e classificado com base nas características da lesão, incluindo o tamanho, a variação de cor, irregularidade do formato,
+evolução ao longo do tempo e a localização no corpo. \cite{recognizing_skin_cancer}.
 
-A análise desses sintomas é normalmente um processo visual realizado por um dermatologista, sendo que técnicas como a dermatoscopia e teledermatologia podem ser usadas.
-Outros métodos não invasivos incluem, por exemplo, a análise intracutânea espectrofotométrica, ultrasonografia de alta frequência e microscopia confocal de refletância.
-É possível também diagnosticar a doença através de métodos invasivos como a biópsia. Além destes métodos, há também a utilização de \ac{IA}. Soluções com \ac{IA}
-utilizam imagens para a classificação da doença e podem ter uma precisão equiparável ou até maior à de dermatologistas \cite{recognizing_skin_cancer, skin_cancer_ai}.
+A análise desses sintomas é normalmente um processo visual realizado por um dermatologista, sendo que técnicas como a dermatoscopia e inspeção da área da lesão podem
+ser realizadas no contexto da teledermatologia. Outros métodos não invasivos incluem, por exemplo, a análise intracutânea espectrofotométrica, ultrasonografia de alta
+frequência e microscopia confocal de refletância. É possível também diagnosticar a doença através de métodos invasivos como a biópsia. Além destes métodos, há também a
+utilização de \ac{IA}. Soluções com \ac{IA} utilizam imagens para a classificação da doença e podem ter uma precisão equiparável ou até maior à de dermatologistas
+\cite{recognizing_skin_cancer, skin_cancer_ai}.
 
 \section{\textit{Multimodal Large Language Models}}
 
-\acp{MLLM} são \acp{IA} baseadas em \acp{LLM} que possuem a capacidade de interpretação de diferentes modalidades de informação, diferentemente de \acp{LLM}, que
-operam sobre informações textuais. Esses modelos também podem ser capazes de produzir conteúdo multimodal. Essas modalidades podem ser imagens, vídeos, áudios e
-entre outros \cite{mllm_survey_2023, mllm_survey_2024}.
+\acp{MLLM} são \acp{IA} baseadas em \acp{LLM} que possuem a capacidade de interpretação de diferentes modalidades de informação, como imagens, vídeos e áudios.
+O que torna esses modelos diferentes de \acp{LLM}, que operam sobre informações textuais. Esses modelos também podem ser capazes de gerar conteúdo
+\cite{mllm_survey_2023, mllm_survey_2024}.
 
 Segundo \textcite{mllm_survey_2024}, a estrutura de um \ac{MLLM} pode ser dividida em cinco componentes, sendo eles o codificador de modalidade, projetor de entrada,
-\ac{LLM}, projetor de saída e o gerador de modalidade. No caso de \acp{MLLM} que possuem apenas saída de texto, só os três primeiros componentes estão presentes,
+\ac{LLM}, projetor de saída e o gerador de modalidade. No caso de \acp{MLLM} que possuem apenas saída de texto, somente os três primeiros componentes estão presentes,
 essa estrutura é demonstrada na \autoref{fig:mllm_structure_encoder_only}.
 
 % TODO: Fazer uma figura melhor
 \begin{figure}[ht]
       \centering
+      \caption{\small Estrutura de um \ac{MLLM} que realiza apenas a interpretação multimodal.}
       \includegraphics[width=0.7\columnwidth,keepaspectratio]{images/mllm_structure_encoder_only.pdf}
-      \caption{\small Estrutura de um \ac{MLLM} que realiza apenas a interpretação multimodal. Fonte: Autoria própria.}
       \label{fig:mllm_structure_encoder_only}
+      \fonte{Autoria própria.}
 \end{figure}
 
 Neste trabalho, o foco será dado a modelos que interpretam imagens e retornam saídas textuais. Sendo assim, a parte de geração multimodal não será coberta.
@@ -121,18 +123,20 @@ tokenizado. Cada preenchimento colorido denota um \textit{token}.
 
 \begin{figure}[ht]
       \centering
+      \caption{\small Texto tokenizado com o tokenizador do \ac{GPT}-4o.}
       \includegraphics[width=0.7\columnwidth,keepaspectratio]{images/tokens.png}
-      \caption{\small Texto tokenizado com o tokenizador do \ac{GPT}-4o. Fonte: \textcite{tokenizer}.}
       \label{fig:tokens}
+      \fonte{\textcite{tokenizer}.}
 \end{figure}
 
 O mesmo texto, representado como uma lista de \textit{IDs} de \textit{tokens} pode ser visto na \autoref{fig:tokens_ids}.
 
 \begin{figure}[ht]
       \centering
+      \caption{\small \textit{IDs} de \textit{tokens} gerados com o tokenizador do \ac{GPT}-4o.}
       \includegraphics[width=0.7\columnwidth,keepaspectratio]{images/tokens_ids.png}
-      \caption{\small \textit{IDs} de \textit{tokens} gerados com o tokenizador do \ac{GPT}-4o. Fonte: \textcite{tokenizer}.}
       \label{fig:tokens_ids}
+      \fonte{\textcite{tokenizer}.}
 \end{figure}
 
 \textcite{llm_survey_2024} elenca os tipos mais comuns de tokenização, sendo eles o \textit{Byte pair encoding}, \textit{Word piece encoding} e
@@ -157,8 +161,9 @@ simplificado da estrutura destes vetores. No contexto de \acp{LLM}, \textit{toke
 
 \begin{figure}[ht]
       \centering
+      \caption{\small Representação de palavras como vetores de valores reais.}
       \includegraphics[width=0.3\columnwidth,keepaspectratio]{images/word_embeddings.pdf}
-      \caption{Representação de palavras como vetores de valores reais. Fonte: \textcite{word_embedding}.}
+      \fonte{\textcite{word_embedding}.}
       \label{fig:word_embeddings}
 \end{figure}
 
@@ -168,9 +173,10 @@ Nesse espaço vetorial, direções podem ter um significado semântico. Um exemp
 
 \begin{figure}[ht]
       \centering
+      \caption{\small Visualização aproximada de incorporações com a direção que codifica informações de gênero evidenciada.}
       \includegraphics[width=0.6\columnwidth,keepaspectratio]{images/word_embeddings_directions.png}
-      \caption{Visualização aproximada de incorporações com a direção que codifica informações de gênero evidenciada. Fonte: \textcite{word_embedding}.}
       \label{fig:word_embeddings_directions}
+      \fonte{\textcite{word_embedding}.}
 \end{figure}
 
 Outro exemplo de relação semântica pode ser visto com \begin{math}V_{Paris} - V_{France} + V_{Italy} \approx V_{Rome}\end{math}, em que é possível calcular qual é a
@@ -186,9 +192,10 @@ combinação de funções seno e cosseno com diferentes frequências, sendo que 
 
 \begin{figure}[ht]
       \centering
+      \caption{\small Visualização da codificação posicional original, cada faixa horizontal corresponde a uma incorporação.}
       \includegraphics[width=1.0\columnwidth,keepaspectratio]{images/absolute_positional_embeddings.png}
-      \caption{Visualização da codificação posicional original, cada faixa horizontal corresponde a uma incorporação. Fonte: \textcite{positional_embeddings}.}
       \label{fig:absolute_positional_embeddings}
+      \fonte{\textcite{positional_embeddings}.}
 \end{figure}
 
 % TODO: Verificar porquê o RoPE não aparece na versão longa sem forçar
@@ -210,15 +217,16 @@ distâncias relativas. Mas, existem outras formas de codificação que lidam com
 
 \begin{figure}[ht]
       \centering
+      \caption{\small Funcionamento da codificação do tipo \ac{RoPE}.}
       \includegraphics[width=0.8\columnwidth,keepaspectratio]{images/rotary_positional_embeddings.jpg}
-      \caption{Funcionamento da codificação do tipo \ac{RoPE}. Fonte: \textcite{su2024roformer}.}
       \label{fig:rotary_positional_embeddings}
+      \fonte{\textcite{su2024roformer}.}
 \end{figure}
 
 \subsubsection{Transformadores} \label{sec:transformers}
 
 O transformador é o componente central de um \ac{LLM}, ele processa o texto de entrada previamente tokenizado e representado em incorporações vetoriais e prevê o
-próximo \textit{token} desse texto. As explicações fornecidas neste trabalho se baseiam no modelo de \textcite{transformer}, mas várias outras variantes já existem.
+próximo \textit{token} desse texto. Dentre os modelos existentes, as explicações deste trabalho se baseiam no modelo de \textcite{transformer}.
 
 A arquitetura original dos transformadores possui um codificador e um decodificador, sendo que cada um deles é composto por camadas. No codificador, cada camada é
 composta por duas subcamadas, sendo uma delas um mecanismo de \textit{multi-head self-attention} e outra, uma rede \textit{feed-forward}. A saída de cada uma delas possui
@@ -228,9 +236,10 @@ incorporação possa ser prevista e usada para gerar um \textit{token}. A \autor
 
 \begin{figure}[ht]
       \centering
+      \caption{\small Arquitetura de um transformador.}
       \includegraphics[width=0.4\columnwidth,keepaspectratio]{images/transformer.png}
-      \caption{Arquitetura de um transformador. Fonte: \textcite{transformer}.}
       \label{fig:transformer}
+      \fonte{\textcite{transformer}.}
 \end{figure}
 
 O mecanismo de \textit{multi-head self-attention} permite que o modelo reconheça as relações entre diferentes partes do texto de entrada e ajuste os valores das
@@ -285,9 +294,10 @@ subcamada de atenção. A expressão abaixo e a \autoref{fig:attention} demonstr
 
 \begin{figure}[ht]
       \centering
+      \caption{\small Estrutura da subcamada de atenção.}
       \includegraphics[width=0.7\columnwidth,keepaspectratio]{images/attention.png}
-      \caption{Estrutura da subcamada de atenção. Fonte: \textcite{transformer}.}
       \label{fig:attention}
+      \fonte{\textcite{transformer}.}
 \end{figure}
 
 A saída de cada subcamada possui uma conexão residual que soma os dados de entrada com os de saída dessa subcamada, aplicando uma normalização em seguida. Esse processo
@@ -345,13 +355,12 @@ o modelo de \textcite{dosovitskiy2020image} aplica a normalização antes da sub
 A classificação pode ser realizada com o processamento da incorporação de classificação por um \ac{MLP}. Assim, é gerada uma distribuição de probabilidades sobre as
 classes. A \autoref{fig:vision_transformer} demonstra a estrutura de um transformador visual com os detalhes de sua implementação.
 
-\clearpage
-
 \begin{figure}[ht]
       \centering
+      \caption{\small Transformador visual.}
       \includegraphics[width=0.8\columnwidth,keepaspectratio]{images/vision_transformer.pdf}
-      \caption{\small Transformador visual. Fonte: \textcite{dosovitskiy2020image}.}
       \label{fig:vision_transformer}
+      \fonte{\textcite{dosovitskiy2020image}.}
 \end{figure}
 
 No contexto de codificadores visuais, a classificação não é necessária, já que a saída do codificador se constitui nas incorporações processadas. Sendo assim, a
@@ -431,17 +440,17 @@ do \ac{LoRA} com a expressão \begin{math}h = W_0x + BAx\end{math}.
 
 \begin{figure}[ht]
       \centering
+      \caption{\small Representação do \ac{LoRA} com as matrizes \begin{math}W_0\end{math}, \begin{math}A\end{math} e \begin{math}B\end{math}.}
       \includegraphics[width=0.35\columnwidth,keepaspectratio]{images/lora.png}
-      \caption{\small Representação do \ac{LoRA} com as matrizes \begin{math}W_0\end{math}, \begin{math}A\end{math} e \begin{math}B\end{math}. Fonte:
-            \textcite{hu2021lora}.}
       \label{fig:lora}
+      \fonte{\textcite{hu2021lora}.}
 \end{figure}
 
 \subsubsubsection{QLoRA} % TODO: Explicar mais no futuro, talvez?
 
-É possível usar também a quantização para acelerar o \textit{fine-tuning}. A quantização se trata da redução da precisão numérica durante o treinamento. Uma técnica que
-utiliza este conceito é o \ac{QLoRA}, proposta por \textcite{qlora}. Nessa técnica, é usado o tipo \ac{NF4} no armazenamento das matrizes pré-treinadas, sendo que os
-valores em \ac{NF4} são convertidos para \ac{BF16} durante os cálculos. Além disso, também são usados otimizadores paginados e dupla quantização.
+É comum utilizar quantização para acelerar o \textit{fine-tuning}, que se trata da redução da precisão numérica durante o treinamento. Uma técnica que utiliza este
+conceito é o \ac{QLoRA}, proposta por \textcite{qlora}. Nela, é usado o tipo \ac{NF4} no armazenamento das matrizes pré-treinadas, sendo que os valores em \ac{NF4} são
+convertidos para \ac{BF16} durante os cálculos. Além disso, também são usados otimizadores paginados e dupla quantização.
 
 \section{LLaMA 3}
 
@@ -495,7 +504,8 @@ Além de imagens, o \ac{LLaMA}-3.2 também pode operar com vídeos e áudios. A 
 
 \begin{figure}[ht]
       \centering
+      \caption{\small Arquitetura multimodal de imagem e vídeo do \ac{LLaMA}-3.2.}
       \includegraphics[width=1.0\columnwidth,keepaspectratio]{images/llama.pdf}
-      \caption{\small Arquitetura multimodal de imagem e vídeo do \ac{LLaMA}-3.2. Fonte: \textcite{dubey2024llama}.}
       \label{fig:llama}
+      \fonte{\textcite{dubey2024llama}.}
 \end{figure}
