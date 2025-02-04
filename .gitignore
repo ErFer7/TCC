@@ -167,3 +167,6 @@ cython_debug/
 # Extra
 .secrets
 experiments/data
+experiments/results
+experiments/notebooks/outputs
+experiments/notebooks/unsloth_compiled_cache
