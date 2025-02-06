@@ -2,9 +2,13 @@
 Preparação dos dados de treinamento.
 '''
 
+from re import search
+from json import dump, load
 from tqdm.notebook import tqdm
 from datasets import Dataset
 from sklearn.model_selection import train_test_split
+
+import pandas as pd
 
 PROMPT = 'Classify the skin lesion in the image.'
 ANSWER = 'The skin lesion in the image is {disease}.'
@@ -49,7 +53,6 @@ def generate_training_messages(dataset: Dataset, size: int | None = None) -> lis
             chunk = dataset[i:i + chunk_size]
             chunk_messages = [format_data(sample) for sample in chunk]
             training_messages.extend(chunk_messages)
-
     else:
         total_size = len(dataset)
         indices = range(total_size)
@@ -85,7 +88,6 @@ def generate_test_samples(dataset: Dataset, size: int | None = None) -> list:
             chunk = dataset[i:i + chunk_size]
             chunk_samples = [(sample['image'], sample['dx']) for sample in chunk]
             test_samples.extend(chunk_samples)
-
     else:
         total_size = len(dataset)
         indices = range(total_size)
