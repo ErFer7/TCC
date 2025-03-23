@@ -26,66 +26,21 @@ com os baseados na variante de 11 bilhões de parâmetros.
 
 A \autoref{tab:tcc_development} apresenta o plano de desenvolvimento do \ac{TCC} com o trabalho realizado até o momento e as atividades que ainda serão realizadas.
 
-\definecolor{Silver}{rgb}{0.752,0.752,0.752}
-\definecolor{Green}{rgb}{0.639,0.941,0.717}
-\noindent \begin{table}[ht]
-    \caption{\small Cronograma de desenvolvimento do \ac{TCC}. As atividades em verde já foram realizadas, enquanto as atividades em cinza ainda deverão ser concluídas.}
-    \centering
-    \begin{tblr}{
-        width = \linewidth,
-        colspec = {Q[371]Q[37]Q[46]Q[38]Q[40]Q[44]Q[44]Q[44]Q[40]Q[46]Q[40]Q[46]Q[44]Q[37]},
-        row{1} = {Silver,c},
-        row{2} = {Silver},
-        cell{1}{1} = {r=2}{},
-        cell{1}{2} = {c=13}{0.545\linewidth},
-        cell{2}{2} = {c},
-        cell{2}{3} = {c},
-        cell{2}{4} = {c},
-        cell{2}{5} = {c},
-        cell{3}{2} = {Green},
-        cell{3}{3} = {Green},
-        cell{3}{4} = {Green},
-        cell{3}{5} = {Green},
-        cell{4}{4} = {Green},
-        cell{4}{5} = {Green},
-        cell{4}{6} = {Green},
-        cell{5}{6} = {Green},
-        cell{6}{6} = {Green},
-        cell{6}{7} = {Green},
-        cell{7}{7} = {Green},
-        cell{8}{8} = {Silver},
-        cell{8}{9} = {Silver},
-        cell{9}{9} = {Silver},
-        cell{9}{10} = {Silver},
-        cell{10}{10} = {Silver},
-        cell{10}{11} = {Silver},
-        cell{11}{11} = {Silver},
-        cell{11}{12} = {Silver},
-        cell{12}{12} = {Silver},
-        cell{12}{13} = {Silver},
-        cell{13}{13} = {Silver},
-        cell{14}{14} = {Silver},
-        vlines,
-        hline{1,3-14} = {-}{},
-        hline{2} = {2-15}{},
-        hline{12} = {1-14}{},
-        hline{15} = {1-14}{}
-            }
-        \textbf{Etapas}                                                                                                              & \textbf{Meses} &             &             &             &             &             &             &             &             &             &             &             &             \\
-                                                                                                                                     & \textbf{07}    & \textbf{08} & \textbf{09} & \textbf{10} & \textbf{11} & \textbf{12} & \textbf{01} & \textbf{02} & \textbf{03} & \textbf{04} & \textbf{05} & \textbf{06} & \textbf{07} \\
-        Estudo da fundamentação teórica dos \acp{MLLM}                                                                               &                &             &             &             &             &             &             &             &             &             &             &             &             \\
-        Estudo da utilização de métodos de \textit{fine-tuning} baseados em \ac{PEFT}                                                &                &             &             &             &             &             &             &             &             &             &             &             &             \\
-        Pesquisa dos trabalhos correlatos                                                                                            &                &             &             &             &             &             &             &             &             &             &             &             &             \\
-        \textit{Fine-tuning} inicial do \ac{LLaMA}-3.2 com \ac{QLoRA} e \ac{LoRA}                                                    &                &             &             &             &             &             &             &             &             &             &             &             &             \\
-        Entrega do relatório do \ac{TCC} I                                                                                           &                &             &             &             &             &             &             &             &             &             &             &             &             \\
-        Tratamento do conjunto de dados do \ac{STT/SC}                                                                               &                &             &             &             &             &             &             &             &             &             &             &             &             \\
-        Desenvolvimento dos testes                                                                                                   &                &             &             &             &             &             &             &             &             &             &             &             &             \\
-        \textit{Fine-tuning} do \ac{LLaMA}-3.2 com 11 e 90 bilhões de parâmetros com hiperparâmetros adequados e diferentes métodos &                &             &             &             &             &             &             &             &             &             &             &             &             \\
-        Aplicação dos testes e análise dos resultados                                                                                &                &             &             &             &             &             &             &             &             &             &             &             &             \\
-        Entrega do relatório do \ac{TCC} II                                                                                          &                &             &             &             &             &             &             &             &             &             &             &             &             \\
-        Defesa pública                                                                                                               &                &             &             &             &             &             &             &             &             &             &             &             &             \\
-        Ajustes finais no relatório do \ac{TCC}                                                                                      &                &             &             &             &             &             &             &             &             &             &             &             &
-    \end{tblr}
-    \label{tab:tcc_development}
-    \fonte{Autoria própria.}
+\begin{table}[]
+    \resizebox{\columnwidth}{!}{%
+        \begin{tabular}{|l|lllll|}
+            \hline
+            \rowcolor[HTML]{EFEFEF}
+            \multicolumn{1}{|c|}{\cellcolor[HTML]{EFEFEF}}                                                                                                             & \multicolumn{5}{c|}{\cellcolor[HTML]{EFEFEF}Meses}                                                                                                                                                                                                                                                                         \\ \cline{2-6}
+            \rowcolor[HTML]{EFEFEF}
+            \multicolumn{1}{|c|}{\multirow{-2}{*}{\cellcolor[HTML]{EFEFEF}Etapas}}                                                                                     & \multicolumn{1}{c}{\cellcolor[HTML]{EFEFEF}03}                       & 04                                                                   & 05                                                                   & 06                                                                   & 07                             \\ \hline
+            \begin{tabular}[c]{@{}l@{}}Tratamento do conjunto de dados do STT/SC\\ e desenvolvimento da base de dados\end{tabular}                                     & \multicolumn{1}{c|}{\cellcolor[HTML]{C0C0C0}{\color[HTML]{241F31} }} & \multicolumn{1}{l|}{}                                                & \multicolumn{1}{l|}{}                                                & \multicolumn{1}{l|}{}                                                &                                \\ \hline
+            Desenvolvimento dos testes                                                                                                                                 & \multicolumn{1}{l|}{}                                                & \multicolumn{1}{c|}{\cellcolor[HTML]{C0C0C0}{\color[HTML]{241F31} }} & \multicolumn{1}{l|}{}                                                & \multicolumn{1}{l|}{}                                                &                                \\ \hline
+            \begin{tabular}[c]{@{}l@{}}Fine-tuning do LLaMA-3.2 com 11 e 90 bilhões de\\ parâmeteros com hiperparâmetros adequados e\\ diferentes métodos\end{tabular} & \multicolumn{1}{l|}{}                                                & \multicolumn{1}{c|}{\cellcolor[HTML]{C0C0C0}{\color[HTML]{241F31} }} & \multicolumn{1}{l|}{\cellcolor[HTML]{C0C0C0}}                        & \multicolumn{1}{l|}{}                                                &                                \\ \hline
+            Aplicação dos testes e análise dos resultados                                                                                                              & \multicolumn{1}{c|}{}                                                & \multicolumn{1}{l|}{}                                                & \multicolumn{1}{c|}{\cellcolor[HTML]{C0C0C0}{\color[HTML]{241F31} }} & \multicolumn{1}{c|}{}                                                &                                \\ \hline
+            Entrega do Relatório do TCC II                                                                                                                             & \multicolumn{1}{l|}{}                                                & \multicolumn{1}{l|}{}                                                & \multicolumn{1}{l|}{}                                                & \multicolumn{1}{c|}{\cellcolor[HTML]{C0C0C0}{\color[HTML]{241F31} }} & \multicolumn{1}{c|}{\textbf{}} \\ \hline
+            Defesa pública                                                                                                                                             & \multicolumn{1}{l|}{}                                                & \multicolumn{1}{l|}{}                                                & \multicolumn{1}{l|}{}                                                & \multicolumn{1}{l|}{\cellcolor[HTML]{C0C0C0}}                        & \multicolumn{1}{c|}{\textbf{}} \\ \hline
+            Ajustes finais no relatório do TCC                                                                                                                         & \multicolumn{1}{l|}{}                                                & \multicolumn{1}{l|}{}                                                & \multicolumn{1}{l|}{}                                                & \multicolumn{1}{l|}{}                                                & \cellcolor[HTML]{C0C0C0}       \\ \hline
+        \end{tabular}%
+    }
 \end{table}
