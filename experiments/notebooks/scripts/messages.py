@@ -3,7 +3,7 @@ Mensagens.
 '''
 
 
-def add_inference_message(message: str, messages: list = None) -> list:
+def add_inference_message(message: str, messages: list | None = None) -> list:
     '''
     Mensagem de adição de inferência.
     '''
