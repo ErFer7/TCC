@@ -5,6 +5,8 @@ Constantes.
 from enum import Enum
 from os.path import join
 
+from pydantic import BaseModel
+
 DATA_PATH = join('..', 'data')
 ANALYSIS_PATH = join('..', 'analysis')
 RESULTS_PATH = join('..', 'results')
@@ -187,3 +189,15 @@ class PromptType(Enum):
 
     SIMPLE_CLASSIFICATION = 'simple_classification'
     REPORT = 'report'
+
+
+class Model(BaseModel):
+    '''
+    MLLM.
+    '''
+
+    local: bool
+    quantized: bool | None
+    prompt_type: PromptType
+    version: str
+    size: int
