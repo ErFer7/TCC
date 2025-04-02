@@ -2,7 +2,7 @@
 Mensagens.
 '''
 
-from scripts.configuration import PromptType
+from scripts.definitions import PromptType
 
 
 def format_prompt(prompt_template: str, prompt_type: PromptType, dataset_analysis: dict) -> str | None:
@@ -13,15 +13,6 @@ def format_prompt(prompt_template: str, prompt_type: PromptType, dataset_analysi
     match prompt_type:
         case PromptType.SIMPLE_CLASSIFICATION:
             return prompt_template.format(dataset_analysis['skin_lesion_distribution']['classes'].keys())
-        case PromptType.FULL_CLASSIFICATION:
-            return prompt_template.format(
-                dataset_analysis['elementary_lesions_distribution']['classes'].keys(),
-                dataset_analysis['secondary_lesions_distribution']['classes'].keys(),
-                dataset_analysis['coloration_distribution']['classes'].keys(),
-                dataset_analysis['morphology_distribution']['classes'].keys(),
-                dataset_analysis['size_distribution']['classes'].keys(),
-                dataset_analysis['skin_lesion_distribution']['classes'].keys()
-            )
         case PromptType.REPORT:
             return prompt_template.format(
                 dataset_analysis['elementary_lesions_distribution']['classes'].keys(),

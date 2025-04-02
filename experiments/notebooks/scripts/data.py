@@ -113,7 +113,6 @@ def analyse_dataset(data: list, dataset_path: str, dataset_name: str, save: bool
 
     data_analysis = {
         'total_size': 0,
-        'average_images_per_exam': 0,
         'elementary_lesions_distribution': {'classes_count': 0, 'classes': {}},
         'secondary_lesions_distribution': {'classes_count': 0, 'classes': {}},
         'coloration_distribution': {'classes_count': 0, 'classes': {}},
@@ -125,10 +124,7 @@ def analyse_dataset(data: list, dataset_path: str, dataset_name: str, save: bool
         'skin_lesion_distribution': {'classes_count': 0, 'classes': {}}
     }
 
-
     data_analysis['total_size'] = len(data)
-    data_analysis['average_images_per_exam'] = sum(len(exam['images'])
-                                                   for exam in data) / data_analysis['total_size']
 
     lists = [
         'elementary_lesions',
