@@ -11,7 +11,7 @@ from pydantic import BaseModel
 import matplotlib.pyplot as plt
 
 from scripts.test import TestResult
-from scripts.data import ApproximationExam
+from scripts.data import LesionData
 
 import scripts.definitions as defs
 
@@ -266,7 +266,7 @@ def structure_answers(prompt_type: defs.PromptType, results: list[TestResult]) -
     return sanitized_results
 
 
-def associate_results_with_data(dataset: list[ApproximationExam],
+def associate_results_with_data(dataset: list[LesionData],
                                 prompt_type: defs.PromptType,
                                 results: list[SanitizedResult]) -> list[SimpleClassificationResultPair |
                                                                         ReportResultPair]:

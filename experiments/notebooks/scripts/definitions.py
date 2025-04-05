@@ -23,18 +23,28 @@ STATIC_RANDOM_STATE = 3407
 MAX_TOKENS = 2048
 
 # TODO: Melhorar os prompts
-SIMPLE_CLASSIFICATION_PROMPT_TEMPLATE = 'Classifique a lesão de pele na imagem. Não inclua nenhum comentário extra ' \
-    'na resposta além da classificação.\nAs opções de classificação são: {}.'
+SIMPLE_CLASSIFICATION_PROMPT_TEMPLATE = 'Classifique a lesão de pele na imagem. ' \
+                                        'Não inclua nenhum comentário extra na resposta além da classificação.\n' \
+                                        'As opções de classificação são: {}.'
 REPORT_PROMPT_TEMPLATE = 'Classifique a lesão de pele na imagem, informando a lesão elementar, lesão ' \
-    'secundária, coloração, morfologia, tamanho em centímetros, classificação da ' \
-    'lesão e classificação de risco. Por fim, inclua uma breve conclusão sobre o diganóstico.' \
-    '\nAs opções de lesões elementares são: {}.\nAs opções de lesões secundárias são: {}.\nAs ' \
-    'opções de coloração são: {}.\nAs opções de morfologia são: {}.\nAs opções de ' \
-    'tamanho são: {}.\nAs opções de classificação são: {}.\nAs opções de classificação de risco são: {}.'
+                         'secundária, coloração, morfologia, tamanho em centímetros, classificação da ' \
+                         'lesão e classificação de risco.\n' \
+                         'Por fim, inclua uma breve conclusão sobre o diganóstico.\n' \
+                         'As opções de classificação de lesões elementares são: {}.\n' \
+                         'As opções de classificação de lesões secundárias são: {}.\n' \
+                         'As opções de classificação de coloração são: {}.\n' \
+                         'As opções de classificação de morfologia são: {}.\n' \
+                         'As opções de classificação de tamanho são: {}.\n' \
+                         'As opções de classificação de lesões de pele são: {}.\n' \
+                         'As opções de classificação de risco são: {}.'
 SIMPLE_CLASSIFICATION_ANSWER_TEMPLATE = '{}.'
-REPORT_ANSWER_TEMPLATE = 'Lesão elementar: {}.\n\nLesão secundária: {}.\n\nColoração: {}.\n\n' \
-                         'Morfologia: {}.\n\nTamanho: {}.\n\nClassificação: {}.\n\n' \
-                         'Classificação de risco: {}.\n\nConclusão: {}.'
+REPORT_ANSWER_TEMPLATE = 'Lesão elementar: {}.\n\n' \
+                         'Lesão secundária: {}.\n\n' \
+                         'Coloração: {}.\n\n' \
+                         'Morfologia: {}.\n\nTamanho: {}.\n\n' \
+                         'Classificação: {}.\n\n' \
+                         'Classificação de risco: {}.\n\n' \
+                         'Conclusão: {}.'
 
 ELEMENTARY_LESIONS_DOMAIN = (
     'Mácula/mancha',
@@ -69,7 +79,7 @@ SECONDARY_LESIONS_DOMAIN = (
     'Escoriação',
     'Ceratose',
     'Alopécia',
-    'Maceração'
+    'Maceração',
     'Nenhuma'  # Adicionada para o treinamento
 )
 
@@ -181,6 +191,13 @@ RISK_DOMAIN = (
     'AZUL - TRATAMENTO NA UNIDADE BÁSICA DE SAÚDE (UBS)',
     'BRANCA - SEM NECESSIDADE DE INTERVENÇÃO OU ACOMPANHAMENTO'
 )
+
+SIZE_DOMAIN_TRANSFORMED = {
+    '< 1': 'Menos de 1 cm',
+    '1 a 2': '1 a 2 cm',
+    '2 a 4': '2 a 4 cm',
+    '> 4': 'Maior que 4 cm'
+}
 
 
 class PromptType(Enum):

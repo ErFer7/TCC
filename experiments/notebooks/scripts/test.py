@@ -16,7 +16,6 @@ class GenerationParameters(BaseModel):
 
     max_new_tokens: int
     use_cache: bool
-    do_sample: bool
     temperature: float
 
 
@@ -35,7 +34,7 @@ class Test(BaseModel):
     Teste.
     '''
 
-    model_name: str
+    tested_model: str
     model: Model
     generation_parameters: GenerationParameters
     start_time: datetime
