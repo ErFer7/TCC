@@ -20,6 +20,7 @@ BASE_MODEL_NAME = 'weights/LlaDerm-R-0.1-11B-4bit'
 BASE_MODEL_NAME = 'unsloth/Llama-3.2-11B-Vision-Instruct'
 
 STATIC_RANDOM_STATE = 3407
+MAX_TOKENS = 2048
 
 # TODO: Melhorar os prompts
 SIMPLE_CLASSIFICATION_PROMPT_TEMPLATE = 'Classifique a lesão de pele na imagem. Não inclua nenhum comentário extra ' \
