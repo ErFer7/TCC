@@ -1,0 +1,9 @@
+{
+    "unsloth/Llama-3.2-11B-Vision-Instruct": {
+        "local": false,
+        "quantized": null,
+        "prompt_type": "simple_classification",
+        "version": "3.2",
+        "size": 11
+    }
+}
