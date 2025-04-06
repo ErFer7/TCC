@@ -79,8 +79,7 @@ SECONDARY_LESIONS_DOMAIN = (
     'Escoriação',
     'Ceratose',
     'Alopécia',
-    'Maceração',
-    'Nenhuma'  # Adicionada para o treinamento
+    'Maceração'
 )
 
 COLORATION_DOMAIN = (
@@ -92,8 +91,7 @@ COLORATION_DOMAIN = (
     'Azulada',
     'Hipo/acrômica (despigmentada)',
     'Eucrômica',
-    'Amarelada',
-    'Eucrômica'
+    'Amarelada'
 )
 
 MORPHOLOGY_DOMAIN = (

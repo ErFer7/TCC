@@ -146,40 +146,26 @@ def format_data(selected_sample: dict) -> dict:
     }
 
 
-def parse_list_report_part(structured_report: Report,
-                           report_parts: list[str],
-                           attribute_name: str,
-                           domain: tuple[str],
-                           optional: bool = False) -> None:
+def check_string_report_part(report_parts: list[str],
+                             domain: tuple[str] | None,
+                             index: int = 0) -> tuple[int, bool]:
     '''
-    Processa uma parte do laudo.
+    Verifica se uma parte do laudo está presente.
+    Retorna o índice da parte do laudo e um booleano indicando se a parte do laudo está presente.
     '''
 
-    while True:
-        if report_parts[0] in domain:  # type: ignore
-            getattr(structured_report, attribute_name).append(report_parts.pop(0))
-        elif not optional and len(getattr(structured_report, attribute_name)) == 0:
-            raise ValueError(f'Instrutura de laudo incorreta: {report_parts[0]}')
-        else:
-            break
-
-
-def parse_string_report_part(structured_report: Report,
-                             report_parts: list[str],
-                             attribute_name: str,
-                             domain: tuple[str] | None) -> None:
-    '''
-    Processa uma parte do laudo.
-    '''
+    has_part = False
 
     if domain is None:
-        setattr(structured_report, attribute_name, report_parts.pop(0))
-        return
+        index += 1
+        has_part = True
+        return index, has_part
 
-    if report_parts[0] in domain:  # type: ignore
-        setattr(structured_report, attribute_name, report_parts.pop(0))
-    else:
-        raise ValueError(f'Instrutura de laudo incorreta: {report_parts[0]}')
+    if report_parts[index] in domain:  # type: ignore
+        index += 1
+        has_part = True
+
+    return index, has_part
 
 
 def next_lines_contain_report(report_parts: list[str]) -> bool:
@@ -190,10 +176,76 @@ def next_lines_contain_report(report_parts: list[str]) -> bool:
     if len(report_parts) < 8:
         return False
 
-    if search(r'Lesão \d+.', report_parts[0]):
+    index = 0
+    has_elementary_lesion = False
+
+    while True:
+        if report_parts[index] in defs.ELEMENTARY_LESIONS_DOMAIN and \
+           not (has_elementary_lesion and report_parts[index] == 'Ausente'):
+            index += 1
+            has_elementary_lesion = True
+        elif not has_elementary_lesion:
+            return False
+        else:
+            break
+
+    while True:
+        if report_parts[index] in defs.SECONDARY_LESIONS_DOMAIN:
+            index += 1
+        else:
+            break
+
+    has_coloration = False
+
+    while True:
+        if report_parts[index] in defs.COLORATION_DOMAIN:
+            index += 1
+            has_coloration = True
+        elif not has_coloration:
+            return False
+        else:
+            break
+
+    has_morphology = False
+
+    while True:
+        if report_parts[index] in defs.MORPHOLOGY_DOMAIN:
+            index += 1
+            has_morphology = True
+        elif not has_morphology:
+            return False
+        else:
+            break
+
+    if report_parts[index] in defs.SIZE_DOMAIN:
+        index += 1
+    else:
         return False
 
-    return report_parts[0] in defs.ELEMENTARY_LESIONS_DOMAIN
+    index += 1
+
+    has_distribution = False
+
+    while True:
+        if report_parts[index] in defs.DISTRIBUTION_DOMAIN:
+            index += 1
+            has_distribution = True
+        elif not has_distribution:
+            return False
+        else:
+            break
+
+    if report_parts[index] in defs.RISK_DOMAIN:
+        index += 1
+    else:
+        return False
+
+    if report_parts[index] in defs.SKIN_LESION_DOMAIN:
+        index += 1
+    else:
+        return False
+
+    return True
 
 
 def parse_report(report_parts: list[str]) -> tuple[Report | None, bool]:
@@ -218,69 +270,61 @@ def parse_report(report_parts: list[str]) -> tuple[Report | None, bool]:
         conclusion='',
     )
 
-    parse_list_report_part(
-        structured_report,
-        report_parts,
-        'elementary_lesions',
-        defs.ELEMENTARY_LESIONS_DOMAIN  # type: ignore
-    )
+    while True:
+        if report_parts[0] in defs.ELEMENTARY_LESIONS_DOMAIN and \
+           not (len(structured_report.elementary_lesions) > 0 and report_parts[0] == 'Ausente'):
+            structured_report.elementary_lesions.append(report_parts.pop(0))
+        elif len(structured_report.elementary_lesions) == 0:
+            raise ValueError(f'Instrutura de laudo incorreta: {report_parts[0]}')
+        else:
+            break
 
-    parse_list_report_part(
-        structured_report,
-        report_parts,
-        'secondary_lesions',
-        defs.SECONDARY_LESIONS_DOMAIN,  # type: ignore
-        True
-    )
+    while True:
+        if report_parts[0] in defs.SECONDARY_LESIONS_DOMAIN:
+            structured_report.secondary_lesions.append(report_parts.pop(0))
+        else:
+            break
 
-    parse_list_report_part(
-        structured_report,
-        report_parts,
-        'coloration',
-        defs.COLORATION_DOMAIN  # type: ignore
-    )
+    while True:
+        if report_parts[0] in defs.COLORATION_DOMAIN:
+            structured_report.coloration.append(report_parts.pop(0))
+        elif len(structured_report.coloration) == 0:
+            raise ValueError(f'Instrutura de laudo incorreta: {report_parts[0]}')
+        else:
+            break
 
-    parse_list_report_part(
-        structured_report,
-        report_parts,
-        'morphology',
-        defs.MORPHOLOGY_DOMAIN  # type: ignore
-    )
+    while True:
+        if report_parts[0] in defs.MORPHOLOGY_DOMAIN:
+            structured_report.morphology.append(report_parts.pop(0))
+        elif len(structured_report.morphology) == 0:
+            raise ValueError(f'Instrutura de laudo incorreta: {report_parts[0]}')
+        else:
+            break
 
-    parse_string_report_part(
-        structured_report,
-        report_parts,
-        'size',
-        defs.SIZE_DOMAIN  # type: ignore
-    )
+    if report_parts[0] in defs.SIZE_DOMAIN:
+        structured_report.size = report_parts.pop(0)
+    else:
+        raise ValueError(f'Instrutura de laudo incorreta: {report_parts[0]}')
 
-    parse_string_report_part(
-        structured_report,
-        report_parts,
-        'location',
-        None  # type: ignore
-    )
+    structured_report.location = report_parts.pop(0)
 
-    parse_list_report_part(
-        structured_report,
-        report_parts,
-        'distribution',
-        defs.DISTRIBUTION_DOMAIN  # type: ignore
-    )
+    while True:
+        if report_parts[0] in defs.DISTRIBUTION_DOMAIN:
+            structured_report.distribution.append(report_parts.pop(0))
+        elif len(structured_report.distribution) == 0:
+            raise ValueError(f'Instrutura de laudo incorreta: {report_parts[0]}')
+        else:
+            break
 
-    parse_string_report_part(
-        structured_report,
-        report_parts,
-        'risk',
-        defs.RISK_DOMAIN  # type: ignore
-    )
+    if report_parts[0] in defs.RISK_DOMAIN:
+        structured_report.risk = report_parts.pop(0)
+    else:
+        raise ValueError(f'Instrutura de laudo incorreta: {report_parts[0]}')
 
-    parse_string_report_part(
-        structured_report,
-        report_parts,
-        'skin_lesion',
-        defs.SKIN_LESION_DOMAIN  # type: ignore
-    )
+    if report_parts[0] in defs.SKIN_LESION_DOMAIN:
+        structured_report.skin_lesion = report_parts.pop(0)
+    else:
+        raise ValueError(f'Instrutura de laudo incorreta: {report_parts[0]}')
 
     conclusion = ''
 
@@ -292,7 +336,7 @@ def parse_report(report_parts: list[str]) -> tuple[Report | None, bool]:
     structured_report.conclusion = conclusion
 
     if len(structured_report.secondary_lesions) == 0:
-        structured_report.secondary_lesions = ['Nenhuma']
+        structured_report.secondary_lesions = ['Ausente']
 
     structured_report.size = defs.SIZE_DOMAIN_TRANSFORMED[structured_report.size]
 
@@ -300,6 +344,31 @@ def parse_report(report_parts: list[str]) -> tuple[Report | None, bool]:
         structured_report.risk = 'AMARELA - ENCAMINHAMENTO COM PRIORIDADE PARA O AMBULATÓRIO DE REFERÊNCIA TERCIÁRIO'
 
     return structured_report, True
+
+
+def parse_report_footnote(report_parts: list[str]) -> dict[int, list[str]]:
+    '''
+    Processa a nota de rodapé do laudo.
+    '''
+
+    lesions = {}
+    last_lesion = 0
+
+    while len(report_parts) > 0:
+        if search(r'Lesão \d+.', report_parts[0]):
+            lesion_conclusion = report_parts.pop(0)
+            conclusion_parts = lesion_conclusion.split()
+            lesion_number = int(conclusion_parts[1].strip(':'))
+            last_lesion = lesion_number
+
+            if lesion_number not in lesions:
+                lesions[lesion_number] = []
+
+            lesions[lesion_number].append(' '.join(conclusion_parts[2:]))
+        else:
+            lesions[last_lesion].append(report_parts.pop(0))
+
+    return lesions
 
 
 def analyse_dataset(dataset: list[LesionData],
