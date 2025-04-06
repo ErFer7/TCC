@@ -274,7 +274,7 @@ def associate_results_with_data(dataset: list[LesionData],
     Associa os resultados com os dados.
     '''
 
-    dataset_dict = {exam.exam_id: exam for exam in dataset}
+    dataset_dict = {lesion_data.exam_id: lesion_data for lesion_data in dataset}
     result_pairs = []
 
     if prompt_type == defs.PromptType.REPORT:
@@ -336,7 +336,7 @@ def associate_results_with_data(dataset: list[LesionData],
                 else:
                     result_answer = 'unclear'
 
-                expected_answer = dataset_dict[result.exam_id].report.skin_lesion
+                expected_answer = sanitize_domain_class(dataset_dict[result.exam_id].report.skin_lesion)
 
                 result_pair = SimpleClassificationResultPair(
                     exam_id=result.exam_id,
@@ -359,8 +359,8 @@ def get_label_pairs(result_pairs: list[SimpleClassificationResultPair | ReportRe
     pairs = []
 
     for result in result_pairs:
-        answer = getattr(result.answer, attribute_name)
-        expected = getattr(result.expected, attribute_name)
+        answer = result.answer if isinstance(result.answer, str) else getattr(result.answer, attribute_name)
+        expected = result.expected if isinstance(result.expected, str) else getattr(result.expected, attribute_name)
 
         if isinstance(answer, list):
             answer = sorted(answer)
@@ -397,7 +397,7 @@ def create_confusion_matrix(pairs: list[tuple[str, str]], labels: list[str], tit
     color_bar = heat_map.collections[0].colorbar
     color_bar.set_ticks([0, 0.25, 0.5, 0.75, 1])
     color_bar.set_ticklabels(['0%', '25%', '50%', '75%', '100%'])
-    plt.title(f'{title}\nAcurácia: {accuracy:.2%}')
+    plt.title(f'{title}\nAcurácia: {accuracy:.1%}')
     plt.xlabel('Previsto')
     plt.ylabel('Verdadeiro')
     plt.xticks(rotation=45, ha='right')

@@ -16,7 +16,6 @@ TRAINING_PROPORTION = 0.8
 VALIDATION_PROPORTION = 0.1
 TEST_PROPORTION = 0.1
 
-BASE_MODEL_NAME = 'weights/LlaDerm-R-0.1-11B-4bit'
 BASE_MODEL_NAME = 'unsloth/Llama-3.2-11B-Vision-Instruct'
 
 STATIC_RANDOM_STATE = 3407
@@ -198,7 +197,7 @@ SIZE_DOMAIN_TRANSFORMED = {
 }
 
 
-class PromptType(Enum):
+class PromptType(str, Enum):
     '''
     Tipos de prompt.
     '''

@@ -2,8 +2,6 @@
 Módulo de utilitários para testes.
 '''
 
-from datetime import datetime
-
 from pydantic import BaseModel
 
 from scripts.definitions import Model
@@ -15,7 +13,6 @@ class GenerationParameters(BaseModel):
     '''
 
     max_new_tokens: int
-    use_cache: bool
     temperature: float
 
 
@@ -37,7 +34,5 @@ class Test(BaseModel):
     tested_model: str
     model: Model
     generation_parameters: GenerationParameters
-    start_time: datetime
-    end_time: datetime | None
     results_on_test_data: list[TestResult]
     results_on_training_data: list[TestResult]

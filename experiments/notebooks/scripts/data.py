@@ -10,9 +10,6 @@ from pydantic import BaseModel
 
 import scripts.definitions as defs
 
-PROMPT = 'Classify the skin lesion in the image.'
-ANSWER = 'The skin lesion in the image is {disease}.'
-
 
 class Series(BaseModel):
     '''
@@ -117,33 +114,6 @@ class DatasetAnalysis(BaseModel):
     distribution_distribution: Distribution
     risk_distribution: Distribution
     skin_lesion_distribution: Distribution
-
-
-# TODO: Mover para messages.py
-def format_data(selected_sample: dict) -> dict:
-    '''
-    Formata os dados.
-    '''
-
-    return {'messages': [
-        {
-            'role': 'user',
-            'content': [
-                {
-                    'type': 'text',
-                    'text': PROMPT,
-                }, {
-                    'type': 'image',
-                    'image': selected_sample['image'],
-                }
-            ],
-        },
-        {
-            'role': 'assistant',
-            'content': [{'type': 'text', 'text': ANSWER.format(disease=selected_sample['dx'].replace('_', ' '))}],
-        },
-    ],
-    }
 
 
 def check_string_report_part(report_parts: list[str],
