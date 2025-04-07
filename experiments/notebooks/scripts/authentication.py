@@ -17,11 +17,11 @@ def authenticate_huggingface() -> None:
     hf_token = None
 
     if not exists('../.env'):
-        hf_token = getpass('Enter your Hugging Face token: ')
+        hf_token = getpass('Insira seu token do Hugging Face: ')
     else:
         load_dotenv(dotenv_path='../.env')
         hf_token = getenv('HF_TOKEN')
 
-    assert hf_token is not None, 'Invalid Hugging Face token'
+    assert hf_token is not None, 'Token inválido'
 
     login(token=hf_token)

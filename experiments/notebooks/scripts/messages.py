@@ -87,7 +87,9 @@ def add_inference_message(prompt: str, messages: list | None = None) -> list:
     return messages
 
 
-def create_training_message(prompt_type: defs.PromptType, lesion_data: LesionData, dataset_analysis: DatasetAnalysis) -> dict:
+def create_training_message(prompt_type: defs.PromptType,
+                            lesion_data: LesionData,
+                            dataset_analysis: DatasetAnalysis) -> dict:
     '''
     Formata os dados.
     '''

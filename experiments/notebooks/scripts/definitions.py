@@ -17,6 +17,7 @@ VALIDATION_PROPORTION = 0.1
 TEST_PROPORTION = 0.1
 
 BASE_MODEL_NAME = 'unsloth/Llama-3.2-11B-Vision-Instruct'
+MODEL_NAME = 'LLaDerm'
 
 STATIC_RANDOM_STATE = 3407
 MAX_TOKENS = 2048
@@ -35,14 +36,25 @@ REPORT_PROMPT_TEMPLATE = 'Classifique a lesão de pele na imagem, informando a l
                          'As opções de classificação de morfologia são: {}.\n' \
                          'As opções de classificação de tamanho são: {}.\n' \
                          'As opções de classificação de lesões de pele são: {}.\n' \
-                         'As opções de classificação de risco são: {}.'
+                         'As opções de classificação de risco são: {}.\n' \
+                         'Utilize a seguinte formatação para a resposta:\n\n' \
+                         'Lesão elementar: <...>.\n' \
+                         'Lesão secundária: <...>.\n' \
+                         'Coloração: <...>.\n' \
+                         'Morfologia: <...>.\n'\
+                         'Tamanho: <...>.\n' \
+                         'Classificação: <...>.\n' \
+                         'Classificação de risco: <...>.\n' \
+                         'Conclusão: <...>.'
+
 SIMPLE_CLASSIFICATION_ANSWER_TEMPLATE = '{}.'
-REPORT_ANSWER_TEMPLATE = 'Lesão elementar: {}.\n\n' \
-                         'Lesão secundária: {}.\n\n' \
-                         'Coloração: {}.\n\n' \
-                         'Morfologia: {}.\n\nTamanho: {}.\n\n' \
-                         'Classificação: {}.\n\n' \
-                         'Classificação de risco: {}.\n\n' \
+REPORT_ANSWER_TEMPLATE = 'Lesão elementar: {}.\n' \
+                         'Lesão secundária: {}.\n' \
+                         'Coloração: {}.\n' \
+                         'Morfologia: {}.\n' \
+                         'Tamanho: {}.\n' \
+                         'Classificação: {}.\n' \
+                         'Classificação de risco: {}.\n' \
                          'Conclusão: {}.'
 
 ELEMENTARY_LESIONS_DOMAIN = (

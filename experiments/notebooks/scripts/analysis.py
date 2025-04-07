@@ -295,13 +295,13 @@ def associate_results_with_data(dataset: list[LesionData],
                 )
             else:
                 result_answer = ReportClassification(
-                    elementary_lesions=['unclear'],
-                    secondary_lesions=['unclear'],
-                    coloration=['unclear'],
-                    morphology=['unclear'],
-                    size='unclear',
-                    skin_lesion='unclear',
-                    risk='unclear'
+                    elementary_lesions=['incerto'],
+                    secondary_lesions=['incerto'],
+                    coloration=['incerto'],
+                    morphology=['incerto'],
+                    size='incerto',
+                    skin_lesion='incerto',
+                    risk='incerto'
                 )
 
             report = dataset_dict[result.exam_id].report
@@ -334,7 +334,7 @@ def associate_results_with_data(dataset: list[LesionData],
 
                     result_answer = simple_classification_answer.skin_lesion
                 else:
-                    result_answer = 'unclear'
+                    result_answer = 'incerto'
 
                 expected_answer = sanitize_domain_class(dataset_dict[result.exam_id].report.skin_lesion)
 

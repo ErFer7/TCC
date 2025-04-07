@@ -14,28 +14,20 @@ class TrainingHyperparameters(BaseModel):
     Hiperparâmetros de treinamento.
     '''
 
-    # Parâmetros básicos de identificação e treinamento
+    base_model_name: str
     model_name: str
     quantization: bool
     prompt_type: PromptType
     version: str
     size: int
+    peft_hyperparameters: dict[str, Any]
+    sft_hyperparameters: dict[str, Any]
 
-    # Hiperparâmetros de PEFT
-    finetune_vision_layers: bool
-    finetune_language_layers: bool
-    finetune_attention_modules: bool
-    finetune_mlp_modules: bool
-    r: int
-    lora_alpha: int
-    lora_dropout: float
-    bias: str
-    use_rslora: bool
-    loftq_config: Any
+# TODO: Ideias...
+# def custom_loss(logits, labels):
+#     loss = F.cross_entropy(logits, labels, reduction="none")
 
-    # Hiperparâmetros de treinamento
-    eval_strategy: str
-    learning_rate: float
-    weight_decay: float
-    lr_scheduler_type: str
-    optim: str
+#     # Identify positions of structured fields (e.g., first 6 lines)
+#     structured_positions = (labels < CONCLUSION_START_TOKEN_ID)  # Adjust based on tokenization
+#     loss[structured_positions] *= 3.0  # Amplify loss for structured fields
+#     return loss.mean()
