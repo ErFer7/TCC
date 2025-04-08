@@ -27,35 +27,21 @@ MAX_IMAGE_SIZE = 1024
 SIMPLE_CLASSIFICATION_PROMPT_TEMPLATE = 'Classifique a lesão de pele na imagem. ' \
                                         'Não inclua nenhum comentário extra na resposta além da classificação.\n' \
                                         'As opções de classificação são: {}.'
-REPORT_PROMPT_TEMPLATE = 'Classifique a lesão de pele na imagem, informando a lesão elementar, lesão ' \
-                         'secundária, coloração, morfologia, tamanho em centímetros, classificação da ' \
+REPORT_PROMPT_TEMPLATE = 'Classifique a lesão de pele na imagem, informando a classificação da ' \
                          'lesão e classificação de risco.\n' \
-                         'Por fim, inclua uma breve conclusão sobre o diganóstico.\n' \
-                         'As opções de classificação de lesões elementares são: {}.\n' \
-                         'As opções de classificação de lesões secundárias são: {}.\n' \
-                         'As opções de classificação de coloração são: {}.\n' \
-                         'As opções de classificação de morfologia são: {}.\n' \
-                         'As opções de classificação de tamanho são: {}.\n' \
+                         'Por fim, inclua uma breve conclusão sobre o diagnóstico.\n' \
                          'As opções de classificação de lesões de pele são: {}.\n' \
                          'As opções de classificação de risco são: {}.\n' \
                          'Utilize a seguinte formatação para a resposta:\n\n' \
-                         'Lesão elementar: <...>.\n' \
-                         'Lesão secundária: <...>.\n' \
-                         'Coloração: <...>.\n' \
-                         'Morfologia: <...>.\n'\
-                         'Tamanho: <...>.\n' \
                          'Classificação: <...>.\n' \
                          'Classificação de risco: <...>.\n' \
+                         'Conclusão sobre a lesão: <...>.\n' \
                          'Conclusão: <...>.'
 
 SIMPLE_CLASSIFICATION_ANSWER_TEMPLATE = '{}.'
-REPORT_ANSWER_TEMPLATE = 'Lesão elementar: {}.\n' \
-                         'Lesão secundária: {}.\n' \
-                         'Coloração: {}.\n' \
-                         'Morfologia: {}.\n' \
-                         'Tamanho: {}.\n' \
-                         'Classificação: {}.\n' \
+REPORT_ANSWER_TEMPLATE = 'Classificação: {}.\n' \
                          'Classificação de risco: {}.\n' \
+                         'Conclusão sobre a lesão: {}.\n' \
                          'Conclusão: {}.'
 
 ELEMENTARY_LESIONS_DOMAIN = (

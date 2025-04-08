@@ -23,11 +23,6 @@ def format_prompt(prompt_type: defs.PromptType, dataset_analysis: DatasetAnalysi
             prompt_template = defs.REPORT_PROMPT_TEMPLATE
 
             return prompt_template.format(
-                ', '.join(dataset_analysis.elementary_lesions_distribution.classes.keys()),
-                ', '.join(dataset_analysis.secondary_lesions_distribution.classes.keys()),
-                ', '.join(dataset_analysis.coloration_distribution.classes.keys()),
-                ', '.join(dataset_analysis.morphology_distribution.classes.keys()),
-                ', '.join(dataset_analysis.size_distribution.classes.keys()),
                 ', '.join(dataset_analysis.skin_lesion_distribution.classes.keys()),
                 ', '.join(dataset_analysis.risk_distribution.classes.keys())
             )
@@ -49,13 +44,9 @@ def format_answer(prompt_type: defs.PromptType, lesion_data: LesionData) -> str:
             answer_template = defs.REPORT_ANSWER_TEMPLATE
 
             return answer_template.format(
-                ', '.join(lesion_data.report.elementary_lesions),
-                ', '.join(lesion_data.report.secondary_lesions),
-                ', '.join(lesion_data.report.coloration),
-                ', '.join(lesion_data.report.morphology),
-                lesion_data.report.size,
                 lesion_data.report.skin_lesion,
                 lesion_data.report.risk,
+                ', '.join(lesion_data.report.skin_lesion_conclusion),
                 lesion_data.report.conclusion
             )
         case _:
