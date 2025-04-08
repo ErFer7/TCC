@@ -4,8 +4,6 @@ Mensagens.
 
 from os.path import join
 
-from PIL import Image
-
 from scripts.data import DatasetAnalysis, LesionData
 
 import scripts.definitions as defs
@@ -95,7 +93,6 @@ def create_training_message(prompt_type: defs.PromptType,
     '''
 
     image_path = join(defs.DATA_PATH, 'stt_raw_data', 'dataset', 'images', lesion_data.image)
-    image = Image.open(image_path).convert('RGB')
 
     return {
         'messages': [
@@ -107,7 +104,7 @@ def create_training_message(prompt_type: defs.PromptType,
                         'text': format_prompt(prompt_type, dataset_analysis),
                     }, {
                         'type': 'image',
-                        'image': image,
+                        'image': f'file://{image_path}',
                     }
                 ],
             },

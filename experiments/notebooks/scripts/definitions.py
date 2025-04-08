@@ -21,6 +21,7 @@ MODEL_NAME = 'LLaDerm'
 
 STATIC_RANDOM_STATE = 3407
 MAX_TOKENS = 2048
+MAX_IMAGE_SIZE = 1024
 
 # TODO: Melhorar os prompts
 SIMPLE_CLASSIFICATION_PROMPT_TEMPLATE = 'Classifique a lesão de pele na imagem. ' \

@@ -15,7 +15,7 @@ class TrainingHyperparameters(BaseModel):
     '''
 
     base_model_name: str
-    model_name: str
+    trained_model_name: str
     quantization: bool
     prompt_type: PromptType
     version: str
