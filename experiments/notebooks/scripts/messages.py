@@ -42,11 +42,11 @@ def format_answer(prompt_type: defs.PromptType, lesion_data: LesionData) -> str:
 
     match prompt_type:
         case defs.PromptType.SIMPLE_CLASSIFICATION:
-            answer_template = defs.SIMPLE_CLASSIFICATION_PROMPT_TEMPLATE
+            answer_template = defs.SIMPLE_CLASSIFICATION_ANSWER_TEMPLATE
 
             return answer_template.format(lesion_data.report.skin_lesion)
         case defs.PromptType.REPORT:
-            answer_template = defs.REPORT_PROMPT_TEMPLATE
+            answer_template = defs.REPORT_ANSWER_TEMPLATE
 
             return answer_template.format(
                 ', '.join(lesion_data.report.elementary_lesions),
@@ -54,8 +54,9 @@ def format_answer(prompt_type: defs.PromptType, lesion_data: LesionData) -> str:
                 ', '.join(lesion_data.report.coloration),
                 ', '.join(lesion_data.report.morphology),
                 lesion_data.report.size,
-                ', '.join(lesion_data.report.distribution),
-                lesion_data.report.risk
+                lesion_data.report.skin_lesion,
+                lesion_data.report.risk,
+                lesion_data.report.conclusion
             )
         case _:
             raise ValueError(f'Tipo de prompt inválido: {prompt_type}')

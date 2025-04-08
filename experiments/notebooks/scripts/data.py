@@ -57,6 +57,18 @@ class Report(BaseModel):
     risk: str
     skin_lesion: str
     conclusion: str
+    skin_lesion_conclusion: list[str]
+
+
+class SimpleReport(BaseModel):
+    '''
+    Modelo de laudo simples.
+    '''
+
+    skin_lesion: str
+    risk: str
+    conclusion: str
+    skin_lesion_conclusion: list[str]
 
 
 class RawLesionData(BaseModel):
@@ -79,6 +91,16 @@ class LesionData(BaseModel):
     exam_id: int
     image: str
     report: Report
+
+
+class SimpleLesionData(BaseModel):
+    '''
+    Modelo de exame de aproximação estruturado.
+    '''
+
+    exam_id: int
+    image: str
+    report: SimpleReport
 
 
 class ClassCount(BaseModel):
@@ -114,6 +136,18 @@ class DatasetAnalysis(BaseModel):
     distribution_distribution: Distribution
     risk_distribution: Distribution
     skin_lesion_distribution: Distribution
+    skin_lesion_conclusion_distribution: Distribution
+
+
+class SimpleDatasetAnalysis(BaseModel):
+    '''
+    Modelo de análise de dados simples.
+    '''
+
+    total_size: int
+    skin_lesion_distribution: Distribution
+    risk_distribution: Distribution
+    skin_lesion_conclusion_distribution: Distribution
 
 
 def check_string_report_part(report_parts: list[str],
@@ -238,6 +272,7 @@ def parse_report(report_parts: list[str]) -> tuple[Report | None, bool]:
         risk='',
         skin_lesion='',
         conclusion='',
+        skin_lesion_conclusion=[]
     )
 
     while True:
@@ -360,6 +395,7 @@ def analyse_dataset(dataset: list[LesionData],
         distribution_distribution=Distribution(classes_count=0, classes={}),
         risk_distribution=Distribution(classes_count=0, classes={}),
         skin_lesion_distribution=Distribution(classes_count=0, classes={}),
+        skin_lesion_conclusion_distribution=Distribution(classes_count=0, classes={})
     )
 
     lists = (
@@ -367,7 +403,8 @@ def analyse_dataset(dataset: list[LesionData],
         'secondary_lesions',
         'coloration',
         'morphology',
-        'distribution'
+        'distribution',
+        'skin_lesion_conclusion'
     )
 
     strings = (
@@ -389,6 +426,68 @@ def analyse_dataset(dataset: list[LesionData],
                     distribution.classes[value] = ClassCount(count=0, proportion=0.0)
 
                 distribution.classes[value].count += 1
+
+        for data_string in strings:
+            distribution: Distribution = getattr(data_analysis, f'{data_string}_distribution')
+            report_value: str = getattr(report, data_string)
+
+            if report_value not in distribution.classes:
+                distribution.classes_count += 1
+                distribution.classes[report_value] = ClassCount(count=0, proportion=0.0)
+
+            distribution.classes[report_value].count += 1
+
+    for key, distribution in data_analysis.model_dump().items():
+        if key.endswith('_distribution'):
+            classes = distribution['classes']  # type: ignore
+
+            for value in classes:
+                classes[value]['proportion'] = round(classes[value]['count'] / data_analysis.total_size * 100, 3)
+
+            sorted_classes = sorted(classes.items(), key=lambda class_: class_[1]['count'], reverse=True)
+            distribution['classes'] = dict(sorted_classes)  # type: ignore
+            new_distribuition = Distribution(**distribution)  # type: ignore
+
+            setattr(data_analysis, key, new_distribuition)
+
+    if save:
+        with open(join(dataset_path, f'{dataset_name[:-5]}_analysis.json'), 'w', encoding='utf-8') as file:
+            dump(data_analysis.model_dump(), file, indent=4, ensure_ascii=False)
+
+    return data_analysis
+
+
+def analyse_simple_dataset(dataset: list[SimpleLesionData],
+                           dataset_path: str,
+                           dataset_name: str,
+                           save: bool = True) -> SimpleDatasetAnalysis:
+    '''
+    Analisa os dados simples.
+    '''
+
+    data_analysis = SimpleDatasetAnalysis(
+        total_size=len(dataset),
+        skin_lesion_distribution=Distribution(classes_count=0, classes={}),
+        risk_distribution=Distribution(classes_count=0, classes={}),
+        skin_lesion_conclusion_distribution=Distribution(classes_count=0, classes={})
+    )
+
+    strings = (
+        'risk',
+        'skin_lesion'
+    )
+
+    for data in dataset:
+        report = data.report
+
+        for value in report.skin_lesion_conclusion:
+            distribution: Distribution = data_analysis.skin_lesion_conclusion_distribution
+
+            if value not in distribution.classes:
+                distribution.classes_count += 1
+                distribution.classes[value] = ClassCount(count=0, proportion=0.0)
+
+            distribution.classes[value].count += 1
 
         for data_string in strings:
             distribution: Distribution = getattr(data_analysis, f'{data_string}_distribution')

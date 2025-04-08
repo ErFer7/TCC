@@ -139,9 +139,11 @@ def structure_simple_classification_answer(answer: str) -> SimpleClassificationA
 
     valid = False
 
+    # TODO: Melhorar a validação
     for class_ in skin_lesion_classes:
         if class_ in answer:
             valid = True
+            answer = class_
             break
 
     return SimpleClassificationAnswer(

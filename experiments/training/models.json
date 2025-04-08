@@ -5,5 +5,12 @@
         "prompt_type": "simple_classification",
         "version": "3.2",
         "size": 11
+    },
+    "LLaDerm-0.1-11B-4bit-SC": {
+        "local": true,
+        "quantized": true,
+        "prompt_type": "simple_classification",
+        "version": "0.1",
+        "size": 11
     }
 }
