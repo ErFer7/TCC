@@ -9,7 +9,7 @@ from pydantic import BaseModel
 from scripts.definitions import PromptType
 
 
-class TrainingHyperparameters(BaseModel):
+class Training(BaseModel):
     '''
     Hiperparâmetros de treinamento.
     '''
@@ -22,6 +22,8 @@ class TrainingHyperparameters(BaseModel):
     size: int
     peft_hyperparameters: dict[str, Any]
     sft_hyperparameters: dict[str, Any]
+    used_memory: float
+    training_time: int
 
 # TODO: Ideias...
 # def custom_loss(logits, labels):

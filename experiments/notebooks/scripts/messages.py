@@ -84,7 +84,7 @@ def create_training_message(prompt_type: defs.PromptType,
     Formata os dados.
     '''
 
-    image_path = join(defs.DATA_PATH, 'images', lesion_data.image)
+    image_path = join(defs.DATA_PATH, 'stt_data', 'images', lesion_data.image)
 
     return {
         'messages': [
