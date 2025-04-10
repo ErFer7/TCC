@@ -23,4 +23,4 @@ class Training(BaseModel):
     peft_hyperparameters: dict[str, Any]
     sft_hyperparameters: dict[str, Any]
     used_memory: float
-    training_time: int
+    training_time: float
