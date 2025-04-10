@@ -7,11 +7,13 @@ from unicodedata import normalize, combining
 from sklearn.metrics import accuracy_score, confusion_matrix, multilabel_confusion_matrix
 from seaborn import heatmap
 from pydantic import BaseModel
+from tensorboard.backend.event_processing import event_accumulator
 
 import matplotlib.pyplot as plt
+import pandas as pd
 
 from scripts.test import TestResult
-from scripts.data import LesionData
+from scripts.data import SimpleLesionData
 
 import scripts.definitions as defs
 
@@ -24,18 +26,15 @@ class Answer(BaseModel):
     valid: bool
 
 
-class ReportClassification(BaseModel):
+class ReportPrediction(BaseModel):
     '''
     Classificação do laudo. Inclui apenas os campos relevantes para o estudo e de classificação.
     '''
 
-    elementary_lesions: list[str]
-    secondary_lesions: list[str]
-    coloration: list[str]
-    morphology: list[str]
-    size: str
     skin_lesion: str
     risk: str
+    skin_lesion_conclusion: str
+    conclusion: str
 
 
 class SimpleClassificationAnswer(Answer):
@@ -46,12 +45,12 @@ class SimpleClassificationAnswer(Answer):
     skin_lesion: str
 
 
-class ReportAnswer(Answer, ReportClassification):
+class ReportAnswer(Answer, ReportPrediction):
     '''
     Resposta do laudo.
     '''
 
-    conclusion: str
+    pass
 
 
 class InvalidAnswer(Answer):
@@ -90,8 +89,8 @@ class ReportResultPair(BaseModel):
 
     exam_id: int
     image: str
-    answer: ReportClassification
-    expected: ReportClassification
+    answer: ReportPrediction
+    expected: ReportPrediction
 
 
 class TestAnalysis(BaseModel):
@@ -167,73 +166,36 @@ def structure_report_answer(answer: str) -> ReportAnswer | InvalidAnswer:
         if len(label_content_pair) >= 2:
             contents.append(label_content_pair[1].strip())
 
-    elementary_lesions = contents.pop(0) if len(contents) > 0 else ''
-    secondary_lesions = contents.pop(0) if len(contents) > 0 else ''
-    coloration = contents.pop(0) if len(contents) > 0 else ''
-    morphology = contents.pop(0) if len(contents) > 0 else ''
-    size = contents.pop(0) if len(contents) > 0 else ''
     skin_lesion = contents.pop(0) if len(contents) > 0 else ''
     risk = contents.pop(0) if len(contents) > 0 else ''
+    skin_lesion_conclusions = contents.pop(0) if len(contents) > 0 else ''
     conclusion = contents.pop(0) if len(contents) > 0 else ''
 
-    list_domain_pairs = [
-        [elementary_lesions, elementary_lesion_classes],
-        [secondary_lesions, secondary_lesion_classes],
-        [coloration, coloration_classes],
-        [morphology, morphology_classes],
-    ]
-
     value_domain_pairs = [
-        [size, size_classes],
         [skin_lesion, skin_lesion_classes],
         [risk, risk_classes]
     ]
 
-    for i, (content_section, domain) in enumerate(list_domain_pairs):
-        if not valid:
-            break
-
+    for i, (content_section, domain) in enumerate(value_domain_pairs):
         if content_section != '':
-            list_domain_pairs[i][0] = list(map(sanitize_domain_class, content_section.split(',')))
+            value_domain_pairs[i][0] = sanitize_domain_class(content_section)
 
-            for content in list_domain_pairs[i][0]:
-                if content not in domain:
-                    valid = False
-                    break
+            if value_domain_pairs[i][0] not in domain:
+                valid = False
+                break
         else:
             valid = False
             break
 
-    if valid:
-        for i, (content_section, domain) in enumerate(value_domain_pairs):
-            if content_section != '':
-                value_domain_pairs[i][0] = sanitize_domain_class(content_section)
-
-                if value_domain_pairs[i][0] not in domain:
-                    valid = False
-                    break
-            else:
-                valid = False
-                break
-
-    elementary_lesions = list_domain_pairs[0][0]
-    secondary_lesions = list_domain_pairs[1][0]
-    coloration = list_domain_pairs[2][0]
-    morphology = list_domain_pairs[3][0]
-    size = value_domain_pairs[0][0]
-    skin_lesion = value_domain_pairs[1][0]
-    risk = value_domain_pairs[2][0]
+    skin_lesion = value_domain_pairs[0][0]
+    risk = value_domain_pairs[1][0]
 
     if valid:
         return ReportAnswer(
             valid=valid,
-            elementary_lesions=elementary_lesions,
-            secondary_lesions=secondary_lesions,
-            coloration=coloration,
-            morphology=morphology,
-            size=size,
             skin_lesion=skin_lesion,
             risk=risk,
+            skin_lesion_conclusion=skin_lesion_conclusions,
             conclusion=conclusion
         )
     return InvalidAnswer(
@@ -268,7 +230,7 @@ def structure_answers(prompt_type: defs.PromptType, results: list[TestResult]) -
     return sanitized_results
 
 
-def associate_results_with_data(dataset: list[LesionData],
+def associate_results_with_data(dataset: list[SimpleLesionData],
                                 prompt_type: defs.PromptType,
                                 results: list[SanitizedResult]) -> list[SimpleClassificationResultPair |
                                                                         ReportResultPair]:
@@ -286,36 +248,27 @@ def associate_results_with_data(dataset: list[LesionData],
             if result.answer.valid:
                 report_answer: ReportAnswer = result.answer  # type: ignore
 
-                result_answer = ReportClassification(
-                    elementary_lesions=report_answer.elementary_lesions,
-                    secondary_lesions=report_answer.secondary_lesions,
-                    coloration=report_answer.coloration,
-                    morphology=report_answer.morphology,
-                    size=report_answer.size,
+                result_answer = ReportPrediction(
                     skin_lesion=report_answer.skin_lesion,
-                    risk=report_answer.risk
+                    risk=report_answer.risk,
+                    skin_lesion_conclusion=report_answer.skin_lesion_conclusion,
+                    conclusion=report_answer.conclusion
                 )
             else:
-                result_answer = ReportClassification(
-                    elementary_lesions=['incerto'],
-                    secondary_lesions=['incerto'],
-                    coloration=['incerto'],
-                    morphology=['incerto'],
-                    size='incerto',
+                result_answer = ReportPrediction(
                     skin_lesion='incerto',
-                    risk='incerto'
+                    risk='incerto',
+                    skin_lesion_conclusion='',
+                    conclusion=''
                 )
 
             report = dataset_dict[result.exam_id].report
 
-            expected_answer = ReportClassification(
-                elementary_lesions=report.elementary_lesions,
-                secondary_lesions=report.secondary_lesions,
-                coloration=report.coloration,
-                morphology=report.morphology,
-                size=report.size,
+            expected_answer = ReportPrediction(
                 skin_lesion=report.skin_lesion,
-                risk=report.risk
+                risk=report.risk,
+                skin_lesion_conclusion=', '.join(report.skin_lesion_conclusion),
+                conclusion=report.conclusion
             )
 
             result_pair = ReportResultPair(
@@ -472,3 +425,32 @@ def create_multilabel_confusion_matrix(pairs: list[tuple[tuple[str], tuple[str]]
     plt.show()
 
     return accuracy
+
+
+def plot_training_loss(event_file_path: str, save_path: str):
+    '''
+    Plota a loss de treinamento.
+    '''
+
+    events = event_accumulator.EventAccumulator(event_file_path)
+    events.Reload()
+
+    train_loss = []
+    train_steps = []
+
+    for event in events.Scalars('train/loss'):
+        train_steps.append(event.step)
+        train_loss.append(event.value)
+
+    plt.figure(figsize=(10, 6))
+    plt.plot(train_steps, train_loss, label='Loss de treinamento', color='blue')
+    plt.title('Loss de treinamento')
+    plt.xlabel('Passos')
+    plt.ylabel('Loss')
+    plt.grid(True)
+    plt.legend()
+    plt.savefig(save_path, dpi=300, bbox_inches='tight')
+    plt.show()
+
+    print('Estatísticas de loss de treinamento:')
+    print(pd.Series(train_loss).describe())

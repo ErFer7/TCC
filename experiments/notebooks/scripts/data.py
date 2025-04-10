@@ -360,7 +360,7 @@ def parse_report_footnote(report_parts: list[str]) -> dict[int, list[str]]:
     last_lesion = 0
 
     while len(report_parts) > 0:
-        if search(r'Lesão \d+.', report_parts[0]):
+        if search(r'Lesão \d+(.)*', report_parts[0]):
             lesion_conclusion = report_parts.pop(0)
             conclusion_parts = lesion_conclusion.split()
             lesion_number = int(conclusion_parts[1].strip(':'))
@@ -369,9 +369,15 @@ def parse_report_footnote(report_parts: list[str]) -> dict[int, list[str]]:
             if lesion_number not in lesions:
                 lesions[lesion_number] = []
 
-            lesions[lesion_number].append(' '.join(conclusion_parts[2:]))
+            new_part = ' '.join(conclusion_parts[2:])
+
+            if new_part != '':
+                lesions[lesion_number].append(' '.join(conclusion_parts[2:]))
         else:
-            lesions[last_lesion].append(report_parts.pop(0))
+            new_part = report_parts.pop(0)
+
+            if new_part != '':
+                lesions[last_lesion].append(new_part)
 
     return lesions
 
