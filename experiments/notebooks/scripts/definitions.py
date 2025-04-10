@@ -13,8 +13,7 @@ RESULTS_PATH = join('..', 'results')
 TRAINING_PATH = join('..', 'training')
 
 TRAINING_PROPORTION = 0.8
-VALIDATION_PROPORTION = 0.1
-TEST_PROPORTION = 0.1
+TEST_PROPORTION = 0.2
 
 BASE_MODEL_NAME = 'unsloth/Llama-3.2-11B-Vision-Instruct'
 MODEL_NAME = 'LLaDerm'
