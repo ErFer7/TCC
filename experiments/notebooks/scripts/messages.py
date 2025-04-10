@@ -4,12 +4,12 @@ Mensagens.
 
 from os.path import join
 
-from scripts.data import DatasetAnalysis, LesionData
+from scripts.data import SimpleDatasetAnalysis, SimpleLesionData
 
 import scripts.definitions as defs
 
 
-def format_prompt(prompt_type: defs.PromptType, dataset_analysis: DatasetAnalysis) -> str:
+def format_prompt(prompt_type: defs.PromptType, dataset_analysis: SimpleDatasetAnalysis) -> str:
     '''
     Formata o prompt.
     '''
@@ -30,7 +30,7 @@ def format_prompt(prompt_type: defs.PromptType, dataset_analysis: DatasetAnalysi
             raise ValueError(f'Tipo de prompt inválido: {prompt_type}')
 
 
-def format_answer(prompt_type: defs.PromptType, lesion_data: LesionData) -> str:
+def format_answer(prompt_type: defs.PromptType, lesion_data: SimpleLesionData) -> str:
     '''
     Formata a resposta.
     '''
@@ -78,8 +78,8 @@ def add_inference_message(prompt: str, messages: list | None = None) -> list:
 
 
 def create_training_message(prompt_type: defs.PromptType,
-                            lesion_data: LesionData,
-                            dataset_analysis: DatasetAnalysis) -> dict:
+                            lesion_data: SimpleLesionData,
+                            dataset_analysis: SimpleDatasetAnalysis) -> dict:
     '''
     Formata os dados.
     '''
