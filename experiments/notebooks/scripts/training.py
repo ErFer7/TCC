@@ -24,12 +24,3 @@ class Training(BaseModel):
     sft_hyperparameters: dict[str, Any]
     used_memory: float
     training_time: int
-
-# TODO: Ideias...
-# def custom_loss(logits, labels):
-#     loss = F.cross_entropy(logits, labels, reduction="none")
-
-#     # Identify positions of structured fields (e.g., first 6 lines)
-#     structured_positions = (labels < CONCLUSION_START_TOKEN_ID)  # Adjust based on tokenization
-#     loss[structured_positions] *= 3.0  # Amplify loss for structured fields
-#     return loss.mean()
