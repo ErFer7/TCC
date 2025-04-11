@@ -168,5 +168,6 @@ cython_debug/
 .secrets
 experiments/data
 experiments/results
+experiments/training
 experiments/notebooks/outputs
 experiments/notebooks/unsloth_compiled_cache
