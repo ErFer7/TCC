@@ -19,10 +19,14 @@ BASE_MODEL_NAME = 'unsloth/Llama-3.2-11B-Vision-Instruct'
 MODEL_NAME = 'LLaDerm'
 
 STATIC_RANDOM_STATE = 3407
-MAX_TOKENS = 2048
+
+# Com base na estatística dos tokens
+# Mínimo: 638
+# Máximo: 2183
+# Média: 867.7664490205926
+MAX_TOKENS = 2190
 MAX_IMAGE_SIZE = 1024
 
-# TODO: Melhorar os prompts
 SIMPLE_CLASSIFICATION_PROMPT_TEMPLATE = 'Classifique a lesão de pele na imagem. ' \
                                         'Não inclua nenhum comentário extra na resposta além da classificação.\n' \
                                         'As opções de classificação são: {}.'

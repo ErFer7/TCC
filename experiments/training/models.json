@@ -12,5 +12,26 @@
         "prompt_type": "simple_classification",
         "version": "0.1",
         "size": 11
+    },
+    "LLaDerm-0.2-11B": {
+        "local": true,
+        "quantized": false,
+        "prompt_type": "report",
+        "version": "0.2",
+        "size": 11
+    },
+    "LLaDerm-0.2-11B-4bit": {
+        "local": true,
+        "quantized": true,
+        "prompt_type": "report",
+        "version": "0.2",
+        "size": 11
+    },
+    "LLaDerm-0.3-11B": {
+        "local": true,
+        "quantized": false,
+        "prompt_type": "report",
+        "version": "0.3",
+        "size": 11
     }
 }
