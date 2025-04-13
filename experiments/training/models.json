@@ -13,13 +13,6 @@
         "version": "0.1",
         "size": 11
     },
-    "LLaDerm-0.2-11B": {
-        "local": true,
-        "quantized": false,
-        "prompt_type": "report",
-        "version": "0.2",
-        "size": 11
-    },
     "LLaDerm-0.2-11B-4bit": {
         "local": true,
         "quantized": true,
@@ -32,6 +25,90 @@
         "quantized": false,
         "prompt_type": "report",
         "version": "0.3",
+        "size": 11
+    },
+    "LLaDerm-0.3-11B-4bit": {
+        "local": true,
+        "quantized": true,
+        "prompt_type": "report",
+        "version": "0.3",
+        "size": 11
+    },
+    "LLaDerm-0.4-11B-4bit": {
+        "local": true,
+        "quantized": true,
+        "prompt_type": "report",
+        "version": "0.4",
+        "size": 11
+    },
+    "LLaDerm-0.5-11B-4bit": {
+        "local": true,
+        "quantized": true,
+        "prompt_type": "report",
+        "version": "0.5",
+        "size": 11
+    },
+    "LLaDerm-0.7-11B-4bit": {
+        "local": true,
+        "quantized": true,
+        "prompt_type": "report",
+        "version": "0.7",
+        "size": 11
+    },
+    "LLaDerm-0.6-11B-4bit": {
+        "local": true,
+        "quantized": true,
+        "prompt_type": "report",
+        "version": "0.6",
+        "size": 11
+    },
+    "LLaDerm-0.8-11B-4bit": {
+        "local": true,
+        "quantized": true,
+        "prompt_type": "report",
+        "version": "0.8",
+        "size": 11
+    },
+    "LLaDerm-0.9-11B-4bit": {
+        "local": true,
+        "quantized": true,
+        "prompt_type": "report",
+        "version": "0.9",
+        "size": 11
+    },
+    "LLaDerm-0.10-11B-4bit": {
+        "local": true,
+        "quantized": true,
+        "prompt_type": "report",
+        "version": "0.10",
+        "size": 11
+    },
+    "LLaDerm-0.11-11B-4bit": {
+        "local": true,
+        "quantized": true,
+        "prompt_type": "report",
+        "version": "0.11",
+        "size": 11
+    },
+    "LLaDerm-0.12-11B-4bit": {
+        "local": true,
+        "quantized": true,
+        "prompt_type": "report",
+        "version": "0.12",
+        "size": 11
+    },
+    "LLaDerm-0.13-11B-4bit": {
+        "local": true,
+        "quantized": true,
+        "prompt_type": "report",
+        "version": "0.13",
+        "size": 11
+    },
+    "LLaDerm-0.14-11B-4bit": {
+        "local": true,
+        "quantized": true,
+        "prompt_type": "report",
+        "version": "0.14",
         "size": 11
     }
 }

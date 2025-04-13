@@ -4,7 +4,7 @@ Análise de resultados.
 
 from unicodedata import normalize, combining
 
-from sklearn.metrics import accuracy_score, confusion_matrix, multilabel_confusion_matrix
+from sklearn.metrics import accuracy_score, confusion_matrix
 from seaborn import heatmap
 from pydantic import BaseModel
 from tensorboard.backend.event_processing import event_accumulator
@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 from scripts.test import TestResult
-from scripts.data import SimpleLesionData
+from scripts.data import SimpleLesionData, ClassCount
 
 import scripts.definitions as defs
 
@@ -264,9 +264,10 @@ def associate_results_with_data(dataset: list[SimpleLesionData],
 
             report = dataset_dict[result.exam_id].report
 
+            # TODO: Repensar nesse nome
             expected_answer = ReportPrediction(
-                skin_lesion=report.skin_lesion,
-                risk=report.risk,
+                skin_lesion=sanitize_domain_class(report.skin_lesion),
+                risk=sanitize_domain_class(report.risk),
                 skin_lesion_conclusion=', '.join(report.skin_lesion_conclusion),
                 conclusion=report.conclusion
             )
@@ -306,26 +307,59 @@ def associate_results_with_data(dataset: list[SimpleLesionData],
 
 
 def get_label_pairs(result_pairs: list[SimpleClassificationResultPair | ReportResultPair],
-                    attribute_name: str) -> list[tuple[str, str]] | list[tuple[list[str], list[str]]]:
+                    attribute_name: str) -> list[tuple[str, str]]:
     '''
-    Obtém os pares de resultados. Os pares podem ser multilabel ou não.
+    Obtém os pares de resultados.
     '''
 
     pairs = []
 
     for result in result_pairs:
-        answer = result.answer if isinstance(result.answer, str) else getattr(result.answer, attribute_name)
         expected = result.expected if isinstance(result.expected, str) else getattr(result.expected, attribute_name)
+        answer = result.answer if isinstance(result.answer, str) else getattr(result.answer, attribute_name)
 
-        if isinstance(answer, list):
-            answer = sorted(answer)
-
-        if isinstance(expected, list):
-            expected = sorted(expected)
-
-        pairs.append((answer, expected))
+        pairs.append((expected, answer))
 
     return pairs
+
+
+def split_pairs(pairs: list[tuple[str, str]],
+                classes: dict[str, ClassCount],
+                most_frequent_classes_count: int) -> tuple[list[tuple[str, str]],
+                                                           list[tuple[str, str]],
+                                                           list[str],
+                                                           list[str]]:
+    '''
+    Divide os pares pela frequência das labels
+    '''
+
+    class_items = sorted(classes.items(), key=lambda item: item[1].count, reverse=True)
+    most_frequent_classes = list(map(lambda x: sanitize_domain_class(x[0]),
+                                     class_items[:most_frequent_classes_count]))
+    least_frequent_classes = list(map(lambda x: sanitize_domain_class(x[0]),
+                                      class_items[most_frequent_classes_count:]))
+
+    most_frequent_label_pairs = []
+    least_frequent_label_pairs = []
+
+    for pair in pairs:
+        if pair[1] in most_frequent_classes:
+            most_frequent_label_pairs.append(pair)
+        else:
+            least_frequent_label_pairs.append(pair)
+
+    return most_frequent_label_pairs, least_frequent_label_pairs, most_frequent_classes, least_frequent_classes
+
+
+def calculate_accuracy(pairs: list[tuple[str, str]]) -> float:
+    '''
+    Calcula a acurácia.
+    '''
+
+    y_true = [pair[0] for pair in pairs]
+    x_predicted = [pair[1] for pair in pairs]
+
+    return float(accuracy_score(y_true, x_predicted))
 
 
 def create_confusion_matrix(pairs: list[tuple[str, str]], labels: list[str], title: str, save_path: str):
@@ -360,71 +394,6 @@ def create_confusion_matrix(pairs: list[tuple[str, str]], labels: list[str], tit
     plt.tight_layout()
     plt.savefig(save_path, dpi=300)
     plt.show()
-
-    return accuracy
-
-
-# TODO: Refatorar
-def create_multilabel_confusion_matrix(pairs: list[tuple[tuple[str], tuple[str]]],
-                                       labels: list[str],
-                                       title: str,
-                                       save_path: str):
-    '''
-    Calcula a acurácia e cria uma visualização da matriz de confusão multilabel normalizada.
-    '''
-
-    y_true = [pair[0] for pair in pairs]
-    x_predicted = [pair[1] for pair in pairs]
-
-    accuracy = accuracy_score(y_true, x_predicted)
-
-    cm = multilabel_confusion_matrix(y_true, x_predicted, labels=labels)
-
-    # Configure the subplot grid for multiple confusion matrices
-    n_labels = len(labels)
-    n_cols = min(3, n_labels)
-    n_rows = (n_labels + n_cols - 1) // n_cols  # Ceiling division
-
-    fig, axes = plt.subplots(n_rows, n_cols, figsize=(15, 4 * n_rows))
-    axes = axes.flatten() if n_labels > 1 else [axes]
-
-    # Create a confusion matrix for each label
-    for i, (label, matrix) in enumerate(zip(labels, cm)):
-        # Each multilabel confusion matrix has format:
-        # [[TN, FP], [FN, TP]]
-        # We need to normalize to get percentages
-        total = matrix.sum()
-        if total > 0:
-            matrix_normalized = matrix / total
-        else:
-            matrix_normalized = matrix
-
-        # Create heatmap for this label
-        heat_map = heatmap(matrix_normalized,
-                           annot=True,
-                           fmt='.1%',
-                           cmap='Blues',
-                           xticklabels=['Negative', 'Positive'],
-                           yticklabels=['Negative', 'Positive'],
-                           ax=axes[i],
-                           vmin=0,
-                           vmax=1)
-
-        axes[i].set_title(f'Classe: {label}')
-        axes[i].set_xlabel('Previsto')
-        axes[i].set_ylabel('Verdadeiro')
-
-    # Hide any unused subplots
-    for j in range(i + 1, len(axes)):
-        axes[j].set_visible(False)
-
-    # Add overall title and adjust layout
-    fig.suptitle(f'{title}\nAcurácia: {accuracy:.2%}', fontsize=16)
-    plt.tight_layout(rect=[0, 0, 1, 0.96])  # Make room for the suptitle
-    plt.savefig(save_path, dpi=300)
-    plt.show()
-
-    return accuracy
 
 
 def plot_training_loss(event_file_path: str, save_path: str):
