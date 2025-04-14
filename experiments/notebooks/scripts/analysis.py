@@ -243,6 +243,10 @@ def associate_results_with_data(dataset: list[SimpleLesionData],
 
     if prompt_type == defs.PromptType.REPORT:
         for result in results:
+            if result.exam_id not in dataset_dict:
+                continue
+
+            report = dataset_dict[result.exam_id].report
             result_answer = None
 
             if result.answer.valid:
@@ -261,8 +265,6 @@ def associate_results_with_data(dataset: list[SimpleLesionData],
                     skin_lesion_conclusion='',
                     conclusion=''
                 )
-
-            report = dataset_dict[result.exam_id].report
 
             # TODO: Repensar nesse nome
             expected_answer = ReportPrediction(

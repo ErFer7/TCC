@@ -110,5 +110,26 @@
         "prompt_type": "report",
         "version": "0.14",
         "size": 11
+    },
+    "LLaDerm-0.15-11B-4bit": {
+        "local": true,
+        "quantized": true,
+        "prompt_type": "report",
+        "version": "0.15",
+        "size": 11
+    },
+    "LLaDerm-0.16-11B-4bit": {
+        "local": true,
+        "quantized": true,
+        "prompt_type": "report",
+        "version": "0.16",
+        "size": 11
+    },
+    "LLaDerm-0.17-11B-4bit": {
+        "local": true,
+        "quantized": true,
+        "prompt_type": "report",
+        "version": "0.17",
+        "size": 11
     }
 }
