@@ -4,7 +4,7 @@ Análise de resultados.
 
 from unicodedata import normalize, combining
 
-from sklearn.metrics import accuracy_score, confusion_matrix
+from sklearn.metrics import accuracy_score, confusion_matrix, precision_score, recall_score, f1_score
 from seaborn import heatmap
 from pydantic import BaseModel
 from tensorboard.backend.event_processing import event_accumulator
@@ -26,6 +26,7 @@ class Answer(BaseModel):
     valid: bool
 
 
+# TODO: Repensar nesse nome
 class ReportPrediction(BaseModel):
     '''
     Classificação do laudo. Inclui apenas os campos relevantes para o estudo e de classificação.
@@ -49,8 +50,6 @@ class ReportAnswer(Answer, ReportPrediction):
     '''
     Resposta do laudo.
     '''
-
-    pass
 
 
 class InvalidAnswer(Answer):
@@ -138,7 +137,6 @@ def structure_simple_classification_answer(answer: str) -> SimpleClassificationA
 
     valid = False
 
-    # TODO: Melhorar a validação
     for class_ in skin_lesion_classes:
         if class_ in answer:
             valid = True
@@ -266,7 +264,6 @@ def associate_results_with_data(dataset: list[SimpleLesionData],
                     conclusion=''
                 )
 
-            # TODO: Repensar nesse nome
             expected_answer = ReportPrediction(
                 skin_lesion=sanitize_domain_class(report.skin_lesion),
                 risk=sanitize_domain_class(report.risk),
@@ -364,7 +361,40 @@ def calculate_accuracy(pairs: list[tuple[str, str]]) -> float:
     return float(accuracy_score(y_true, x_predicted))
 
 
-def create_confusion_matrix(pairs: list[tuple[str, str]], labels: list[str], title: str, save_path: str):
+def calculate_precision(pairs: list[tuple[str, str]]) -> float:
+    '''
+    Calcula a precisão.
+    '''
+
+    y_true = [pair[0] for pair in pairs]
+    x_predicted = [pair[1] for pair in pairs]
+
+    return float(precision_score(y_true, x_predicted, average='weighted', zero_division=0))
+
+
+def calculate_recall(pairs: list[tuple[str, str]]) -> float:
+    '''
+    Calcula o recall.
+    '''
+
+    y_true = [pair[0] for pair in pairs]
+    x_predicted = [pair[1] for pair in pairs]
+
+    return float(recall_score(y_true, x_predicted, average='weighted', zero_division=0))
+
+
+def calculate_f1(pairs: list[tuple[str, str]]) -> float:
+    '''
+    Calcula o f1-score.
+    '''
+
+    y_true = [pair[0] for pair in pairs]
+    x_predicted = [pair[1] for pair in pairs]
+
+    return float(f1_score(y_true, x_predicted, average='weighted', zero_division=0))
+
+
+def create_confusion_matrix(pairs: list[tuple[str, str]], labels: list[str], title: str, save_path: str) -> None:
     '''
     Calcula a acurácia e cria uma visualização da matriz de confusão normalizada.
     '''
@@ -378,7 +408,7 @@ def create_confusion_matrix(pairs: list[tuple[str, str]], labels: list[str], tit
 
     plt.figure(figsize=(12, 10))
     heat_map = heatmap(cm,
-                       annot=True,
+                       annot=False,  # TODO: Rever
                        fmt='.1%',
                        cmap='Blues',
                        xticklabels=labels,
@@ -398,7 +428,7 @@ def create_confusion_matrix(pairs: list[tuple[str, str]], labels: list[str], tit
     plt.show()
 
 
-def plot_training_loss(event_file_path: str, save_path: str):
+def plot_training_loss(event_file_path: str, save_path: str) -> None:
     '''
     Plota a loss de treinamento.
     '''
