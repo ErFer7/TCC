@@ -2,6 +2,8 @@
 Análise de resultados.
 '''
 
+# TODO: Colocar tudo nos módulos corretos
+
 from unicodedata import normalize, combining
 
 from sklearn.metrics import accuracy_score, confusion_matrix, precision_score, recall_score, f1_score
@@ -14,6 +16,7 @@ import pandas as pd
 
 from scripts.test import TestResult
 from scripts.data import SimpleLesionData, ClassCount
+from scripts.messages import format_answer
 
 import scripts.definitions as defs
 
@@ -26,18 +29,6 @@ class Answer(BaseModel):
     valid: bool
 
 
-# TODO: Repensar nesse nome
-class ReportPrediction(BaseModel):
-    '''
-    Classificação do laudo. Inclui apenas os campos relevantes para o estudo e de classificação.
-    '''
-
-    skin_lesion: str
-    risk: str
-    skin_lesion_conclusion: str
-    conclusion: str
-
-
 class SimpleClassificationAnswer(Answer):
     '''
     Resposta da classificação simples.
@@ -46,7 +37,16 @@ class SimpleClassificationAnswer(Answer):
     skin_lesion: str
 
 
-class ReportAnswer(Answer, ReportPrediction):
+class ReportClassification(BaseModel):
+    '''
+    Classificação do laudo. Inclui apenas os campos relevantes para o estudo e de classificação.
+    '''
+
+    skin_lesion: str
+    risk: str
+
+
+class ReportClassificationAnswer(Answer, ReportClassification):
     '''
     Resposta do laudo.
     '''
@@ -60,19 +60,19 @@ class InvalidAnswer(Answer):
     answer: str
 
 
-class SanitizedResult(BaseModel):
+class AnswerResult(BaseModel):
     '''
-    Resultado sanitizado.
+    Resultado.
     '''
 
     exam_id: int
     image: str
-    answer: SimpleClassificationAnswer | ReportAnswer | InvalidAnswer
+    answer: SimpleClassificationAnswer | ReportClassificationAnswer | InvalidAnswer
 
 
-class SimpleClassificationResultPair(BaseModel):
+class SimpleResultPair(BaseModel):
     '''
-    Par de resultados da classificação simples.
+    Par de resultados.
     '''
 
     exam_id: int
@@ -81,15 +81,21 @@ class SimpleClassificationResultPair(BaseModel):
     expected: str
 
 
-class ReportResultPair(BaseModel):
+class SimpleClassificationResultPair(SimpleResultPair):
+    '''
+    Par de resultados da classificação simples.
+    '''
+
+
+class ReportClassificationResultPair(BaseModel):
     '''
     Par de resultados do laudo.
     '''
 
     exam_id: int
     image: str
-    answer: ReportPrediction
-    expected: ReportPrediction
+    answer: ReportClassification
+    expected: ReportClassification
 
 
 class TestAnalysis(BaseModel):
@@ -98,10 +104,10 @@ class TestAnalysis(BaseModel):
     '''
 
     test_name: str
-    valid_results_on_test_data: list[SanitizedResult]
-    valid_results_on_training_data: list[SanitizedResult]
-    invalid_results_on_test_data: list[SanitizedResult]
-    invalid_results_on_training_data: list[SanitizedResult]
+    valid_results_on_test_data: list[AnswerResult]
+    valid_results_on_training_data: list[AnswerResult]
+    invalid_results_on_test_data: list[AnswerResult]
+    invalid_results_on_training_data: list[AnswerResult]
 
 
 def sanitize_domain_class(domain_class: str) -> str:
@@ -132,16 +138,10 @@ def structure_simple_classification_answer(answer: str) -> SimpleClassificationA
     Estrutura a resposta.
     '''
 
-    answer = answer.strip()
-    answer = sanitize_domain_class(answer)
+    answer = answer.strip().strip('.')
+    sanitized_answer = sanitize_domain_class(answer)
 
-    valid = False
-
-    for class_ in skin_lesion_classes:
-        if class_ in answer:
-            valid = True
-            answer = class_
-            break
+    valid = sanitized_answer in skin_lesion_classes
 
     return SimpleClassificationAnswer(
         valid=valid,
@@ -149,89 +149,88 @@ def structure_simple_classification_answer(answer: str) -> SimpleClassificationA
     )
 
 
-def structure_report_answer(answer: str) -> ReportAnswer | InvalidAnswer:
+def structure_report_classification_answer(answer: str) -> ReportClassificationAnswer | InvalidAnswer:
     '''
     Estrutura a resposta.
     '''
 
-    valid = True
     answer_parts = answer.splitlines()
-    contents = []
 
-    for part in answer_parts:
-        label_content_pair = part.split(':', 1)
+    skin_lesion = answer_parts[0].split(':', 1)[1].strip().strip('.')
+    risk = answer_parts[1].split(':', 1)[1].strip().strip('.')
 
-        if len(label_content_pair) >= 2:
-            contents.append(label_content_pair[1].strip())
+    sanitized_skin_lesion = sanitize_domain_class(skin_lesion)
+    sanitized_risk = sanitize_domain_class(risk)
 
-    skin_lesion = contents.pop(0) if len(contents) > 0 else ''
-    risk = contents.pop(0) if len(contents) > 0 else ''
-    skin_lesion_conclusions = contents.pop(0) if len(contents) > 0 else ''
-    conclusion = contents.pop(0) if len(contents) > 0 else ''
-
-    value_domain_pairs = [
-        [skin_lesion, skin_lesion_classes],
-        [risk, risk_classes]
-    ]
-
-    for i, (content_section, domain) in enumerate(value_domain_pairs):
-        if content_section != '':
-            value_domain_pairs[i][0] = sanitize_domain_class(content_section)
-
-            if value_domain_pairs[i][0] not in domain:
-                valid = False
-                break
-        else:
-            valid = False
-            break
-
-    skin_lesion = value_domain_pairs[0][0]
-    risk = value_domain_pairs[1][0]
-
-    if valid:
-        return ReportAnswer(
-            valid=valid,
+    if sanitized_skin_lesion in skin_lesion_classes and sanitized_risk in risk_classes:
+        return ReportClassificationAnswer(
+            valid=True,
             skin_lesion=skin_lesion,
-            risk=risk,
-            skin_lesion_conclusion=skin_lesion_conclusions,
-            conclusion=conclusion
+            risk=risk
         )
+
     return InvalidAnswer(
-        valid=valid,
+        valid=False,
         answer=answer
     )
 
 
-def structure_answers(prompt_type: defs.PromptType, results: list[TestResult]) -> list[SanitizedResult]:
+def structure_classification_results(prompt_type: defs.PromptType, results: list[TestResult]) -> list[AnswerResult]:
     '''
     Estrutura as respostas.
     '''
 
-    sanitized_results = []
+    answer_results = []
 
     for result in results:
         answer = None
 
         if prompt_type == defs.PromptType.REPORT:
-            answer = structure_report_answer(result.answer)
+            answer = structure_report_classification_answer(result.answer)
         else:
             answer = structure_simple_classification_answer(result.answer)
 
-        sanitized_result = SanitizedResult(
+        answer_result = AnswerResult(
             exam_id=result.exam_id,
             image=result.image,
             answer=answer
         )
 
-        sanitized_results.append(sanitized_result)
+        answer_results.append(answer_result)
 
-    return sanitized_results
+    return answer_results
 
 
-def associate_results_with_data(dataset: list[SimpleLesionData],
-                                prompt_type: defs.PromptType,
-                                results: list[SanitizedResult]) -> list[SimpleClassificationResultPair |
-                                                                        ReportResultPair]:
+def associate_simple_results_with_data(dataset: list[SimpleLesionData],
+                                       prompt_type: defs.PromptType,
+                                       results: list[TestResult]) -> list[SimpleResultPair]:
+    '''
+    Associa os resultados com os dados.
+    '''
+
+    dataset_dict = {lesion_data.exam_id: lesion_data for lesion_data in dataset}
+    result_pairs = []
+
+    for result in results:
+        if result.exam_id not in dataset_dict:
+            continue
+
+        result_pair = SimpleResultPair(
+            exam_id=result.exam_id,
+            image=result.image,
+            answer=result.answer,
+            expected=format_answer(prompt_type, dataset_dict[result.exam_id])
+        )
+
+        result_pairs.append(result_pair)
+
+    return result_pairs
+
+
+def associate_classification_results_with_data(dataset: list[SimpleLesionData],
+                                               prompt_type: defs.PromptType,
+                                               results: list[AnswerResult]) -> list[SimpleClassificationResultPair |
+                                                                                    ReportClassificationResultPair]:
     '''
     Associa os resultados com os dados.
     '''
@@ -248,30 +247,24 @@ def associate_results_with_data(dataset: list[SimpleLesionData],
             result_answer = None
 
             if result.answer.valid:
-                report_answer: ReportAnswer = result.answer  # type: ignore
+                report_answer: ReportClassificationAnswer = result.answer  # type: ignore
 
-                result_answer = ReportPrediction(
+                result_answer = ReportClassification(
                     skin_lesion=report_answer.skin_lesion,
-                    risk=report_answer.risk,
-                    skin_lesion_conclusion=report_answer.skin_lesion_conclusion,
-                    conclusion=report_answer.conclusion
+                    risk=report_answer.risk
                 )
             else:
-                result_answer = ReportPrediction(
+                result_answer = ReportClassification(
                     skin_lesion='incerto',
-                    risk='incerto',
-                    skin_lesion_conclusion='',
-                    conclusion=''
+                    risk='incerto'
                 )
 
-            expected_answer = ReportPrediction(
-                skin_lesion=sanitize_domain_class(report.skin_lesion),
-                risk=sanitize_domain_class(report.risk),
-                skin_lesion_conclusion=', '.join(report.skin_lesion_conclusion),
-                conclusion=report.conclusion
+            expected_answer = ReportClassification(
+                skin_lesion=report.skin_lesion,
+                risk=report.risk
             )
 
-            result_pair = ReportResultPair(
+            result_pair = ReportClassificationResultPair(
                 exam_id=result.exam_id,
                 image=result.image,
                 answer=result_answer,
@@ -291,7 +284,7 @@ def associate_results_with_data(dataset: list[SimpleLesionData],
                 else:
                     result_answer = 'incerto'
 
-                expected_answer = sanitize_domain_class(dataset_dict[result.exam_id].report.skin_lesion)
+                expected_answer = dataset_dict[result.exam_id].report.skin_lesion
 
                 result_pair = SimpleClassificationResultPair(
                     exam_id=result.exam_id,
@@ -305,10 +298,10 @@ def associate_results_with_data(dataset: list[SimpleLesionData],
     return result_pairs
 
 
-def get_label_pairs(result_pairs: list[SimpleClassificationResultPair | ReportResultPair],
+def get_label_pairs(result_pairs: list[SimpleClassificationResultPair | ReportClassificationResultPair],
                     attribute_name: str) -> list[tuple[str, str]]:
     '''
-    Obtém os pares de resultados.
+    Obtém os pares de resultados: (Esperado, Previsto).
     '''
 
     pairs = []
@@ -394,7 +387,12 @@ def calculate_f1(pairs: list[tuple[str, str]]) -> float:
     return float(f1_score(y_true, x_predicted, average='weighted', zero_division=0))
 
 
-def create_confusion_matrix(pairs: list[tuple[str, str]], labels: list[str], title: str, save_path: str) -> None:
+def create_confusion_matrix(pairs: list[tuple[str, str]],
+                            labels: list[str],
+                            title: str,
+                            save_path: str,
+                            annotate: bool = True,
+                            format_: str = '.1%') -> None:
     '''
     Calcula a acurácia e cria uma visualização da matriz de confusão normalizada.
     '''
@@ -408,8 +406,8 @@ def create_confusion_matrix(pairs: list[tuple[str, str]], labels: list[str], tit
 
     plt.figure(figsize=(12, 10))
     heat_map = heatmap(cm,
-                       annot=False,  # TODO: Rever
-                       fmt='.1%',
+                       annot=annotate,
+                       fmt=format_,
                        cmap='Blues',
                        xticklabels=labels,
                        yticklabels=labels,

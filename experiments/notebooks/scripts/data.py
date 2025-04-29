@@ -7,6 +7,7 @@ from json import dump
 from re import search
 
 from pydantic import BaseModel
+import matplotlib.pyplot as plt
 
 import scripts.definitions as defs
 
@@ -523,3 +524,113 @@ def analyse_simple_dataset(dataset: list[SimpleLesionData],
             dump(data_analysis.model_dump(), file, indent=4, ensure_ascii=False)
 
     return data_analysis
+
+
+def get_skin_lesions_numeric_labels_dict(simple_dataset_analysis: SimpleDatasetAnalysis) -> dict[str, str]:
+    '''
+    Retorna os rótulos numéricos das lesões de pele.
+    '''
+
+    labels = {}
+
+    items = list(simple_dataset_analysis.skin_lesion_distribution.classes.items())
+    items.sort(key=lambda item: item[1].count, reverse=True)
+
+    for i, (key, _) in enumerate(items):
+        labels[key] = str(i + 1)
+
+    return labels
+
+
+def get_risk_labels_dict(simple_dataset_analysis: SimpleDatasetAnalysis) -> dict[str, str]:
+    '''
+    Retorna os rótulos numéricos dos riscos.
+    '''
+
+    labels = {}
+
+    items = list(simple_dataset_analysis.risk_distribution.classes.items())
+    items.sort(key=lambda item: item[1].count, reverse=True)
+
+    for i, (key, _) in enumerate(items):
+        labels[key] = key.split()[0]
+
+    return labels
+
+
+def plot_skin_lesion_distribution(simple_dataset_analysis: SimpleDatasetAnalysis,
+                                  save_path: str | None = None) -> None:
+    '''
+    Plota a distribuição das lesões de pele.
+    '''
+
+    plt.style.use('tableau-colorblind10')
+
+    _, ax = plt.subplots(figsize=(10, 8))
+
+    distribution = simple_dataset_analysis.skin_lesion_distribution
+    skin_lesions_numeric_labels_dict = get_skin_lesions_numeric_labels_dict(simple_dataset_analysis)
+
+    categories = list(reversed(distribution.classes.keys()))
+    counts = [distribution.classes[category].count for category in categories]
+    percentages = [distribution.classes[category].proportion for category in categories]
+    y_positions = range(len(categories))
+    labels = [skin_lesions_numeric_labels_dict[category] for category in categories]
+
+    ax.barh(y_positions, counts, align='center')
+    ax.set_xmargin(0.125)
+    ax.set_yticks(y_positions)
+    ax.set_yticklabels(labels)
+
+    for i, (count, percentage) in enumerate(zip(counts, percentages)):
+        ax.text(count + max(counts) * 0.01,
+                i,
+                f'{count} ({percentage:.1f}%)',
+                va='center', fontsize=9)
+
+    ax.set_xlabel('Quantidade')
+    ax.set_title('Distribuição das Lesões de Pele')
+
+    plt.tight_layout()
+
+    if save_path is not None:
+        plt.savefig(save_path, bbox_inches='tight', dpi=300)
+
+
+def plot_risk_distribution(simple_dataset_analysis: SimpleDatasetAnalysis,
+                           save_path: str | None = None) -> None:
+    '''
+    Plota a distribuição das lesões de pele.
+    '''
+
+    plt.style.use('tableau-colorblind10')
+
+    _, ax = plt.subplots(figsize=(10, 4))
+
+    distribution = simple_dataset_analysis.risk_distribution
+    risk_labels_dict = get_risk_labels_dict(simple_dataset_analysis)
+
+    categories = list(reversed(distribution.classes.keys()))
+    counts = [distribution.classes[category].count for category in categories]
+    percentages = [distribution.classes[category].proportion for category in categories]
+    y_positions = range(len(categories))
+    labels = [risk_labels_dict[category] for category in categories]
+
+    ax.barh(y_positions, counts, align='center')
+    ax.set_xmargin(0.125)
+    ax.set_yticks(y_positions)
+    ax.set_yticklabels(labels)
+
+    for i, (count, percentage) in enumerate(zip(counts, percentages)):
+        ax.text(count + max(counts) * 0.01,
+                i,
+                f'{count} ({percentage:.1f}%)',
+                va='center', fontsize=9)
+
+    ax.set_xlabel('Quantidade')
+    ax.set_title('Distribuição das classificações de risco')
+
+    plt.tight_layout()
+
+    if save_path is not None:
+        plt.savefig(save_path, bbox_inches='tight', dpi=300)

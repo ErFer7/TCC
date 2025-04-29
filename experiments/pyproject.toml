@@ -20,6 +20,8 @@ packaging = "^24.2"
 setuptools = "^78.1.0"
 wheel = "^0.45.1"
 scikit-learn = "^1.6.1"
+nltk = "^3.9.1"
+rouge-score = "^0.1.2"
 
 [tool.poetry.dev-dependencies]
 
