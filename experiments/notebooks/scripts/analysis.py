@@ -2,16 +2,21 @@
 Análise de resultados.
 '''
 
+# TODO: Colocar tudo nos módulos corretos
+
 from unicodedata import normalize, combining
 
-from sklearn.metrics import accuracy_score, confusion_matrix, multilabel_confusion_matrix
+from sklearn.metrics import accuracy_score, confusion_matrix, precision_score, recall_score, f1_score
 from seaborn import heatmap
 from pydantic import BaseModel
+from tensorboard.backend.event_processing import event_accumulator
 
 import matplotlib.pyplot as plt
+import pandas as pd
 
 from scripts.test import TestResult
-from scripts.data import LesionData
+from scripts.data import SimpleLesionData, ClassCount
+from scripts.messages import format_answer
 
 import scripts.definitions as defs
 
@@ -24,20 +29,6 @@ class Answer(BaseModel):
     valid: bool
 
 
-class ReportClassification(BaseModel):
-    '''
-    Classificação do laudo. Inclui apenas os campos relevantes para o estudo e de classificação.
-    '''
-
-    elementary_lesions: list[str]
-    secondary_lesions: list[str]
-    coloration: list[str]
-    morphology: list[str]
-    size: str
-    skin_lesion: str
-    risk: str
-
-
 class SimpleClassificationAnswer(Answer):
     '''
     Resposta da classificação simples.
@@ -46,12 +37,19 @@ class SimpleClassificationAnswer(Answer):
     skin_lesion: str
 
 
-class ReportAnswer(Answer, ReportClassification):
+class ReportClassification(BaseModel):
+    '''
+    Classificação do laudo. Inclui apenas os campos relevantes para o estudo e de classificação.
+    '''
+
+    skin_lesion: str
+    risk: str
+
+
+class ReportClassificationAnswer(Answer, ReportClassification):
     '''
     Resposta do laudo.
     '''
-
-    conclusion: str
 
 
 class InvalidAnswer(Answer):
@@ -62,19 +60,19 @@ class InvalidAnswer(Answer):
     answer: str
 
 
-class SanitizedResult(BaseModel):
+class AnswerResult(BaseModel):
     '''
-    Resultado sanitizado.
+    Resultado.
     '''
 
     exam_id: int
     image: str
-    answer: SimpleClassificationAnswer | ReportAnswer | InvalidAnswer
+    answer: SimpleClassificationAnswer | ReportClassificationAnswer | InvalidAnswer
 
 
-class SimpleClassificationResultPair(BaseModel):
+class SimpleResultPair(BaseModel):
     '''
-    Par de resultados da classificação simples.
+    Par de resultados.
     '''
 
     exam_id: int
@@ -83,7 +81,13 @@ class SimpleClassificationResultPair(BaseModel):
     expected: str
 
 
-class ReportResultPair(BaseModel):
+class SimpleClassificationResultPair(SimpleResultPair):
+    '''
+    Par de resultados da classificação simples.
+    '''
+
+
+class ReportClassificationResultPair(BaseModel):
     '''
     Par de resultados do laudo.
     '''
@@ -100,10 +104,10 @@ class TestAnalysis(BaseModel):
     '''
 
     test_name: str
-    valid_results_on_test_data: list[SanitizedResult]
-    valid_results_on_training_data: list[SanitizedResult]
-    invalid_results_on_test_data: list[SanitizedResult]
-    invalid_results_on_training_data: list[SanitizedResult]
+    valid_results_on_test_data: list[AnswerResult]
+    valid_results_on_training_data: list[AnswerResult]
+    invalid_results_on_test_data: list[AnswerResult]
+    invalid_results_on_training_data: list[AnswerResult]
 
 
 def sanitize_domain_class(domain_class: str) -> str:
@@ -134,15 +138,10 @@ def structure_simple_classification_answer(answer: str) -> SimpleClassificationA
     Estrutura a resposta.
     '''
 
-    answer = answer.strip()
-    answer = sanitize_domain_class(answer)
+    answer = answer.strip().strip('.')
+    sanitized_answer = sanitize_domain_class(answer)
 
-    valid = False
-
-    for class_ in skin_lesion_classes:
-        if class_ in answer:
-            valid = True
-            break
+    valid = sanitized_answer in skin_lesion_classes
 
     return SimpleClassificationAnswer(
         valid=valid,
@@ -150,173 +149,122 @@ def structure_simple_classification_answer(answer: str) -> SimpleClassificationA
     )
 
 
-def structure_report_answer(answer: str) -> ReportAnswer | InvalidAnswer:
+def structure_report_classification_answer(answer: str) -> ReportClassificationAnswer | InvalidAnswer:
     '''
     Estrutura a resposta.
     '''
 
-    valid = True
     answer_parts = answer.splitlines()
-    contents = []
 
-    for part in answer_parts:
-        label_content_pair = part.split(':', 1)
+    skin_lesion = answer_parts[0].split(':', 1)[1].strip().strip('.')
+    risk = answer_parts[1].split(':', 1)[1].strip().strip('.')
 
-        if len(label_content_pair) >= 2:
-            contents.append(label_content_pair[1].strip())
+    sanitized_skin_lesion = sanitize_domain_class(skin_lesion)
+    sanitized_risk = sanitize_domain_class(risk)
 
-    elementary_lesions = contents.pop(0) if len(contents) > 0 else ''
-    secondary_lesions = contents.pop(0) if len(contents) > 0 else ''
-    coloration = contents.pop(0) if len(contents) > 0 else ''
-    morphology = contents.pop(0) if len(contents) > 0 else ''
-    size = contents.pop(0) if len(contents) > 0 else ''
-    skin_lesion = contents.pop(0) if len(contents) > 0 else ''
-    risk = contents.pop(0) if len(contents) > 0 else ''
-    conclusion = contents.pop(0) if len(contents) > 0 else ''
-
-    list_domain_pairs = [
-        [elementary_lesions, elementary_lesion_classes],
-        [secondary_lesions, secondary_lesion_classes],
-        [coloration, coloration_classes],
-        [morphology, morphology_classes],
-    ]
-
-    value_domain_pairs = [
-        [size, size_classes],
-        [skin_lesion, skin_lesion_classes],
-        [risk, risk_classes]
-    ]
-
-    for i, (content_section, domain) in enumerate(list_domain_pairs):
-        if not valid:
-            break
-
-        if content_section != '':
-            list_domain_pairs[i][0] = list(map(sanitize_domain_class, content_section.split(',')))
-
-            for content in list_domain_pairs[i][0]:
-                if content not in domain:
-                    valid = False
-                    break
-        else:
-            valid = False
-            break
-
-    if valid:
-        for i, (content_section, domain) in enumerate(value_domain_pairs):
-            if content_section != '':
-                value_domain_pairs[i][0] = sanitize_domain_class(content_section)
-
-                if value_domain_pairs[i][0] not in domain:
-                    valid = False
-                    break
-            else:
-                valid = False
-                break
-
-    elementary_lesions = list_domain_pairs[0][0]
-    secondary_lesions = list_domain_pairs[1][0]
-    coloration = list_domain_pairs[2][0]
-    morphology = list_domain_pairs[3][0]
-    size = value_domain_pairs[0][0]
-    skin_lesion = value_domain_pairs[1][0]
-    risk = value_domain_pairs[2][0]
-
-    if valid:
-        return ReportAnswer(
-            valid=valid,
-            elementary_lesions=elementary_lesions,
-            secondary_lesions=secondary_lesions,
-            coloration=coloration,
-            morphology=morphology,
-            size=size,
+    if sanitized_skin_lesion in skin_lesion_classes and sanitized_risk in risk_classes:
+        return ReportClassificationAnswer(
+            valid=True,
             skin_lesion=skin_lesion,
-            risk=risk,
-            conclusion=conclusion
+            risk=risk
         )
+
     return InvalidAnswer(
-        valid=valid,
+        valid=False,
         answer=answer
     )
 
 
-def structure_answers(prompt_type: defs.PromptType, results: list[TestResult]) -> list[SanitizedResult]:
+def structure_classification_results(prompt_type: defs.PromptType, results: list[TestResult]) -> list[AnswerResult]:
     '''
     Estrutura as respostas.
     '''
 
-    sanitized_results = []
+    answer_results = []
 
     for result in results:
         answer = None
 
         if prompt_type == defs.PromptType.REPORT:
-            answer = structure_report_answer(result.answer)
+            answer = structure_report_classification_answer(result.answer)
         else:
             answer = structure_simple_classification_answer(result.answer)
 
-        sanitized_result = SanitizedResult(
+        answer_result = AnswerResult(
             exam_id=result.exam_id,
             image=result.image,
             answer=answer
         )
 
-        sanitized_results.append(sanitized_result)
+        answer_results.append(answer_result)
 
-    return sanitized_results
+    return answer_results
 
 
-def associate_results_with_data(dataset: list[LesionData],
-                                prompt_type: defs.PromptType,
-                                results: list[SanitizedResult]) -> list[SimpleClassificationResultPair |
-                                                                        ReportResultPair]:
+def associate_simple_results_with_data(dataset: list[SimpleLesionData],
+                                       prompt_type: defs.PromptType,
+                                       results: list[TestResult]) -> list[SimpleResultPair]:
     '''
     Associa os resultados com os dados.
     '''
 
-    dataset_dict = {exam.exam_id: exam for exam in dataset}
+    dataset_dict = {lesion_data.exam_id: lesion_data for lesion_data in dataset}
+    result_pairs = []
+
+    for result in results:
+        if result.exam_id not in dataset_dict:
+            continue
+
+        result_pair = SimpleResultPair(
+            exam_id=result.exam_id,
+            image=result.image,
+            answer=result.answer,
+            expected=format_answer(prompt_type, dataset_dict[result.exam_id])
+        )
+
+        result_pairs.append(result_pair)
+
+    return result_pairs
+
+
+def associate_classification_results_with_data(dataset: list[SimpleLesionData],
+                                               prompt_type: defs.PromptType,
+                                               results: list[AnswerResult]) -> list[SimpleClassificationResultPair |
+                                                                                    ReportClassificationResultPair]:
+    '''
+    Associa os resultados com os dados.
+    '''
+
+    dataset_dict = {lesion_data.exam_id: lesion_data for lesion_data in dataset}
     result_pairs = []
 
     if prompt_type == defs.PromptType.REPORT:
         for result in results:
+            if result.exam_id not in dataset_dict:
+                continue
+
+            report = dataset_dict[result.exam_id].report
             result_answer = None
 
             if result.answer.valid:
-                report_answer: ReportAnswer = result.answer  # type: ignore
+                report_answer: ReportClassificationAnswer = result.answer  # type: ignore
 
                 result_answer = ReportClassification(
-                    elementary_lesions=report_answer.elementary_lesions,
-                    secondary_lesions=report_answer.secondary_lesions,
-                    coloration=report_answer.coloration,
-                    morphology=report_answer.morphology,
-                    size=report_answer.size,
                     skin_lesion=report_answer.skin_lesion,
                     risk=report_answer.risk
                 )
             else:
                 result_answer = ReportClassification(
-                    elementary_lesions=['unclear'],
-                    secondary_lesions=['unclear'],
-                    coloration=['unclear'],
-                    morphology=['unclear'],
-                    size='unclear',
-                    skin_lesion='unclear',
-                    risk='unclear'
+                    skin_lesion='incerto',
+                    risk='incerto'
                 )
 
-            report = dataset_dict[result.exam_id].report
-
             expected_answer = ReportClassification(
-                elementary_lesions=report.elementary_lesions,
-                secondary_lesions=report.secondary_lesions,
-                coloration=report.coloration,
-                morphology=report.morphology,
-                size=report.size,
                 skin_lesion=report.skin_lesion,
                 risk=report.risk
             )
 
-            result_pair = ReportResultPair(
+            result_pair = ReportClassificationResultPair(
                 exam_id=result.exam_id,
                 image=result.image,
                 answer=result_answer,
@@ -334,7 +282,7 @@ def associate_results_with_data(dataset: list[LesionData],
 
                     result_answer = simple_classification_answer.skin_lesion
                 else:
-                    result_answer = 'unclear'
+                    result_answer = 'incerto'
 
                 expected_answer = dataset_dict[result.exam_id].report.skin_lesion
 
@@ -350,30 +298,101 @@ def associate_results_with_data(dataset: list[LesionData],
     return result_pairs
 
 
-def get_label_pairs(result_pairs: list[SimpleClassificationResultPair | ReportResultPair],
-                    attribute_name: str) -> list[tuple[str, str]] | list[tuple[list[str], list[str]]]:
+def get_label_pairs(result_pairs: list[SimpleClassificationResultPair | ReportClassificationResultPair],
+                    attribute_name: str) -> list[tuple[str, str]]:
     '''
-    Obtém os pares de resultados. Os pares podem ser multilabel ou não.
+    Obtém os pares de resultados: (Esperado, Previsto).
     '''
 
     pairs = []
 
     for result in result_pairs:
-        answer = getattr(result.answer, attribute_name)
-        expected = getattr(result.expected, attribute_name)
+        expected = result.expected if isinstance(result.expected, str) else getattr(result.expected, attribute_name)
+        answer = result.answer if isinstance(result.answer, str) else getattr(result.answer, attribute_name)
 
-        if isinstance(answer, list):
-            answer = sorted(answer)
-
-        if isinstance(expected, list):
-            expected = sorted(expected)
-
-        pairs.append((answer, expected))
+        pairs.append((expected, answer))
 
     return pairs
 
 
-def create_confusion_matrix(pairs: list[tuple[str, str]], labels: list[str], title: str, save_path: str):
+def split_pairs(pairs: list[tuple[str, str]],
+                classes: dict[str, ClassCount],
+                most_frequent_classes_count: int) -> tuple[list[tuple[str, str]],
+                                                           list[tuple[str, str]],
+                                                           list[str],
+                                                           list[str]]:
+    '''
+    Divide os pares pela frequência das labels
+    '''
+
+    class_items = sorted(classes.items(), key=lambda item: item[1].count, reverse=True)
+    most_frequent_classes = list(map(lambda x: sanitize_domain_class(x[0]),
+                                     class_items[:most_frequent_classes_count]))
+    least_frequent_classes = list(map(lambda x: sanitize_domain_class(x[0]),
+                                      class_items[most_frequent_classes_count:]))
+
+    most_frequent_label_pairs = []
+    least_frequent_label_pairs = []
+
+    for pair in pairs:
+        if pair[1] in most_frequent_classes:
+            most_frequent_label_pairs.append(pair)
+        else:
+            least_frequent_label_pairs.append(pair)
+
+    return most_frequent_label_pairs, least_frequent_label_pairs, most_frequent_classes, least_frequent_classes
+
+
+def calculate_accuracy(pairs: list[tuple[str, str]]) -> float:
+    '''
+    Calcula a acurácia.
+    '''
+
+    y_true = [pair[0] for pair in pairs]
+    x_predicted = [pair[1] for pair in pairs]
+
+    return float(accuracy_score(y_true, x_predicted))
+
+
+def calculate_precision(pairs: list[tuple[str, str]]) -> float:
+    '''
+    Calcula a precisão.
+    '''
+
+    y_true = [pair[0] for pair in pairs]
+    x_predicted = [pair[1] for pair in pairs]
+
+    return float(precision_score(y_true, x_predicted, average='weighted', zero_division=0))
+
+
+def calculate_recall(pairs: list[tuple[str, str]]) -> float:
+    '''
+    Calcula o recall.
+    '''
+
+    y_true = [pair[0] for pair in pairs]
+    x_predicted = [pair[1] for pair in pairs]
+
+    return float(recall_score(y_true, x_predicted, average='weighted', zero_division=0))
+
+
+def calculate_f1(pairs: list[tuple[str, str]]) -> float:
+    '''
+    Calcula o f1-score.
+    '''
+
+    y_true = [pair[0] for pair in pairs]
+    x_predicted = [pair[1] for pair in pairs]
+
+    return float(f1_score(y_true, x_predicted, average='weighted', zero_division=0))
+
+
+def create_confusion_matrix(pairs: list[tuple[str, str]],
+                            labels: list[str],
+                            title: str,
+                            save_path: str,
+                            annotate: bool = True,
+                            format_: str = '.1%') -> None:
     '''
     Calcula a acurácia e cria uma visualização da matriz de confusão normalizada.
     '''
@@ -387,8 +406,8 @@ def create_confusion_matrix(pairs: list[tuple[str, str]], labels: list[str], tit
 
     plt.figure(figsize=(12, 10))
     heat_map = heatmap(cm,
-                       annot=True,
-                       fmt='.1%',
+                       annot=annotate,
+                       fmt=format_,
                        cmap='Blues',
                        xticklabels=labels,
                        yticklabels=labels,
@@ -397,7 +416,7 @@ def create_confusion_matrix(pairs: list[tuple[str, str]], labels: list[str], tit
     color_bar = heat_map.collections[0].colorbar
     color_bar.set_ticks([0, 0.25, 0.5, 0.75, 1])
     color_bar.set_ticklabels(['0%', '25%', '50%', '75%', '100%'])
-    plt.title(f'{title}\nAcurácia: {accuracy:.2%}')
+    plt.title(f'{title}\nAcurácia: {accuracy:.1%}')
     plt.xlabel('Previsto')
     plt.ylabel('Verdadeiro')
     plt.xticks(rotation=45, ha='right')
@@ -406,67 +425,31 @@ def create_confusion_matrix(pairs: list[tuple[str, str]], labels: list[str], tit
     plt.savefig(save_path, dpi=300)
     plt.show()
 
-    return accuracy
 
-
-# TODO: Refatorar
-def create_multilabel_confusion_matrix(pairs: list[tuple[tuple[str], tuple[str]]],
-                                       labels: list[str],
-                                       title: str,
-                                       save_path: str):
+def plot_training_loss(event_file_path: str, save_path: str) -> None:
     '''
-    Calcula a acurácia e cria uma visualização da matriz de confusão multilabel normalizada.
+    Plota a loss de treinamento.
     '''
 
-    y_true = [pair[0] for pair in pairs]
-    x_predicted = [pair[1] for pair in pairs]
+    events = event_accumulator.EventAccumulator(event_file_path)
+    events.Reload()
 
-    accuracy = accuracy_score(y_true, x_predicted)
+    train_loss = []
+    train_steps = []
 
-    cm = multilabel_confusion_matrix(y_true, x_predicted, labels=labels)
+    for event in events.Scalars('train/loss'):
+        train_steps.append(event.step)
+        train_loss.append(event.value)
 
-    # Configure the subplot grid for multiple confusion matrices
-    n_labels = len(labels)
-    n_cols = min(3, n_labels)
-    n_rows = (n_labels + n_cols - 1) // n_cols  # Ceiling division
-
-    fig, axes = plt.subplots(n_rows, n_cols, figsize=(15, 4 * n_rows))
-    axes = axes.flatten() if n_labels > 1 else [axes]
-
-    # Create a confusion matrix for each label
-    for i, (label, matrix) in enumerate(zip(labels, cm)):
-        # Each multilabel confusion matrix has format:
-        # [[TN, FP], [FN, TP]]
-        # We need to normalize to get percentages
-        total = matrix.sum()
-        if total > 0:
-            matrix_normalized = matrix / total
-        else:
-            matrix_normalized = matrix
-
-        # Create heatmap for this label
-        heat_map = heatmap(matrix_normalized,
-                           annot=True,
-                           fmt='.1%',
-                           cmap='Blues',
-                           xticklabels=['Negative', 'Positive'],
-                           yticklabels=['Negative', 'Positive'],
-                           ax=axes[i],
-                           vmin=0,
-                           vmax=1)
-
-        axes[i].set_title(f'Classe: {label}')
-        axes[i].set_xlabel('Previsto')
-        axes[i].set_ylabel('Verdadeiro')
-
-    # Hide any unused subplots
-    for j in range(i + 1, len(axes)):
-        axes[j].set_visible(False)
-
-    # Add overall title and adjust layout
-    fig.suptitle(f'{title}\nAcurácia: {accuracy:.2%}', fontsize=16)
-    plt.tight_layout(rect=[0, 0, 1, 0.96])  # Make room for the suptitle
-    plt.savefig(save_path, dpi=300)
+    plt.figure(figsize=(10, 6))
+    plt.plot(train_steps, train_loss, label='Loss de treinamento', color='blue')
+    plt.title('Loss de treinamento')
+    plt.xlabel('Passos')
+    plt.ylabel('Loss')
+    plt.grid(True)
+    plt.legend()
+    plt.savefig(save_path, dpi=300, bbox_inches='tight')
     plt.show()
 
-    return accuracy
+    print('Estatísticas de loss de treinamento:')
+    print(pd.Series(train_loss).describe())

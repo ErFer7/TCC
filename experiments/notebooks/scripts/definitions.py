@@ -13,37 +13,38 @@ RESULTS_PATH = join('..', 'results')
 TRAINING_PATH = join('..', 'training')
 
 TRAINING_PROPORTION = 0.8
-VALIDATION_PROPORTION = 0.1
-TEST_PROPORTION = 0.1
+TEST_PROPORTION = 0.2
 
-BASE_MODEL_NAME = 'weights/LlaDerm-R-0.1-11B-4bit'
 BASE_MODEL_NAME = 'unsloth/Llama-3.2-11B-Vision-Instruct'
+MODEL_NAME = 'LLaDerm'
 
 STATIC_RANDOM_STATE = 3407
-MAX_TOKENS = 2048
 
-# TODO: Melhorar os prompts
+# Com base na estatística dos tokens
+# Mínimo: 638
+# Máximo: 2183
+# Média: 867.7664490205926
+MAX_TOKENS = 2190
+MAX_IMAGE_SIZE = 1024
+
 SIMPLE_CLASSIFICATION_PROMPT_TEMPLATE = 'Classifique a lesão de pele na imagem. ' \
                                         'Não inclua nenhum comentário extra na resposta além da classificação.\n' \
                                         'As opções de classificação são: {}.'
-REPORT_PROMPT_TEMPLATE = 'Classifique a lesão de pele na imagem, informando a lesão elementar, lesão ' \
-                         'secundária, coloração, morfologia, tamanho em centímetros, classificação da ' \
+REPORT_PROMPT_TEMPLATE = 'Classifique a lesão de pele na imagem, informando a classificação da ' \
                          'lesão e classificação de risco.\n' \
-                         'Por fim, inclua uma breve conclusão sobre o diganóstico.\n' \
-                         'As opções de classificação de lesões elementares são: {}.\n' \
-                         'As opções de classificação de lesões secundárias são: {}.\n' \
-                         'As opções de classificação de coloração são: {}.\n' \
-                         'As opções de classificação de morfologia são: {}.\n' \
-                         'As opções de classificação de tamanho são: {}.\n' \
+                         'Por fim, inclua uma breve conclusão sobre o diagnóstico.\n' \
                          'As opções de classificação de lesões de pele são: {}.\n' \
-                         'As opções de classificação de risco são: {}.'
+                         'As opções de classificação de risco são: {}.\n' \
+                         'Utilize a seguinte formatação para a resposta:\n\n' \
+                         'Classificação: <...>.\n' \
+                         'Classificação de risco: <...>.\n' \
+                         'Conclusão sobre a lesão: <...>.\n' \
+                         'Conclusão: <...>.'
+
 SIMPLE_CLASSIFICATION_ANSWER_TEMPLATE = '{}.'
-REPORT_ANSWER_TEMPLATE = 'Lesão elementar: {}.\n\n' \
-                         'Lesão secundária: {}.\n\n' \
-                         'Coloração: {}.\n\n' \
-                         'Morfologia: {}.\n\nTamanho: {}.\n\n' \
-                         'Classificação: {}.\n\n' \
-                         'Classificação de risco: {}.\n\n' \
+REPORT_ANSWER_TEMPLATE = 'Classificação: {}.\n' \
+                         'Classificação de risco: {}.\n' \
+                         'Conclusão sobre a lesão: {}.\n' \
                          'Conclusão: {}.'
 
 ELEMENTARY_LESIONS_DOMAIN = (
@@ -198,7 +199,7 @@ SIZE_DOMAIN_TRANSFORMED = {
 }
 
 
-class PromptType(Enum):
+class PromptType(str, Enum):
     '''
     Tipos de prompt.
     '''

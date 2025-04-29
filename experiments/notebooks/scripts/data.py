@@ -7,11 +7,9 @@ from json import dump
 from re import search
 
 from pydantic import BaseModel
+import matplotlib.pyplot as plt
 
 import scripts.definitions as defs
-
-PROMPT = 'Classify the skin lesion in the image.'
-ANSWER = 'The skin lesion in the image is {disease}.'
 
 
 class Series(BaseModel):
@@ -60,6 +58,18 @@ class Report(BaseModel):
     risk: str
     skin_lesion: str
     conclusion: str
+    skin_lesion_conclusion: list[str]
+
+
+class SimpleReport(BaseModel):
+    '''
+    Modelo de laudo simples.
+    '''
+
+    skin_lesion: str
+    risk: str
+    conclusion: str
+    skin_lesion_conclusion: list[str]
 
 
 class RawLesionData(BaseModel):
@@ -82,6 +92,16 @@ class LesionData(BaseModel):
     exam_id: int
     image: str
     report: Report
+
+
+class SimpleLesionData(BaseModel):
+    '''
+    Modelo de exame de aproximação estruturado.
+    '''
+
+    exam_id: int
+    image: str
+    report: SimpleReport
 
 
 class ClassCount(BaseModel):
@@ -117,33 +137,18 @@ class DatasetAnalysis(BaseModel):
     distribution_distribution: Distribution
     risk_distribution: Distribution
     skin_lesion_distribution: Distribution
+    skin_lesion_conclusion_distribution: Distribution
 
 
-# TODO: Mover para messages.py
-def format_data(selected_sample: dict) -> dict:
+class SimpleDatasetAnalysis(BaseModel):
     '''
-    Formata os dados.
+    Modelo de análise de dados simples.
     '''
 
-    return {'messages': [
-        {
-            'role': 'user',
-            'content': [
-                {
-                    'type': 'text',
-                    'text': PROMPT,
-                }, {
-                    'type': 'image',
-                    'image': selected_sample['image'],
-                }
-            ],
-        },
-        {
-            'role': 'assistant',
-            'content': [{'type': 'text', 'text': ANSWER.format(disease=selected_sample['dx'].replace('_', ' '))}],
-        },
-    ],
-    }
+    total_size: int
+    skin_lesion_distribution: Distribution
+    risk_distribution: Distribution
+    skin_lesion_conclusion_distribution: Distribution
 
 
 def check_string_report_part(report_parts: list[str],
@@ -268,6 +273,7 @@ def parse_report(report_parts: list[str]) -> tuple[Report | None, bool]:
         risk='',
         skin_lesion='',
         conclusion='',
+        skin_lesion_conclusion=[]
     )
 
     while True:
@@ -355,7 +361,7 @@ def parse_report_footnote(report_parts: list[str]) -> dict[int, list[str]]:
     last_lesion = 0
 
     while len(report_parts) > 0:
-        if search(r'Lesão \d+.', report_parts[0]):
+        if search(r'Lesão \d+(.)*', report_parts[0]):
             lesion_conclusion = report_parts.pop(0)
             conclusion_parts = lesion_conclusion.split()
             lesion_number = int(conclusion_parts[1].strip(':'))
@@ -364,9 +370,15 @@ def parse_report_footnote(report_parts: list[str]) -> dict[int, list[str]]:
             if lesion_number not in lesions:
                 lesions[lesion_number] = []
 
-            lesions[lesion_number].append(' '.join(conclusion_parts[2:]))
+            new_part = ' '.join(conclusion_parts[2:])
+
+            if new_part != '':
+                lesions[lesion_number].append(' '.join(conclusion_parts[2:]))
         else:
-            lesions[last_lesion].append(report_parts.pop(0))
+            new_part = report_parts.pop(0)
+
+            if new_part != '':
+                lesions[last_lesion].append(new_part)
 
     return lesions
 
@@ -390,6 +402,7 @@ def analyse_dataset(dataset: list[LesionData],
         distribution_distribution=Distribution(classes_count=0, classes={}),
         risk_distribution=Distribution(classes_count=0, classes={}),
         skin_lesion_distribution=Distribution(classes_count=0, classes={}),
+        skin_lesion_conclusion_distribution=Distribution(classes_count=0, classes={})
     )
 
     lists = (
@@ -397,7 +410,8 @@ def analyse_dataset(dataset: list[LesionData],
         'secondary_lesions',
         'coloration',
         'morphology',
-        'distribution'
+        'distribution',
+        'skin_lesion_conclusion'
     )
 
     strings = (
@@ -448,3 +462,175 @@ def analyse_dataset(dataset: list[LesionData],
             dump(data_analysis.model_dump(), file, indent=4, ensure_ascii=False)
 
     return data_analysis
+
+
+def analyse_simple_dataset(dataset: list[SimpleLesionData],
+                           dataset_path: str,
+                           dataset_name: str,
+                           save: bool = True) -> SimpleDatasetAnalysis:
+    '''
+    Analisa os dados simples.
+    '''
+
+    data_analysis = SimpleDatasetAnalysis(
+        total_size=len(dataset),
+        skin_lesion_distribution=Distribution(classes_count=0, classes={}),
+        risk_distribution=Distribution(classes_count=0, classes={}),
+        skin_lesion_conclusion_distribution=Distribution(classes_count=0, classes={})
+    )
+
+    strings = (
+        'risk',
+        'skin_lesion'
+    )
+
+    for data in dataset:
+        report = data.report
+
+        for value in report.skin_lesion_conclusion:
+            distribution: Distribution = data_analysis.skin_lesion_conclusion_distribution
+
+            if value not in distribution.classes:
+                distribution.classes_count += 1
+                distribution.classes[value] = ClassCount(count=0, proportion=0.0)
+
+            distribution.classes[value].count += 1
+
+        for data_string in strings:
+            distribution: Distribution = getattr(data_analysis, f'{data_string}_distribution')
+            report_value: str = getattr(report, data_string)
+
+            if report_value not in distribution.classes:
+                distribution.classes_count += 1
+                distribution.classes[report_value] = ClassCount(count=0, proportion=0.0)
+
+            distribution.classes[report_value].count += 1
+
+    for key, distribution in data_analysis.model_dump().items():
+        if key.endswith('_distribution'):
+            classes = distribution['classes']  # type: ignore
+
+            for value in classes:
+                classes[value]['proportion'] = round(classes[value]['count'] / data_analysis.total_size * 100, 3)
+
+            sorted_classes = sorted(classes.items(), key=lambda class_: class_[1]['count'], reverse=True)
+            distribution['classes'] = dict(sorted_classes)  # type: ignore
+            new_distribuition = Distribution(**distribution)  # type: ignore
+
+            setattr(data_analysis, key, new_distribuition)
+
+    if save:
+        with open(join(dataset_path, f'{dataset_name[:-5]}_analysis.json'), 'w', encoding='utf-8') as file:
+            dump(data_analysis.model_dump(), file, indent=4, ensure_ascii=False)
+
+    return data_analysis
+
+
+def get_skin_lesions_numeric_labels_dict(simple_dataset_analysis: SimpleDatasetAnalysis) -> dict[str, str]:
+    '''
+    Retorna os rótulos numéricos das lesões de pele.
+    '''
+
+    labels = {}
+
+    items = list(simple_dataset_analysis.skin_lesion_distribution.classes.items())
+    items.sort(key=lambda item: item[1].count, reverse=True)
+
+    for i, (key, _) in enumerate(items):
+        labels[key] = str(i + 1)
+
+    return labels
+
+
+def get_risk_labels_dict(simple_dataset_analysis: SimpleDatasetAnalysis) -> dict[str, str]:
+    '''
+    Retorna os rótulos numéricos dos riscos.
+    '''
+
+    labels = {}
+
+    items = list(simple_dataset_analysis.risk_distribution.classes.items())
+    items.sort(key=lambda item: item[1].count, reverse=True)
+
+    for i, (key, _) in enumerate(items):
+        labels[key] = key.split()[0]
+
+    return labels
+
+
+def plot_skin_lesion_distribution(simple_dataset_analysis: SimpleDatasetAnalysis,
+                                  save_path: str | None = None) -> None:
+    '''
+    Plota a distribuição das lesões de pele.
+    '''
+
+    plt.style.use('tableau-colorblind10')
+
+    _, ax = plt.subplots(figsize=(10, 8))
+
+    distribution = simple_dataset_analysis.skin_lesion_distribution
+    skin_lesions_numeric_labels_dict = get_skin_lesions_numeric_labels_dict(simple_dataset_analysis)
+
+    categories = list(reversed(distribution.classes.keys()))
+    counts = [distribution.classes[category].count for category in categories]
+    percentages = [distribution.classes[category].proportion for category in categories]
+    y_positions = range(len(categories))
+    labels = [skin_lesions_numeric_labels_dict[category] for category in categories]
+
+    ax.barh(y_positions, counts, align='center')
+    ax.set_xmargin(0.125)
+    ax.set_yticks(y_positions)
+    ax.set_yticklabels(labels)
+
+    for i, (count, percentage) in enumerate(zip(counts, percentages)):
+        ax.text(count + max(counts) * 0.01,
+                i,
+                f'{count} ({percentage:.1f}%)',
+                va='center', fontsize=9)
+
+    ax.set_xlabel('Quantidade')
+    ax.set_title('Distribuição das Lesões de Pele')
+
+    plt.tight_layout()
+
+    if save_path is not None:
+        plt.savefig(save_path, bbox_inches='tight', dpi=300)
+
+
+def plot_risk_distribution(simple_dataset_analysis: SimpleDatasetAnalysis,
+                           save_path: str | None = None) -> None:
+    '''
+    Plota a distribuição das lesões de pele.
+    '''
+
+    plt.style.use('tableau-colorblind10')
+
+    _, ax = plt.subplots(figsize=(10, 4))
+
+    distribution = simple_dataset_analysis.risk_distribution
+    risk_labels_dict = get_risk_labels_dict(simple_dataset_analysis)
+
+    categories = list(reversed(distribution.classes.keys()))
+    counts = [distribution.classes[category].count for category in categories]
+    percentages = [distribution.classes[category].proportion for category in categories]
+    y_positions = range(len(categories))
+    labels = [risk_labels_dict[category] for category in categories]
+
+    ax.barh(y_positions, counts, align='center')
+    ax.set_xmargin(0.125)
+    ax.set_yticks(y_positions)
+    ax.set_yticklabels(labels)
+
+    for i, (count, percentage) in enumerate(zip(counts, percentages)):
+        ax.text(count + max(counts) * 0.01,
+                i,
+                f'{count} ({percentage:.1f}%)',
+                va='center', fontsize=9)
+
+    ax.set_xlabel('Quantidade')
+    ax.set_title('Distribuição das classificações de risco')
+
+    plt.tight_layout()
+
+    if save_path is not None:
+        plt.savefig(save_path, bbox_inches='tight', dpi=300)
