@@ -1,3 +1,5 @@
+% TODO: Ajustar isso para a entrega final
+
 \chapter{Introdução}
 
 Lesões de pele são áreas anormais ou danificadas da pele, causadas por diversos fatores, como condições ambientais, infecções ou doenças graves, incluindo o câncer de
@@ -18,39 +20,38 @@ brasileiros está associada à renda e classe econômica.
 
 No Brasil, uma parte da atenção primária é feita por \ac{ACS}, que possuem um treinamento básico para atender a população e dar orientações simples de saúde. Esses
 são os profissionais que normalmente estão em contato com as regiões mais carentes. A identificação da causa de uma lesão de pele está além das responsabilidades de um
-\ac{ACS} \cite{filgueiras2011agente}. Isso pode ser problemático, pois para realizar a triagem de um caso de lesão de pele, se faz necessária a análise de um dermatologista, que nem sempre está
-disponível em regiões carentes.
+\ac{ACS} \cite{filgueiras2011agente}. Isso pode ser problemático, pois para realizar a triagem de um caso de lesão de pele, se faz necessária a análise de um dermatologista,
+que nem sempre está disponível em regiões carentes.
 
 Considerando este cenário, seria útil a existência de um serviço com uma boa usabilidade que analisasse imagens de pacientes e recomendasse uma forma de triagem,
-mitigando a carência de dermatologistas. As capacidades de classificar lesões de pele precisamente e boa usabilidade com interação conversacional tornam \acp{MLLM}
-bons candidatos para a fundação desse serviço \cite{mllm_success_rate}.
+mitigando a carência de dermatologistas. As capacidades de classificar e descrever imagens precisamente tornam \acp{MLLM} bons candidatos para a fundação desse serviço
+\cite{mllm_success_rate}.
 
-Neste trabalho, o \ac{LLaMA} 3.2 foi escolhido como o modelo base para o desenvolvimento, pois ele tem o código aberto e também é relevante no estado da arte
-\cite{dubey2024llama}.
+Neste trabalho, o \ac{LLaMA} 3.2 foi escolhido como o modelo base para o desenvolvimento, pois ele tem o código aberto e também é relevante no estado da arte em tarefas
+visuais e textuais \cite{dubey2024llama}. O modelo foi treinado com técnicas de \textit{fine-tuning} sobre o conjunto de dados do \ac{STT/SC} para a classificação e lesões
+de pele e a geração de laudos sobre imagens.
 
-% TODO: Alterar essa parte com o contexto do fine-tuning completo.
-
-Com este modelo, é possível realizar um \textit{fine-tuning}, adaptando-o para a classificação de lesões de pele. Com o objetivo utilizar os recursos computacionais
-disponíveis eficientemente, o \textit{fine-tuning} será feito com técnicas baseadas em \ac{PEFT}. Este método permite a redução do número de parâmetros usados no
-processo, resultando em uma utilização menor de recursos \cite{peft}. Especificamente, planeja-se utilizar métodos como \ac{LoRA} e \ac{QLoRA} para a adaptação do modelo.
-
-Com as adaptações feitas no \ac{LLaMA} 3.2, espera-se obter um sistema confiável de classificação de lesões de pele.
+Com o objetivo utilizar os recursos computacionais disponíveis eficientemente, o \textit{fine-tuning} foi feito com técnicas baseadas em \ac{PEFT}. Este método permite a
+redução do número de parâmetros usados no processo, resultando em uma utilização menor de recursos \cite{peft}. Especificamente, utilizaram-se os métodos \ac{QLoRA} e
+\ac{LoRA} para o treinamento do modelo.
 
 \section{Objetivos}
 
-O objetivo deste trabalho é desenvolver um sistema de classificação de lesões de pele utilizando um \ac{LLM} multimodal. Serão utilizados métodos de \textit{fine-tuning}
-para adaptar o modelo base. Além disso, planeja-se analisar a eficiência entre diferentes técnicas de adaptação.
+O objetivo principal deste trabalho é treinar um \ac{LLM} multimodal com métodos de \textit{fine-tuning} para a classificação de lesões de pele e geração de laudos,
+avaliando o desempenho dos modelos resultantes e comparando as diferentes técnicas de treinamento.
 
 \subsection*{Objetivos Específicos}
 
 \begin{itemize}
-    \item Avaliar a eficiência de diferentes métodos de \textit{fine-tuning} e a precisão dos modelos resultantes;
-    \item Obter um modelo adaptado que possua uma precisão satisfatória na classificação de lesões de pele;
-    \item Comparar o modelo adaptado com outros \acp{MLLM}.
+    \item Treinar o modelo \ac{LLaMA} 3.2 com as técnicas de \textit{fine-tuning} \ac{QLoRA} e \ac{LoRA};
+    \item Comparar os modelos treinados com o \ac{LLaMA} 3.2;
+    \item Avaliar os modelos treinados e comparar as diferentes técnicas de \textit{fine-tuning} entre si.
 \end{itemize}
 
 \section{Organização do Trabalho}
 
+% TODO: Rever isso no final
+
 O trabalho apresenta inicialmente os conceitos teóricos sobre lesões de pele e \acp{MLLM}, abordando questões sobre a arquitetura e treinamento destes modelos. Logo
 em seguida, é feita uma apresentação e discussão sobre trabalhos correlatos. Depois, são apresentados os experimentos, abordando os dados e tecnologias utilizadas,
-características dos treinamentos e os resultados. Por fim, é feita uma breve discussão sobre a próxima etapa do trabalho.
+características dos treinamentos e os resultados. Por fim, é feita a discussão sobre os resultados e possíveis trabalhos futuros são apresentados.
