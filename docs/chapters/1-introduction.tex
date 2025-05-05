@@ -2,49 +2,59 @@
 
 \chapter{Introdução}
 
-Lesões de pele são áreas anormais ou danificadas da pele, causadas por diversos fatores, como condições ambientais, infecções ou doenças graves, incluindo o câncer de
-pele. A identificação precisa da causa é fundamental para o tratamento adequado, porém, devido à semelhança entre os sintomas, diagnosticar corretamente as doenças que
-afetam a pele pode ser uma tarefa complexa. Além disso, o prognóstico pode se agravar significativamente se o tratamento não for iniciado cedo o suficiente
-\cite{habif2015clinical}.
+Lesões de pele são áreas anormais ou danificadas da pele, causadas por diversos fatores, como condições ambientais,
+infecções ou doenças graves, incluindo o câncer de pele. A identificação precisa da causa é fundamental para o
+tratamento adequado, porém, devido à semelhança entre os sintomas, diagnosticar corretamente as doenças que afetam a
+pele pode ser uma tarefa complexa. Além disso, o prognóstico pode se agravar significativamente se o tratamento não for
+iniciado cedo o suficiente \cite{habif2015clinical}.
 
-A importância do cuidado com lesões de pele é evidenciada pelo impacto do câncer de pele. No Brasil, 30\% dos tumores malignos registrados são atribuídos a essa doença
-\cite{skin_cancer_in_brazil}. Os tipos mais comuns, o carcinoma basocelular e o carcinoma epidermoide, apresentam baixa letalidade, mas podem deixar sequelas
-significativas devido ao tratamento. Já o melanoma, embora menos frequente, é altamente letal e corresponde a cerca de 75\% das mortes causadas pelo câncer de pele
-\cite{skin_cancer_screening}. A detecção precoce é essencial para a garantia da efetividade do tratamento, pois a taxa de sobrevida dos pacientes tende a cair ao longo
-do avanço da doença \cite{skin_cancer_survival}.
+A importância do cuidado com lesões de pele é evidenciada pelo impacto do câncer de pele. No Brasil, 30\% dos tumores
+malignos registrados são atribuídos a essa doença \cite{skin_cancer_in_brazil}. Os tipos mais comuns, o carcinoma
+basocelular e o carcinoma epidermoide, apresentam baixa letalidade, mas podem deixar sequelas significativas devido ao
+tratamento. Já o melanoma, embora menos frequente, é altamente letal e corresponde a cerca de 75\% das mortes causadas
+pelo câncer de pele \cite{skin_cancer_screening}. A detecção precoce é essencial para a garantia da efetividade do
+tratamento, pois a taxa de sobrevida dos pacientes tende a cair ao longo do avanço da doença
+\cite{skin_cancer_survival}.
 
-A dificuldade da identificação precoce de lesões de pele tem um componente socioeconômico. Em um estudo feito por \textcite{skin_cancer_socioeconomic}, observa-se que
-indivíduos com um grau menor de escolaridade têm um prognóstico pior, pois apresentam tumores em estágios mais avançados. Esta correlação pode indicar que a desigualdade
-resulta no atraso do diagnóstico e consequentemente na redução da taxa de sucesso do tratamento. \textcite{santos2020desigualdades} também constata que a saúde dos
-brasileiros está associada à renda e classe econômica.
+A dificuldade da identificação precoce de lesões de pele tem um componente socioeconômico. Em um estudo feito por
+\textcite{skin_cancer_socioeconomic}, observa-se que indivíduos com um grau menor de escolaridade têm um prognóstico
+pior, pois apresentam tumores em estágios mais avançados. Esta correlação pode indicar que a desigualdade resulta no
+atraso do diagnóstico e consequentemente na redução da taxa de sucesso do tratamento.
+\textcite{santos2020desigualdades} também constata que a saúde dos brasileiros está associada à renda e classe
+econômica.
 
-No Brasil, uma parte da atenção primária é feita por \ac{ACS}, que possuem um treinamento básico para atender a população e dar orientações simples de saúde. Esses
-são os profissionais que normalmente estão em contato com as regiões mais carentes. A identificação da causa de uma lesão de pele está além das responsabilidades de um
-\ac{ACS} \cite{filgueiras2011agente}. Isso pode ser problemático, pois para realizar a triagem de um caso de lesão de pele, se faz necessária a análise de um dermatologista,
-que nem sempre está disponível em regiões carentes.
+No Brasil, uma parte da atenção primária é feita por \ac{ACS}, que possuem um treinamento básico para atender a
+população e dar orientações simples de saúde. Esses são os profissionais que normalmente estão em contato com as
+regiões mais carentes. A identificação da causa de uma lesão de pele está além das responsabilidades de um \ac{ACS}
+\cite{filgueiras2011agente}. Isso pode ser problemático, pois para realizar a triagem de um caso de lesão de pele, se
+faz necessária a análise de um dermatologista, que nem sempre está disponível em regiões carentes.
 
-Considerando este cenário, seria útil a existência de um serviço com uma boa usabilidade que analisasse imagens de pacientes e recomendasse uma forma de triagem,
-mitigando a carência de dermatologistas. As capacidades de classificar e descrever imagens precisamente tornam \acp{MLLM} bons candidatos para a fundação desse serviço
+Considerando este cenário, seria útil a existência de um serviço com uma boa usabilidade que analisasse imagens de
+pacientes e recomendasse uma forma de triagem, mitigando a carência de dermatologistas. As capacidades de classificar e
+descrever imagens precisamente tornam \acp{MLLM} bons candidatos para a fundação desse serviço
 \cite{mllm_success_rate}.
 
-Neste trabalho, o \ac{LLaMA} 3.2 foi escolhido como o modelo base para o desenvolvimento, pois ele tem o código aberto e também é relevante no estado da arte em tarefas
-visuais e textuais \cite{dubey2024llama}. O modelo foi treinado com técnicas de \textit{fine-tuning} sobre o conjunto de dados do \ac{STT/SC} para a classificação e lesões
-de pele e a geração de laudos sobre imagens.
+Neste trabalho, o \ac{LLaMA}-3.2 foi escolhido como o modelo base para o desenvolvimento, pois ele tem o código aberto
+e também é relevante no estado da arte em tarefas visuais e textuais \cite{dubey2024llama}. O modelo foi treinado com
+técnicas de \textit{fine-tuning} sobre o conjunto de dados do \ac{STT/SC} para a classificação e lesões de pele e a
+geração de laudos sobre imagens.
 
-Com o objetivo utilizar os recursos computacionais disponíveis eficientemente, o \textit{fine-tuning} foi feito com técnicas baseadas em \ac{PEFT}. Este método permite a
-redução do número de parâmetros usados no processo, resultando em uma utilização menor de recursos \cite{peft}. Especificamente, utilizaram-se os métodos \ac{QLoRA} e
-\ac{LoRA} para o treinamento do modelo.
+Com o objetivo utilizar os recursos computacionais disponíveis eficientemente, o \textit{fine-tuning} foi feito com
+técnicas baseadas em \ac{PEFT}. Este método permite a redução do número de parâmetros usados no processo, resultando em
+uma utilização menor de recursos \cite{peft}. Especificamente, utilizaram-se os métodos \ac{QLoRA} e \ac{LoRA} para o
+treinamento do modelo.
 
 \section{Objetivos}
 
-O objetivo principal deste trabalho é treinar um \ac{LLM} multimodal com métodos de \textit{fine-tuning} para a classificação de lesões de pele e geração de laudos,
-avaliando o desempenho dos modelos resultantes e comparando as diferentes técnicas de treinamento.
+O objetivo principal deste trabalho é treinar um \ac{LLM} multimodal com métodos de \textit{fine-tuning} para a
+classificação de lesões de pele e geração de laudos, avaliando o desempenho dos modelos resultantes e comparando as
+diferentes técnicas de treinamento.
 
 \subsection*{Objetivos Específicos}
 
 \begin{itemize}
-    \item Treinar o modelo \ac{LLaMA} 3.2 com as técnicas de \textit{fine-tuning} \ac{QLoRA} e \ac{LoRA};
-    \item Comparar os modelos treinados com o \ac{LLaMA} 3.2;
+    \item Treinar o modelo \ac{LLaMA}-3.2 com as técnicas de \textit{fine-tuning} \ac{QLoRA} e \ac{LoRA};
+    \item Comparar os modelos treinados com o \ac{LLaMA}-3.2;
     \item Avaliar os modelos treinados e comparar as diferentes técnicas de \textit{fine-tuning} entre si.
 \end{itemize}
 
@@ -52,6 +62,8 @@ avaliando o desempenho dos modelos resultantes e comparando as diferentes técni
 
 % TODO: Rever isso no final
 
-O trabalho apresenta inicialmente os conceitos teóricos sobre lesões de pele e \acp{MLLM}, abordando questões sobre a arquitetura e treinamento destes modelos. Logo
-em seguida, é feita uma apresentação e discussão sobre trabalhos correlatos. Depois, são apresentados os experimentos, abordando os dados e tecnologias utilizadas,
-características dos treinamentos e os resultados. Por fim, é feita a discussão sobre os resultados e possíveis trabalhos futuros são apresentados.
+O trabalho apresenta inicialmente os conceitos teóricos sobre lesões de pele e \acp{MLLM}, abordando questões sobre a
+arquitetura e treinamento destes modelos. Logo em seguida, é feita uma apresentação e discussão sobre trabalhos
+correlatos. Depois, são apresentados os experimentos, abordando os dados e tecnologias utilizadas, características dos
+treinamentos e os resultados. Por fim, é feita a discussão sobre os resultados e possíveis trabalhos futuros são
+apresentados.

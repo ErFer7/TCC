@@ -1,23 +1,29 @@
 \chapter{Conclusão}
 
-Neste trabalho, apresentou-se a fundamentação teórica sobre \acp{MLLM} e suas aplicações na classificação de lesões de pele. Além disso, os experimentos realizados
-forneceram dados relevantes para a discussão sobre metodologias de \textit{fine-tuning}.
+Neste trabalho, apresentou-se a fundamentação teórica sobre \acp{MLLM} e suas aplicações na classificação de lesões de
+pele. Além disso, os experimentos realizados forneceram dados relevantes para a discussão sobre metodologias de
+\textit{fine-tuning}.
 
-Os resultados apresentados indicam que o modelo \ac{LLaMA}-3.2 pode ser treinado eficientemente através do \textit{fine-tuning} com \ac{QLoRA} e \ac{LoRA} para atingir
-desempenhos satisfatórios na classificação de lesões de pele. Constatou-se que o \ac{QLoRA} leva a um uso consideravelmente menor de memória durante o treinamento, o
-que é vantajoso para o desenvolvimento do modelo. Porém, algumas características dos experimentos não foram avaliadas, como, por exemplo, o \textit{overfitting}. % TODO: Talvez colocar a tradução no rodapé
+Os resultados apresentados indicam que o modelo \ac{LLaMA}-3.2 pode ser treinado eficientemente através do
+\textit{fine-tuning} com \ac{QLoRA} e \ac{LoRA} para atingir desempenhos satisfatórios na classificação de lesões de
+pele. Constatou-se que o \ac{QLoRA} leva a um uso consideravelmente menor de memória durante o treinamento, o que é
+vantajoso para o desenvolvimento do modelo. Porém, algumas características dos experimentos não foram avaliadas, como,
+por exemplo, o \textit{overfitting}. % TODO: Talvez colocar a tradução no rodapé
 
 \section{Próxima Etapa e Planejamento}
 
-Na próxima etapa, planeja-se utilizar o conjunto de dados do \ac{STT/SC}, permitindo que o \textit{fine-tuning} seja feito com laudos detalhados e em português. Além
-disso, esse conjunto de dados possui uma diversidade maior de lesões e não foca somente no câncer de pele.
+Na próxima etapa, planeja-se utilizar o conjunto de dados do \ac{STT/SC}, permitindo que o \textit{fine-tuning} seja
+feito com laudos detalhados e em português. Além disso, esse conjunto de dados possui uma diversidade maior de lesões e
+não foca somente no câncer de pele.
 
-O refinamento dos principais hiperparâmetros de \textit{fine-tuning} é também um objetivo para a próxima etapa. Um estudo mais aprofundado da teoria por trás dessas
-configurações deve ser feito para garantir a qualidade dos treinamentos. Ferramentas como W\&B Sweeps e Optuna podem ser utilizadas para a otimização dos hiperparâmetros
+O refinamento dos principais hiperparâmetros de \textit{fine-tuning} é também um objetivo para a próxima etapa. Um
+estudo mais aprofundado da teoria por trás dessas configurações deve ser feito para garantir a qualidade dos
+treinamentos. Ferramentas como W\&B Sweeps e Optuna podem ser utilizadas para a otimização dos hiperparâmetros
 experimentalmente \cite{wab_sweeps, optuna_2019}.
 
-Além disso, é necessário desenvolver um mecanismo mais adequado de testes para modelos, de modo a avaliar respostas mais complexas. Pretende-se utilizar um \ac{LLM}
-para esta análise, assim será possível extrair informações relevantes de uma grande quantidade de respostas de forma automática.
+Além disso, é necessário desenvolver um mecanismo mais adequado de testes para modelos, de modo a avaliar respostas
+mais complexas. Pretende-se utilizar um \ac{LLM} para esta análise, assim será possível extrair informações relevantes
+de uma grande quantidade de respostas de forma automática.
 
-Por fim, planeja-se realizar o \textit{fine-tuning} com a variante do \ac{LLaMA}-3.2 com 90 bilhões de parâmetros, comparando os modelos resultantes desse treinamento
-com os baseados na variante de 11 bilhões de parâmetros.
+Por fim, planeja-se realizar o \textit{fine-tuning} com a variante do \ac{LLaMA}-3.2 com 90 bilhões de parâmetros,
+comparando os modelos resultantes desse treinamento com os baseados na variante de 11 bilhões de parâmetros.
